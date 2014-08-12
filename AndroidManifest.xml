@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="prescription.technology"
+          package="doctors.prescription.technology"
           android:versionCode="1"
           android:versionName="1.0">
 
@@ -38,7 +38,7 @@
             android:theme="@style/prescriptionTheme">
         <activity
                 android:theme="@style/prescriptionTheme"
-                android:name="prescription.technology.Index"
+                android:name="doctors.prescription.technology.Index"
                 android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
                 android:label="@string/index">
             <intent-filter>
