@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Cordova</title>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css"/>
+    <scrypt type="text/javascript" src="cordova.js">
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+<h1>Hello World</h1>
+
+<div id="test-ajax"></div>
+<input type="button" id="btn" value="google"/>
+<input type="button" id="btn2" value="Go to Customer Address"/>
+<script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+<script type="text/javascript">
+		$(function(){
+			$('#btn').click(function(){
+				$.ajax({
+					url : "http://google.ro",
+					method:"get"
+				}).done(function(result){$('#test-ajax').html(result);});
+			});
+			$('#btn2').click(function(){
+				console.log('catat is here');
+				window.prescription_technology.NavigateTo("prescription.technology.intent.CUSTOMER_ADDRESS");
+			});			
+		});
+
+
+
+
+
+</script>
+</body>
+</html>

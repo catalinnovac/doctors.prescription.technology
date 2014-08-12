@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN"
+        "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">
+<html>
+<head>
+    <title>Prescription Technology</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen"/>
+    <!--script type="text/javascript" src="cordova.js"></script-->
+    <script type="text/javascript" src="js/respond.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic"
+          rel="stylesheet" type="text/css"/>
+</head>
+<body id="login-page">
+<!-- Preloader -->
+<div id="page-preloader">
+    <img class="preloader" src="/themes/<%=currentTemplate%>/images/loading.gif" alt=""/>
+</div>
+
+<div class="container wrap">
+    <div class="row gutters">
+        <div class="col span_24">
+            <a href="/" id="logo" title="Prescription Technology - Doctors Interface"/>Prescription Technology - Doctors
+            Interface</a>
+            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface menu"/>Menu</a>
+        </div>
+    </div>
+</div>
+
+<div class="container wrap">
+    <h1>Doctors Interface</h1>
+
+    <form id="login-form" action="" method="post" class="row gutters">
+        <div class="col span_24">
+            <input type="text" id="login-user" name="login-user" value="" placeholder="Enter your username"/>
+            <input type="password" id="login-pass" name="login-pass" value="" placeholder="Enter your username"/>
+            <button type="submit" class="btn btn-big has-icon" id="login-submit">
+                <div class="btn-text">Sign in</div>
+                <div class="btn-icon"><i class="fa fa-angle-double-right"></i></div>
+            </button>
+        </div>
+    </form>
+    <div>
+        <script type="text/javascript">
+			$(function(){
+				$('#nav-toggle').on('click', function(e){
+					e.preventDefault();
+					alert('opening side panel');
+					prescription.sendMessage("CART");
+				});
+				$('#login-form').on('click', '#login-submit', function(e){
+					e.preventDefault();
+					alert('logging in click on submit');
+					prescription.sendMessage("CART");
+				}).on('kewdown', '#login-user, #login-pass', function(e){
+					var code = e.keyCode || e.which;
+					if(code == 13) { //Enter keycode
+						e.preventDefault();
+						//Do something
+						alert('logging in via ENTER');
+						prescription.sendMessage("CART");
+					}
+				});
+			});
+
+
+        </script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport"
+          content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi"/>
+    <link rel="stylesheet" type="text/css" href="css/index.css"/>
+    <title>Farmacia Tei - Conectare</title>
+</head>
+<body id="conectare">
+<div class="container">
+    <header class="wrap">
+        <a id="brand" href="acasa.html"></a>
+    </header>
+    <div class="wrap">
+        <h1>Bine ați venit!</h1>
+
+        <p>În această aplicație vă puteți vizualiza toate comenzile și puteți lansa unele noi.</p>
+
+        <form id="form-conectare" action="http://comenzi.farmaciatei.ro/android_login3.php" method="get">
+            <input type="hidden" id="m" name="m" value="0"/>
+            <input type="hidden" id="j" name="j" value="1"/>
+            <textarea style="display:none;" id="myxml" name="myxml"></textarea>
+
+            <div id="response-holder" style="display:none;"></div>
+            <div id="response-holder2" style="display:none;"></div>
+            <div id="response-holder3" style="display:none;"></div>
+            <fieldset>
+                <label>Email</label>
+                <input type="text" id="u" name="u"/>
+            </fieldset>
+
+            <fieldset>
+                <label>Parolă</label>
+                <input type="text" id="p" name="p"/>
+            </fieldset>
+
+            <button type="button" id="btn-conectare" name="btn-conectare"><img src="./img/buton_intratiincont.png"/>
+            </button>
+        </form>
+        <a id="sterge-sesiune" href="#" title="Sterge datele sesiunii">Șterge contul din telefon</a>
+
+        <div id="response-holder-notlogged" style="display:none;"><p class="success">Datele de conectare au fost șterse
+            din telefonul dumneavoastră.</p></div>
+    </div>
+</div>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-migrate-1.2.1.min.js"></script>
+<!--<script type="text/javascript" src="js/index.js"></script>-->
+<script type="text/javascript" src="js/httpRequest.js"></script>
+<script type="text/javascript" src="js/custom.jquery.js"></script>
+<script type="text/javascript">
+			function onDeviceReadyConectare() {
+				var $formConectare = $('#form-conectare');
+				var $btnConectare = $('#btn-conectare');
+				var $responseHolder = $('#response-holder');
+				var $responseHolderNoData = $('#response-holder-nodata');
+				var $responseHolderNotLogged = $('#response-holder-notlogged');
+				var $myxml = $('#myxml');
+				var xmlToSend = '<root>'
+									+ '<regId>regid1</regId>'
+									+ '<u>adrian@plationline.eu</u>'
+									+ '<p>demo123</p>'
+									+ '<forgotPassword>false</forgotPassword>'
+									+ '<idDevice>dev1</idDevice>'
+								+ '</root>';
+				$myxml.text(xmlToSend);
+				
+				var oLocalStorage = new classLocalStorage();
+				
+				$btnConectare.on('touchstart click', function(e) {
+					// HTTP request plugin for Phonegap / Cordova
+					// https://github.com/bperin/HttpRequest
+					var httpOptions = {
+						trustAll: true
+					};
+					var email = $('#u').val();
+					var params = {
+						'm': $('#m').val(),
+						'j': $('#j').val(),
+						'u': email,
+						'p': $('#p').val(),
+						'myxml': xmlToSend
+					};
+
+					window.plugins.HttpRequest.execute(
+						$formConectare.prop('action'),
+						$formConectare.prop('method'),
+						params, 
+						httpOptions,
+						function(response) {
+							// Success
+							var code = response.code;
+							var message = response.message;
+							var body = response.body;
+							messages = ''
+											//+ '<p class="success force-wrap">$formConectare.method(): ' + $formConectare.prop('method') + '</p>'
+											//+ '<p class="success force-wrap">$formConectare.action(): ' + $formConectare.prop('action') + '</p>'
+											+ '<p class="success force-wrap">response: ' + JSON.stringify(response) + '</p>'
+											+ '<p class="success force-wrap">code: ' + code + '</p>'
+											+ '<p class="success force-wrap">message: ' + message + '</p>'
+											+ '<p class="success force-wrap">body: ' + JSON.stringify(body) + '</p>'
+											+ '<p class="success force-wrap">email: ' + email + '</p>'
+											;
+							
+							try {
+								var data = $.parseJSON(body);
+								if (data.status == '1') {
+									messages += '<p class="success">Logged in.</p>';
+												+ '<p class="success">email start: ' + email + '</p>';
+									if (oLocalStorage.SetLoggedData(data, email)) {
+										messages += '<p class="success">SetLoggedData</p>';
+										messages += '<p class="success">GetLoggedData: ' + oLocalStorage.GetLoggedData() + '</p>';
+										// Everything is ok, set local storage and redirect
+										//window.location.href = 'file:///android_asset/www/acasa.html';
+										window.location.href = 'acasa.html';
+									} else {
+										// Error - Saving local storage data
+										messages += '<p class="error">Could not set local storage data.</p>';
+									}
+									$responseHolder.hide().html(messages).fadeIn('fast');
+								} else {
+									// Error - Credentials error
+									messages += '<p class="error">Credentials error.</p>';
+									$responseHolder.hide().html(messages).fadeIn('fast');
+									oLocalStorage.ClearSession();
+								}
+							} catch (err) {
+								// Error - Misc
+									messages = '<p class="error">Call succceeded, but parsing got an error: ' + err.message + '.</p>'
+												;
+								$responseHolder.hide().html(messages).fadeIn('fast');
+							}
+							
+							return;
+						},
+						function(response) {
+							// Failure
+							var code = response.code;
+							var message = response.message;
+							var body = response.body;
+
+							var messages = ''
+											//+ '<p class="success">$formConectare.method(): ' + $formConectare.prop('method') + '</p>'
+											//+ '<p class="success">$formConectare.action(): ' + $formConectare.prop('action') + '</p>'
+											+ '<p class="error">response: ' + response + '</p>'
+											+ '<p class="error">code: ' + code + '</p>'
+											+ '<p class="error">message: ' + message + '</p>'
+											+ '<p class="error">body: ' + body + '</p>'
+											;
+							$responseHolder.append(messages).show();
+							oLocalStorage.ClearSession();
+						}
+					);
+					return false;
+				});
+				
+				$('#sterge-sesiune').on('touchstart click', function(e) {
+					oLocalStorage.ClearSession();
+					$responseHolderNotLogged.fadeIn();
+					return false;
+				})
+			};
+
+			$(function() {
+				document.addEventListener("deviceready", onDeviceReadyConectare, true);       
+			});
+
+
+
+</script>
+</body>
+</html>

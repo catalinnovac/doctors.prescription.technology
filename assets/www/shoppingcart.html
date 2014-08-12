@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Cordova</title>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css"/>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+<a href="#" onclick="fire()">SHOPPING CART</a>
+
+<div id="cart">
+
+</div>
+<script type="text/javascript">
+    var evt = document.createEvent("Events");evt.initEvent("cataEvent", true, true);
+    window.evt = evt;
+    function fire(){
+        console.log(document.body.outerHTML);
+        window.dispatchEvent(evt);
+    }
+    function cata(){
+        console.log('cata');
+        $('#cart').html('cata is here');
+    }
+    function showmessage(m){
+        alert(m);
+        window.dispatchEvent(evt);
+    }
+   window.addEventListener("cataEvent", cata, false);
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
