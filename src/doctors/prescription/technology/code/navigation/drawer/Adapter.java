@@ -1,11 +1,12 @@
 package doctors.prescription.technology.code.navigation.drawer;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 import doctors.prescription.technology.R;
 import doctors.prescription.technology.code.PrescriptionTechnologyWithNavigationDrawer;
 
@@ -32,32 +33,70 @@ public class Adapter extends ArrayAdapter<Item> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View v = convertView;
-        Item p = getItem(position);
-        if (v == null) {
-            LayoutInflater vi = LayoutInflater.from(getContext());
-            v = vi.inflate(R.layout.left_drawer_item, null);
+        Item item = getItem(position);
+        ViewHolder holder = null;
+        View view = convertView;
+
+        if (view == null) {
+            int layout = R.layout.menu_row_counter;
+            if (item.isHeader)
+                layout = R.layout.menu_row_header;
+
+            view = LayoutInflater.from(getContext()).inflate(layout, null);
+
+            TextView text1 = (TextView) view.findViewById(R.id.menurow_title);
+            ImageView image1 = (ImageView) view.findViewById(R.id.menurow_icon);
+            TextView textcounter1 = (TextView) view.findViewById(R.id.menurow_counter);
+            view.setTag(new ViewHolder(text1, image1, textcounter1));
         }
-        if (p != null) {
-            CustomCordovaWebView cordovaWebView = (CustomCordovaWebView) v.findViewById(R.id.cordova_left_item_webview);
-            if (cordovaWebView != null) {
-                Log.v(TAG, "LOAD URL:" + p.Id);
-                cordovaWebView.getSettings().setJavaScriptEnabled(true);
-                cordovaWebView.loadUrl(p.CONTENT);
-                internal_context.AddNavigationDrawerView("CART", cordovaWebView);
+
+        if (holder == null && view != null) {
+            Object tag = view.getTag();
+            if (tag instanceof ViewHolder) {
+                holder = (ViewHolder) tag;
             }
         }
-        return v;
+
+
+        if (item != null && holder != null) {
+
+            if (holder.textHolder != null)
+                holder.textHolder.setText(item.title);
+
+            //Counter
+            if (holder.textCounterHolder != null) {
+                if (item.counter > 0) {
+                    holder.textCounterHolder.setVisibility(View.VISIBLE);
+                    holder.textCounterHolder.setText("" + item.counter);
+                } else {
+                    //Hide counter if == 0
+                    holder.textCounterHolder.setVisibility(View.GONE);
+                }
+            }
+
+            if (holder.imageHolder != null) {
+                if (item.iconRes > 0) {
+                    holder.imageHolder.setVisibility(View.VISIBLE);
+                    holder.imageHolder.setImageResource(item.iconRes);
+                } else {
+                    holder.imageHolder.setVisibility(View.GONE);
+                }
+            }
+        }
+
+        return view;
 
     }
 
-    public View getViewById(String Id) {
-        int position = 0;
-        for (int i = 0; i < getCount(); i++) {
-            if (getItem(i).Id == Id)
-                position = i;
-            break;
+    public static class ViewHolder {
+        public final TextView textHolder;
+        public final ImageView imageHolder;
+        public final TextView textCounterHolder;
+
+        public ViewHolder(TextView text1, ImageView image1, TextView textcounter1) {
+            this.textHolder = text1;
+            this.imageHolder = image1;
+            this.textCounterHolder = textcounter1;
         }
-        return getView(position, null, null);
     }
 }

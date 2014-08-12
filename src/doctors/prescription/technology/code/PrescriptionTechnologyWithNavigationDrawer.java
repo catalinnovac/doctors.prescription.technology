@@ -85,8 +85,7 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         List<Item> items = new ArrayList<Item>();
         Item item = new Item();
-        item.Id = "shopping-cart";
-        item.CONTENT = "file:///android_asset/www/shoppingcart.html";
+        item.
         items.add(item);
         mDrawerList.setAdapter(new Adapter(this,
                 R.layout.left_drawer_item, items));

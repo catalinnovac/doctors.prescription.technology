@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="libs">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/appcompat/libs/android-support-v4.jar!/" />
-      <root url="jar://$PROJECT_DIR$/appcompat/libs/android-support-v7-appcompat.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/android-support-v4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/cordova-2.9.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

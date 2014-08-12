@@ -9,7 +9,6 @@
             android:layout_width="match_parent"
             android:layout_height="48dp">
 
-        <!-- icon -->
         <ImageView
                 android:id="@+id/menurow_icon"
                 android:layout_width="48dp"
@@ -17,9 +16,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
-                android:src="@drawable/ic_launcher"></ImageView>
+                android:src="@drawable/ic_launcher"/>
 
-        <!-- text -->
         <TextView
                 android:id="@+id/menurow_title"
                 android:layout_width="wrap_content"
@@ -27,9 +25,8 @@
                 android:layout_toRightOf="@+id/menurow_icon"
                 android:gravity="center_vertical"
                 android:minHeight="?android:attr/listPreferredItemHeightSmall"
-                android:textAppearance="?android:attr/textAppearanceListItemSmall" tools:ignore="NewApi"></TextView>
+                android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
 
-        <!-- counter -->
         <TextView
                 android:id="@+id/menurow_counter"
                 android:layout_width="32dp"
@@ -44,15 +41,14 @@
                 android:textAppearance="?android:attr/textAppearanceListItemSmall"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
-                android:textStyle="bold" tools:ignore="NewApi"></TextView>
+                android:textStyle="bold" tools:ignore="NewApi"/>
     </RelativeLayout>
 
-    <!-- divider -->
     <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginBottom="1dp"
             android:layout_marginTop="1dp"
-            android:background="#DADADC"></View>
+            android:background="#DADADC"/>
 
 </LinearLayout>

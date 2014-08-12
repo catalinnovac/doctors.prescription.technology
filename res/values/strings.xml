@@ -10,4 +10,6 @@
     <string name="questions">Questions</string>
     <string name="drawer_open"></string>
     <string name="drawer_close"></string>
+    <string name="first_menu_item">FIRST</string>
+    <string name="second_menu_item">FIRST</string>
 </resources>
