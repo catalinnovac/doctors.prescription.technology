@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -64,7 +63,7 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
         getActionBar().setCustomView(R.layout.action_bar);
         LayoutInflater vi = LayoutInflater.from(this);
         CordovaWebView actionbar = (CordovaWebView) vi.inflate(R.layout.action_bar, null);
-        actionbar.loadUrl("file:///android_asset/www/accountinfo.html");
+        actionbar.loadUrl("file:///android_asset/www/messages.html");
         */
 
         setContentView(R.layout.activity_main);
@@ -73,7 +72,7 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
         appView.getSettings().setJavaScriptEnabled(true);
         //adauga interfata dintre code behind si cod client
         WebViewInterface webViewInterface = new WebViewInterface(this);
-        appView.addJavascriptInterface(webViewInterface, "prescription");
+        appView.addJavascriptInterface(webViewInterface, "doctors");
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new DrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer,
                 R.string.drawer_open,  /* "open drawer" description */
@@ -91,7 +90,7 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
             registerReceiver(broadcastReceiverHashMap.get(key), new IntentFilter(key));
         }
         //deschide meniu lateral(stanga)
-        mDrawerLayout.openDrawer(Gravity.LEFT);
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     @Override

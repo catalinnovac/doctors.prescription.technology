@@ -5,12 +5,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.SearchView;
 import doctors.prescription.technology.code.PrescriptionTechnologyWithNavigationDrawer;
-import doctors.prescription.technology.code.data.Login;
+import doctors.prescription.technology.code.data.DataContext;
 
 import java.util.HashMap;
 
@@ -21,11 +23,11 @@ public class Index extends PrescriptionTechnologyWithNavigationDrawer {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Login login = new Login(this);
-        appView.addJavascriptInterface(login, "login");
+        DataContext dataContext = new DataContext(this);
+        appView.addJavascriptInterface(dataContext, "data");
         appView.getSettings().setDomStorageEnabled(true);
         appView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        appView.loadUrl("file:///android_asset/www/index.html");
+        appView.loadUrl("file:///android_asset/www/conectare.html");
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
@@ -56,13 +58,28 @@ public class Index extends PrescriptionTechnologyWithNavigationDrawer {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.hasExtra("TOKEN")) {
-                    appView.loadUrl("file:///android_asset/www/shoppingcart.html");
+                    appView.loadUrl("file:///android_asset/www/index.html");
+                    mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 } else {
-                    appView.sendJavascript("document.dispatchEvent(loginCompleted)");
+                    appView.sendJavascript("document.dispatchEvent(OnloginError)");
                 }
             }
         };
+        BroadcastReceiver drawer = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.hasExtra("open")) {
+                    if (intent.getStringExtra("open").equals("1")) {
+                        mDrawerLayout.openDrawer(Gravity.LEFT);
+                    } else {
+                        mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    }
+                } else
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+            }
+        };
         map.put("LOGIN_COMPLETED", loginCompleted);
+        map.put("DRAWER", drawer);
         return map;
     }
 

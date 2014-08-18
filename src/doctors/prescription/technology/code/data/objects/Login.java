@@ -1,12 +1,12 @@
-package doctors.prescription.technology.code.data;
+package doctors.prescription.technology.code.data.objects;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.webkit.JavascriptInterface;
 import doctors.prescription.technology.code.Constants;
+import doctors.prescription.technology.code.data.base.DataObjectBase;
 import doctors.prescription.technology.code.http.Request;
 import doctors.prescription.technology.code.http.RequestRunnable;
 import org.apache.http.NameValuePair;
@@ -20,15 +20,12 @@ import java.util.List;
 /**
  * Created by novac on 14-Aug-14.
  */
-public class Login {
-    private static final String TAG = Login.class.getSimpleName();
-    private Context _context;
+public class Login extends DataObjectBase {
 
     public Login(Context context) {
-        _context = context;
+        super(context);
     }
 
-    @JavascriptInterface
     public void auth(String loginID, String password, String user) {
         //loginID = "marius";
         //password = "1234";

@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic"
           rel="stylesheet" type="text/css"/>
 </head>
-<body id="login-page">
+<body id="main-page">
 <!-- Preloader -->
 <div id="page-preloader">
     <img class="preloader" src="/themes/<%=currentTemplate%>/images/loading.gif" alt=""/>
@@ -33,57 +33,30 @@
 
 <div class="container wrap">
     <h1>Doctors Interface</h1>
+    <script type="text/javascript">
+                $(function(){
+                    $('#nav-toggle').on('click', function(e){
+                        e.preventDefault();
+                        alert('opening side panel');
+                        var extra = new Array();
+                        extra.push({ key:"open",value:"1"});
+                        doctors.sendMessage("DRAWER",JSON.stringify(extra));
+                    });
+                });
 
-    <form id="login-form" action="" method="post" class="row gutters">
-        <div class="col span_24">
-            <input type="text" id="login-user" name="login-user" value="" placeholder="Enter your username"/>
-            <input type="password" id="login-pass" name="login-pass" value="" placeholder="Enter your username"/>
-            <button type="submit" class="btn btn-big has-icon" id="login-submit">
-                <div class="btn-text">Sign in</div>
-                <div class="btn-icon"><i class="fa fa-angle-double-right"></i></div>
-            </button>
-        </div>
-    </form>
-    <div>
-        <script type="text/javascript">
-			$(function(){
-				$('#nav-toggle').on('click', function(e){
-					e.preventDefault();
-					alert('opening side panel');
-					prescription.sendMessage("CART");
-				});
-				$('#login-form').on('click', '#login-submit', function(e){
-					e.preventDefault();
-					alert('logging in click on submit');
-                    login.auth($('#login-user').val(),$('#login-pass').val(),'1');
-					//prescription.sendMessage("CART");
-				}).on('kewdown', '#login-user, #login-pass', function(e){
-					var code = e.keyCode || e.which;
-					if(code == 13) { //Enter keycode
-						e.preventDefault();
-						//Do something
-						alert('logging in via ENTER');
-					    //prescription.sendMessage("CART");
-					}
-				});
-			});
-
-			//---- added by cata 15.08.2014 ----//
-			var OnloginError = document.createEvent('Event');
-			OnloginError.initEvent("OnloginError",true,true);
-			document.addEventListener("OnloginError",OnloginErrorEventHandler,false);
-			function OnloginErrorEventHandler(e){
-			    alert('Invalid credentials');
-			}
-			//-------------end------------------//
+                //---- added by cata 15.08.2014 ----//
+                var OnloginError = document.createEvent('Event');
+                OnloginError.initEvent("OnloginError",true,true);
+                document.addEventListener("OnloginError",OnloginErrorEventHandler,false);
+                function OnloginErrorEventHandler(e){
+                    alert('Invalid credentials');
+                }
+                //-------------end------------------//
 
 
 
 
-
-
-
-
-        </script>
+    </script>
+</div>
 </body>
 </html>
