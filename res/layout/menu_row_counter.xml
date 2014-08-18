@@ -25,6 +25,10 @@
                 android:layout_toRightOf="@+id/menurow_icon"
                 android:gravity="center_vertical"
                 android:minHeight="?android:attr/listPreferredItemHeightSmall"
+                android:textColor="#fff"
+                android:textSize="13sp"
+                android:fontFamily="open-sains"
+                android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
 
         <TextView
@@ -40,7 +44,7 @@
                 android:padding="6dp"
                 android:textAppearance="?android:attr/textAppearanceListItemSmall"
                 android:textColor="#FFFFFF"
-                android:textSize="12sp"
+                android:textSize="13sp"
                 android:textStyle="bold" tools:ignore="NewApi"/>
     </RelativeLayout>
 

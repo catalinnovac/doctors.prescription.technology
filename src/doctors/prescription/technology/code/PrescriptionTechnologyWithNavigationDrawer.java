@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.ListView;
 import doctors.prescription.technology.R;
 import doctors.prescription.technology.code.navigation.drawer.Adapter;
-import doctors.prescription.technology.code.navigation.drawer.CustomCordovaWebView;
 import doctors.prescription.technology.code.navigation.drawer.DrawerToggle;
 import doctors.prescription.technology.code.navigation.drawer.Item;
 import doctors.prescription.technology.code.webview.WebViewInterface;
@@ -35,16 +34,15 @@ import java.util.concurrent.Executors;
  * Created by novac on 24-Jul-14.
  */
 public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activity implements CordovaInterface {
-
-    public static CustomCordovaWebView __cart;
-    public final String TAG = "PRESCRIPTION TECHNOLOGY";
+    private final String TAG = "PRESCRIPTION TECHNOLOGY";
     private final ExecutorService threadPool = Executors.newCachedThreadPool();
     //<editor-fold desc="Fields"
     public HashMap<String, View> NavigationDrawerViews = new HashMap<String, View>();
     public DrawerLayout mDrawerLayout;
-    protected CordovaWebView appView;
+    public CordovaWebView appView;
     boolean activityResultKeepRunning;
     boolean keepRunning;
+    List<Item> items;
     private ListView mDrawerList;
     private CordovaPlugin activityResultCallback;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -73,6 +71,7 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
         appView = (CordovaWebView) findViewById(R.id.cordova_main_webview);
         Config.init(this);
         appView.getSettings().setJavaScriptEnabled(true);
+        //adauga interfata dintre code behind si cod client
         WebViewInterface webViewInterface = new WebViewInterface(this);
         appView.addJavascriptInterface(webViewInterface, "prescription");
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -81,19 +80,17 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
                 R.string.drawer_close  /* "close drawer" description */
         );
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        List<Item> items = new ArrayList<Item>();
-        Item item = new Item();
-        item.
-        items.add(item);
+        PopulateLeftMenu();//populeaza listview din navigation drawer
         mDrawerList.setAdapter(new Adapter(this,
                 R.layout.left_drawer_item, items));
-
+        //populeaza harta de receiver-e din activity-ul curent
         broadcastReceiverHashMap = GetBroadcastsMap();
         for (String key : broadcastReceiverHashMap.keySet()) {
+            //inregistreaza fiecare receiver
             registerReceiver(broadcastReceiverHashMap.get(key), new IntentFilter(key));
         }
+        //deschide meniu lateral(stanga)
         mDrawerLayout.openDrawer(Gravity.LEFT);
     }
 
@@ -108,6 +105,7 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
     protected void onStop() {
         super.onStop();
         for (String key : broadcastReceiverHashMap.keySet()) {
+            //unregister fiecare receiver
             unregisterReceiver(broadcastReceiverHashMap.get(key));
         }
     }
@@ -183,6 +181,45 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
     //<editor-fold desc="Abstract">
     protected abstract HashMap<String, BroadcastReceiver> GetBroadcastsMap();
 
+    //</editor-fold>
+
+    //<editor-fold desc="Private">
+    private void PopulateLeftMenu() {
+        items = new ArrayList<Item>();
+        Item pendingItem = new Item();
+        pendingItem.counter = 1;
+        pendingItem.iconRes = R.drawable.ic_drawer;
+        pendingItem.title = R.string.pending_menu_title;
+        pendingItem.isHeader = false;
+        items.add(pendingItem);
+        Item historyItem = new Item();
+        historyItem.counter = 6;
+        historyItem.iconRes = R.drawable.ic_drawer;
+        historyItem.title = R.string.history_menu_title;
+        historyItem.isHeader = false;
+        items.add(historyItem);
+        Item declinedItem = new Item();
+        declinedItem.counter = 18;
+        declinedItem.iconRes = R.drawable.ic_drawer;
+        declinedItem.title = R.string.declined_menu_title;
+        declinedItem.isHeader = false;
+        items.add(declinedItem);
+        Item queryItem = new Item();
+        queryItem.iconRes = R.drawable.ic_drawer;
+        queryItem.title = R.string.query_menu_title;
+        queryItem.isHeader = false;
+        items.add(queryItem);
+        Item invoicesItem = new Item();
+        invoicesItem.iconRes = R.drawable.ic_drawer;
+        invoicesItem.title = R.string.invoices_menu_title;
+        invoicesItem.isHeader = false;
+        items.add(invoicesItem);
+        Item messagesItem = new Item();
+        messagesItem.iconRes = R.drawable.ic_drawer;
+        messagesItem.title = R.string.messages_menu_title;
+        messagesItem.isHeader = false;
+        items.add(messagesItem);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Public">

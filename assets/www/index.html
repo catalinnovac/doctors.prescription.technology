@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen"/>
     <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen"/>
-    <!--script type="text/javascript" src="cordova.js"></script-->
+    <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/respond.min.js"></script>
     <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic"
@@ -55,17 +55,33 @@
 				$('#login-form').on('click', '#login-submit', function(e){
 					e.preventDefault();
 					alert('logging in click on submit');
-					prescription.sendMessage("CART");
+                    login.auth($('#login-user').val(),$('#login-pass').val(),'1');
+					//prescription.sendMessage("CART");
 				}).on('kewdown', '#login-user, #login-pass', function(e){
 					var code = e.keyCode || e.which;
 					if(code == 13) { //Enter keycode
 						e.preventDefault();
 						//Do something
 						alert('logging in via ENTER');
-						prescription.sendMessage("CART");
+					    //prescription.sendMessage("CART");
 					}
 				});
 			});
+
+			//---- added by cata 15.08.2014 ----//
+			var OnloginError = document.createEvent('Event');
+			OnloginError.initEvent("OnloginError",true,true);
+			document.addEventListener("OnloginError",OnloginErrorEventHandler,false);
+			function OnloginErrorEventHandler(e){
+			    alert('Invalid credentials');
+			}
+			//-------------end------------------//
+
+
+
+
+
+
 
 
         </script>

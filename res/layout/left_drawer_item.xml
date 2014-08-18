@@ -26,6 +26,10 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/menurow_icon"
                 android:gravity="center_vertical"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:fontFamily="open-sains"
+                android:textStyle="bold"
                 android:minHeight="?android:attr/listPreferredItemHeightSmall"
                 android:textAppearance="?android:attr/textAppearanceListItemSmall" tools:ignore="NewApi"></TextView>
 

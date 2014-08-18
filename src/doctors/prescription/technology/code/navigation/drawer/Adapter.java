@@ -1,6 +1,7 @@
 package doctors.prescription.technology.code.navigation.drawer;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,12 @@ public class Adapter extends ArrayAdapter<Item> {
             view = LayoutInflater.from(getContext()).inflate(layout, null);
 
             TextView text1 = (TextView) view.findViewById(R.id.menurow_title);
+            Typeface face = Typeface.create("Open Sans", Typeface.BOLD);
+            text1.setTypeface(face);
+            /*
+            Typeface face = Typeface.createFromAsset(getContext().getAssets(), "www/fonts/fontawesome-webfont.ttf");
+            text1.setTypeface(face);
+            */
             ImageView image1 = (ImageView) view.findViewById(R.id.menurow_icon);
             TextView textcounter1 = (TextView) view.findViewById(R.id.menurow_counter);
             view.setTag(new ViewHolder(text1, image1, textcounter1));

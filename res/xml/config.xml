@@ -101,8 +101,12 @@
     <feature name="InAppBrowser">
         <param name="android-package" value="org.apache.cordova.InAppBrowser"/>
     </feature>
+    <feature name="DoctorsPlugin">
+        <param name="android-package" value="doctors.prescription.technology.code.webview.DoctorsPlugin"></param>
+    </feature>
     <!-- Deprecated plugins element. Remove in 3.0 -->
     <plugins>
+
     </plugins>
     <param name="android-package" value="org.apache.cordova.core.NetworkManager"/>
 </widget>

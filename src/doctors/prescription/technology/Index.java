@@ -10,7 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.SearchView;
 import doctors.prescription.technology.code.PrescriptionTechnologyWithNavigationDrawer;
-import doctors.prescription.technology.code.receivers.CartBroadcastReceiver;
+import doctors.prescription.technology.code.data.Login;
 
 import java.util.HashMap;
 
@@ -21,6 +21,10 @@ public class Index extends PrescriptionTechnologyWithNavigationDrawer {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Login login = new Login(this);
+        appView.addJavascriptInterface(login, "login");
+        appView.getSettings().setDomStorageEnabled(true);
+        appView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         appView.loadUrl("file:///android_asset/www/index.html");
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -48,8 +52,17 @@ public class Index extends PrescriptionTechnologyWithNavigationDrawer {
     @Override
     protected HashMap<String, BroadcastReceiver> GetBroadcastsMap() {
         HashMap<String, BroadcastReceiver> map = new HashMap<String, BroadcastReceiver>();
-        CartBroadcastReceiver br = new CartBroadcastReceiver();
-        map.put("CART", br);
+        BroadcastReceiver loginCompleted = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.hasExtra("TOKEN")) {
+                    appView.loadUrl("file:///android_asset/www/shoppingcart.html");
+                } else {
+                    appView.sendJavascript("document.dispatchEvent(loginCompleted)");
+                }
+            }
+        };
+        map.put("LOGIN_COMPLETED", loginCompleted);
         return map;
     }
 

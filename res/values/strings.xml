@@ -10,6 +10,11 @@
     <string name="questions">Questions</string>
     <string name="drawer_open"></string>
     <string name="drawer_close"></string>
-    <string name="first_menu_item">FIRST</string>
-    <string name="second_menu_item">FIRST</string>
+    <string name="pending_menu_title">Pending</string>
+    <string name="history_menu_title">History</string>
+    <string name="declined_menu_title">Declined</string>
+    <string name="query_menu_title">Query</string>
+    <string name="invoices_menu_title">Invoices</string>
+    <string name="messages_menu_title">Messages</string>
+
 </resources>

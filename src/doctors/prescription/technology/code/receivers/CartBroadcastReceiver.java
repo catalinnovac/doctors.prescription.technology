@@ -6,26 +6,22 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.Gravity;
 import doctors.prescription.technology.Index;
-import doctors.prescription.technology.code.navigation.drawer.CustomCordovaWebView;
+import org.apache.cordova.CordovaWebView;
 
 /**
  * Created by novac on 07-Aug-14.
  */
 public class CartBroadcastReceiver extends BroadcastReceiver {
     private final static String TAG = CartBroadcastReceiver.class.getSimpleName();
-    public CustomCordovaWebView cartView;
+    public CordovaWebView cartView;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction() == "CART") {
             Index activity = (Index) context;
-            cartView = (CustomCordovaWebView) activity.NavigationDrawerViews.get("CART");
-            if (cartView != null) {
-                Log.v(TAG, "send javascript");
-                //cartView.sendJavascript("showmessage(\"cata is here\")");
-                activity.mDrawerLayout.openDrawer(Gravity.LEFT);
-            } else
-                Log.v(TAG, "cartView is not set");
+            Log.v(TAG, "send javascript");
+            cartView.sendJavascript("console.log('cata is here')");
+            activity.mDrawerLayout.openDrawer(Gravity.LEFT);
         }
     }
 }

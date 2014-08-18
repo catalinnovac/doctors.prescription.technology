@@ -21,11 +21,12 @@ import java.util.List;
 public class Request extends AsyncTask<String, List<NameValuePair>, String> {
 
     public final String TAG = Request.class.getSimpleName();
-    public RequestRunnable onPostExecute__callback;
-    public Runnable onPreExecute__callback;
-    public RequestRunnable onBeforeDoInBackground__callback;
-    public RequestRunnable onAfterDoInBackground__callback;
-    public Runnable onPostExecuteException__callback;
+    public RequestRunnable PostExecuteHandler;
+    public Runnable PreExecuteHandler;
+    public RequestRunnable BeforeDoInBackgroundHandler;
+    public RequestRunnable BeforeDoRequestInBackgroundHandler;
+    public RequestRunnable AfterDoInBackgroundHandler;
+    public Runnable PostExecuteExceptionHandler;
     private Context mContext;
     private List<NameValuePair> data;
 
@@ -35,8 +36,8 @@ public class Request extends AsyncTask<String, List<NameValuePair>, String> {
 
     @Override
     protected void onPreExecute() {
-        if (onPreExecute__callback != null)
-            onPreExecute__callback.run();
+        if (PreExecuteHandler != null)
+            PreExecuteHandler.run();
         super.onPreExecute();
     }
 
@@ -53,15 +54,21 @@ public class Request extends AsyncTask<String, List<NameValuePair>, String> {
         String responseString = null;
         //in case we want to execute an action in async thread and before executing the rest of code
         //we call a callback
-        if (onBeforeDoInBackground__callback != null) {
+        if (BeforeDoInBackgroundHandler != null) {
             //Log.v(TAG, "onBeforeDoInBackground call");
-            onBeforeDoInBackground__callback.run();
+            BeforeDoInBackgroundHandler.run();
         }
 
         try {
 
             if (NetworkManager.isNetworkConnection(mContext)) {
                 HttpPost request = new HttpPost(uri[0]);
+                if (BeforeDoRequestInBackgroundHandler != null) {
+                    Hashtable h = new Hashtable();
+                    h.put("request", request);
+                    BeforeDoRequestInBackgroundHandler.setArgs(h);
+                    BeforeDoRequestInBackgroundHandler.run();
+                }
                 request.setHeader("Content-Type",
                         "application/x-www-form-urlencoded");
                 request.setEntity(new UrlEncodedFormEntity(getData()));
@@ -89,12 +96,12 @@ public class Request extends AsyncTask<String, List<NameValuePair>, String> {
             e.printStackTrace();
         }
         //execute (if is defined) this callback in the same thread as action before
-        if (onAfterDoInBackground__callback != null) {
+        if (AfterDoInBackgroundHandler != null) {
             //Log.v(TAG, "onAfterDoInBackground call");
             Hashtable h = new Hashtable();
             h.put("response", responseString);
-            onAfterDoInBackground__callback.setArgs(h);
-            onAfterDoInBackground__callback.run();
+            AfterDoInBackgroundHandler.setArgs(h);
+            AfterDoInBackgroundHandler.run();
         }
         return responseString;
     }
@@ -106,24 +113,24 @@ public class Request extends AsyncTask<String, List<NameValuePair>, String> {
             if (result != null) {
                 Hashtable args = new Hashtable();
                 try {
-
+                    args.put("response", result);
                 } catch (Exception e) {
                     args.put("status", "error");
                     args.put("message", e.getMessage());
                 }
-                if (onPostExecute__callback != null) {
-                    onPostExecute__callback.setArgs(args);
-                    onPostExecute__callback.run();
+                if (PostExecuteHandler != null) {
+                    PostExecuteHandler.setArgs(args);
+                    PostExecuteHandler.run();
                 }
             } else {
                 Toast.makeText(mContext, "Malformed response from sever!", Toast.LENGTH_LONG).show();
-                if (onPostExecuteException__callback != null)
-                    onPostExecuteException__callback.run();
+                if (PostExecuteExceptionHandler != null)
+                    PostExecuteExceptionHandler.run();
             }
         } else {
             Toast.makeText(mContext, "Check your Internet connection!", Toast.LENGTH_LONG).show();
-            if (onPostExecuteException__callback != null)
-                onPostExecuteException__callback.run();
+            if (PostExecuteExceptionHandler != null)
+                PostExecuteExceptionHandler.run();
         }
     }
 

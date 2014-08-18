@@ -3,8 +3,6 @@ package doctors.prescription.technology.code;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
-import android.webkit.JavascriptInterface;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import doctors.prescription.technology.R;
@@ -36,30 +34,6 @@ public class PrescriptionTechnologyActivity extends DroidGap {
                 android.R.layout.simple_list_item_1, mPlanetTitles));
         appView.addJavascriptInterface(this, "prescription");
         appView.addJavascriptInterface(new Constants(), "constants");
-    }
-
-    @JavascriptInterface
-    public void NavigateTo(String action) {
-        Log.v(TAG, action);
-        boolean valid = false;
-        Constants constant = new Constants();
-        if (action.equals(constant.CUSTOMER_ADDRESS_ACTIVITY))
-            valid = true;
-        if (action.equals(constant.CUSTOMER_PERSONAL_INFO_ACTIVITY))
-            valid = true;
-        if (action.equals(constant.ORDER_CONFIRMARTION_ACTIVITY))
-            valid = true;
-        if (action.equals(constant.QUESTIONS_ACTIVITY))
-            valid = true;
-        if (valid) {
-            Intent i = new Intent(action);
-            startActivity(i);
-        } else
-            try {
-                throw new Exception("Invalid action!");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
     }
 
     @Override
