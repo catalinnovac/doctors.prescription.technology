@@ -55,8 +55,14 @@
 				$('#login-form').on('click', '#login-submit', function(e){
 					e.preventDefault();
 					alert('logging in click on submit');
-                    login.auth($('#login-user').val(),$('#login-pass').val(),'1');
-					//prescription.sendMessage("CART");
+					try {
+						var rezLogin = login.auth($('#login-user').val(),$('#login-pass').val(),'1');
+						alert('ok');
+					} catch (ex) {
+						alert('exception');
+						alert(ex.message);
+					}
+					alert(rezLogin);
 				}).on('kewdown', '#login-user, #login-pass', function(e){
 					var code = e.keyCode || e.which;
 					if(code == 13) { //Enter keycode
@@ -65,7 +71,7 @@
 						alert('logging in via ENTER');
 					    //prescription.sendMessage("CART");
 					}
-				});
+				})
 			});
 
 			//---- added by cata 15.08.2014 ----//
