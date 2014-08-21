@@ -540,8 +540,12 @@
 	}
 	.error, .success, .warning {
 		font-size: 0.8rem;
-		font-weight: 800;
+		font-weight: 400;
 		text-transform: none;
+	}
+	.alert {
+		padding: .5em 1em;
+		font-weight: 400;
 	}
 	.close-box { margin-left: 1em; }
 	.error .close-box, .success .close-box { color: #fff; }
@@ -574,7 +578,7 @@
 		vertical-align: middle;
 		width: 16px;
 		height: 16px;
-
+		
 		background: #EDEEF1;
 		filter:alpha(opacity=60);
 		-moz-opacity:0.6;
@@ -591,20 +595,21 @@
 		-khtml-opacity: 0;
 		opacity: 0;
 	}
-		.language-flag.language-empty { background: transparent url('images/flags/doesntexist-h.png') no-repeat; }
-		.language-flag.language-empty { background: transparent url('images/flags/empty-h.png') no-repeat; }
-		.language-flag.romanian { background: transparent url('images/flags/romanian-h.png') no-repeat;}
-		.language-flag.english {background: transparent url('images/flags/english-EU.png') no-repeat;}
-		.language-flag.italian {background: transparent url('images/flags/italian-h.png') no-repeat;}
-		.language-flag.spanish {background: transparent url('images/flags/spanish-h.png') no-repeat;}
-		.language-flag.french {background: transparent url('images/flags/french-h.png') no-repeat;}
-		.language-flag.german {background: transparent url('images/flags/german-h.png') no-repeat;}
-		.language-flag.hungarian {background: transparent url('images/flags/hungarian-h.png') no-repeat;}
-		.language-flag.peyronies-english {background: transparent url('images/flags/peyronies-english-h.png') no-repeat;}
-		.language-flag.portuguese {background: transparent url('images/flags/portuguese-h.png') no-repeat;}
-		.language-flag.polish {background: transparent url('images/flags/polish-h.png') no-repeat;}
-		.language-flag.swedish {background: transparent url('images/flags/swedish-h.png') no-repeat;}
-		.language-flag.norwegian {background: transparent url('images/flags/norwegian-h.png') no-repeat;}
+		.language-flag.language-empty { background: transparent url('../img/flags/doesntexist-h.png') no-repeat; }
+		.language-flag.language-empty { background: transparent url('../img/flags/empty-h.png') no-repeat; }
+		.language-flag.dutch { background: transparent url('../img/flags/nederland-h.png') no-repeat;}
+		.language-flag.romanian { background: transparent url('../img/flags/romanian-h.png') no-repeat;}
+		.language-flag.english {background: transparent url('../img/flags/english-EU.png') no-repeat;}
+		.language-flag.italian {background: transparent url('../img/flags/italian-h.png') no-repeat;}
+		.language-flag.spanish {background: transparent url('../img/flags/spanish-h.png') no-repeat;}
+		.language-flag.french {background: transparent url('../img/flags/french-h.png') no-repeat;}
+		.language-flag.german {background: transparent url('../img/flags/german-h.png') no-repeat;}
+		.language-flag.hungarian {background: transparent url('../img/flags/hungarian-h.png') no-repeat;}
+		.language-flag.peyronies-english {background: transparent url('../img/flags/peyronies-english-h.png') no-repeat;}
+		.language-flag.portuguese {background: transparent url('../img/flags/portuguese-h.png') no-repeat;}
+		.language-flag.polish {background: transparent url('../img/flags/polish-h.png') no-repeat;}
+		.language-flag.swedish {background: transparent url('../img/flags/swedish-h.png') no-repeat;}
+		.language-flag.norwegian {background: transparent url('../img/flags/norwegian-h.png') no-repeat;}
 
 		.languages a.language-curent,
 		.languages a.language-curent:link,
