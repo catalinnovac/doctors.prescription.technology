@@ -71,7 +71,7 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
         Config.init(this);
         appView.getSettings().setJavaScriptEnabled(true);
         //adauga interfata dintre code behind si cod client
-        WebViewInterface webViewInterface = new WebViewInterface(this);
+        WebViewInterface webViewInterface = new WebViewInterface(this, appView);
         appView.addJavascriptInterface(webViewInterface, "doctors");
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new DrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer,

@@ -63,7 +63,7 @@ public class Index extends PrescriptionTechnologyWithNavigationDrawer {
                     appView.loadUrl("file:///android_asset/www/index.html");
                     mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 } else {
-                    appView.sendJavascript("document.dispatchEvent(OnloginError)");
+                    appView.sendJavascript("OnloginErrorEventHandler();");
                 }
             }
         };
