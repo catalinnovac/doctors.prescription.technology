@@ -34,6 +34,7 @@
 
 <div class="container wrap">
     <h1>Doctors Interface</h1>
+    <textarea id="x"></textarea>
     <script type="text/javascript">
                 $(function(){
                     $('#nav-toggle').on('click', function(e){
@@ -44,19 +45,9 @@
                         doctors.sendMessage("DRAWER",JSON.stringify(extra));
                     });
                 });
-
-                //---- added by cata 15.08.2014 ----//
-                var OnloginError = document.createEvent('Event');
-                OnloginError.initEvent("OnloginError",true,true);
-                document.addEventListener("OnloginError",OnloginErrorEventHandler,false);
-                function OnloginErrorEventHandler(e){
-                    alert('Invalid credentials');
-                }
-                //-------------end------------------//
-
-
-
-
+                $.get('http://doctors.prescription.technology/ws/pending.asp',function(data){
+                    $('#x').html(data);
+                });
     </script>
 </div>
 </body>

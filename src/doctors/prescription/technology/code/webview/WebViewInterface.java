@@ -2,7 +2,10 @@ package doctors.prescription.technology.code.webview;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.webkit.JavascriptInterface;
+import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,9 +16,11 @@ import org.json.JSONObject;
 public class WebViewInterface {
     public final String UPDATECARTACTION = "1";
     private Context _context;
+    private CordovaWebView _appView;
 
-    public WebViewInterface(Context context) {
+    public WebViewInterface(Context context, CordovaWebView appView) {
         this._context = context;
+        this._appView = appView;
     }
 
     @JavascriptInterface
@@ -33,5 +38,16 @@ public class WebViewInterface {
             }
         }
         _context.sendBroadcast(intent);
+    }
+
+    @JavascriptInterface
+    public String getToken() {
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
+        return sharedPreferences.getString("TOKEN", null);
+    }
+
+    @JavascriptInterface
+    public void redirect(String url) {
+        _appView.loadUrl(url);
     }
 }

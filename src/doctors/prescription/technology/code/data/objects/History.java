@@ -12,7 +12,7 @@ public class History extends DataObjectBaseList {
     }
 
     @Override
-    public String Load() {
-        return null;
+    public void Load() {
+
     }
 }

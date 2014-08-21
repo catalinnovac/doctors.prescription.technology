@@ -10,5 +10,5 @@ public abstract class DataObjectBaseList extends DataObjectBase {
         super(context);
     }
 
-    public abstract String Load();
+    public abstract void Load();
 }

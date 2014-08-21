@@ -12,7 +12,6 @@ public class Query extends DataObjectBaseList {
     }
 
     @Override
-    public String Load() {
-        return null;
+    public void Load() {
     }
 }

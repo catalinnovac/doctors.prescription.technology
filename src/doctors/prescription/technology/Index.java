@@ -19,6 +19,7 @@ import java.util.HashMap;
 public class Index extends PrescriptionTechnologyWithNavigationDrawer {
 
     private final String TAG = Index.class.getSimpleName();
+    HashMap<String, BroadcastReceiver> map = new HashMap<String, BroadcastReceiver>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,10 +54,11 @@ public class Index extends PrescriptionTechnologyWithNavigationDrawer {
 
     @Override
     protected HashMap<String, BroadcastReceiver> GetBroadcastsMap() {
-        HashMap<String, BroadcastReceiver> map = new HashMap<String, BroadcastReceiver>();
         BroadcastReceiver loginCompleted = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                Log.v(TAG, String.valueOf(map.size()));
+                Log.v(TAG, String.valueOf(intent.hasExtra("TOKEN")));
                 if (intent.hasExtra("TOKEN")) {
                     appView.loadUrl("file:///android_asset/www/index.html");
                     mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);

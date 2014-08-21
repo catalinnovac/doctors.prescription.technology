@@ -7,7 +7,9 @@ import android.widget.Toast;
 import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
@@ -29,9 +31,11 @@ public class Request extends AsyncTask<String, List<NameValuePair>, String> {
     public Runnable PostExecuteExceptionHandler;
     private Context mContext;
     private List<NameValuePair> data;
+    private HttpMethod _httpMethod;
 
     public Request(Context context) {
         mContext = context;
+        _httpMethod = HttpMethod.POST;
     }
 
     @Override
@@ -49,6 +53,14 @@ public class Request extends AsyncTask<String, List<NameValuePair>, String> {
         data = _data;
     }
 
+    public void setRequestMethod(HttpMethod httpMethod) {
+        _httpMethod = httpMethod;
+    }
+
+    public HttpMethod get_httpMethod() {
+        return _httpMethod;
+    }
+
     @Override
     protected String doInBackground(String... uri) {
         String responseString = null;
@@ -62,17 +74,23 @@ public class Request extends AsyncTask<String, List<NameValuePair>, String> {
         try {
 
             if (NetworkManager.isNetworkConnection(mContext)) {
-                HttpPost request = new HttpPost(uri[0]);
+                HttpUriRequest request = null;
+                if (_httpMethod == HttpMethod.POST) {
+                    request = new HttpPost(uri[0]);
+                    request.setHeader("Content-Type",
+                            "application/x-www-form-urlencoded");
+                    ((HttpPost) request).setEntity(new UrlEncodedFormEntity(getData()));
+                } else if (_httpMethod == _httpMethod.GET) {
+                    request = new HttpGet(uri[0]);
+                }
                 if (BeforeDoRequestInBackgroundHandler != null) {
                     Hashtable h = new Hashtable();
                     h.put("request", request);
                     BeforeDoRequestInBackgroundHandler.setArgs(h);
                     BeforeDoRequestInBackgroundHandler.run();
                 }
-                request.setHeader("Content-Type",
-                        "application/x-www-form-urlencoded");
-                request.setEntity(new UrlEncodedFormEntity(getData()));
-                HttpResponse response = doctors.prescription.technology.code.http.HttpClient.INSTANCE.getHttp().execute(request);
+                org.apache.http.client.HttpClient httpClient = doctors.prescription.technology.code.http.HttpClient.INSTANCE.getHttp();
+                HttpResponse response = httpClient.execute(request);
                 StatusLine statusLine = response.getStatusLine();
                 //Log.v(TAG,url + ">>STATUS>>"+ String.valueOf(statusLine.getStatusCode()));
                 if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
@@ -133,6 +151,5 @@ public class Request extends AsyncTask<String, List<NameValuePair>, String> {
                 PostExecuteExceptionHandler.run();
         }
     }
-
 
 }

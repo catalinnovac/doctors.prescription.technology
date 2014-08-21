@@ -83,11 +83,13 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
         PopulateLeftMenu();//populeaza listview din navigation drawer
         mDrawerList.setAdapter(new Adapter(this,
                 R.layout.left_drawer_item, items));
-        //populeaza harta de receiver-e din activity-ul curent
-        broadcastReceiverHashMap = GetBroadcastsMap();
-        for (String key : broadcastReceiverHashMap.keySet()) {
-            //inregistreaza fiecare receiver
-            registerReceiver(broadcastReceiverHashMap.get(key), new IntentFilter(key));
+        synchronized (this) {
+            //populeaza harta de receiver-e din activity-ul curent
+            broadcastReceiverHashMap = GetBroadcastsMap();
+            for (String key : broadcastReceiverHashMap.keySet()) {
+                //inregistreaza fiecare receiver
+                registerReceiver(broadcastReceiverHashMap.get(key), new IntentFilter(key));
+            }
         }
         //deschide meniu lateral(stanga)
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -103,9 +105,12 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
     @Override
     protected void onStop() {
         super.onStop();
-        for (String key : broadcastReceiverHashMap.keySet()) {
-            //unregister fiecare receiver
-            unregisterReceiver(broadcastReceiverHashMap.get(key));
+        synchronized (this) {
+            for (String key : broadcastReceiverHashMap.keySet()) {
+                //unregister fiecare receiver
+                unregisterReceiver(broadcastReceiverHashMap.get(key));
+                broadcastReceiverHashMap.remove(key);
+            }
         }
     }
 
