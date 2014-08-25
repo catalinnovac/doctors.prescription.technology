@@ -87,16 +87,22 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
                     case 0: //pending
+                        appView.loadUrl("file:///android_asset/www/pending.html");
                         break;
                     case 1://history
+                        appView.loadUrl("file:///android_asset/www/history.html");
                         break;
                     case 2://declined
+                        appView.loadUrl("file:///android_asset/www/declined.html");
                         break;
                     case 3://query
+                        appView.loadUrl("file:///android_asset/www/query.html");
                         break;
                     case 4: //invoices
+                        appView.loadUrl("file:///android_asset/www/invoices.html");
                         break;
                     case 5: //messages
+                        appView.loadUrl("file:///android_asset/www/messages.html");
                         break;
                 }
             }
