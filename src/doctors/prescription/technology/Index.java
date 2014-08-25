@@ -14,12 +14,12 @@ import android.widget.SearchView;
 import doctors.prescription.technology.code.PrescriptionTechnologyWithNavigationDrawer;
 import doctors.prescription.technology.code.data.DataContext;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Index extends PrescriptionTechnologyWithNavigationDrawer {
 
     private final String TAG = Index.class.getSimpleName();
-    HashMap<String, BroadcastReceiver> map = new HashMap<String, BroadcastReceiver>();
+    ConcurrentHashMap<String, BroadcastReceiver> map = new ConcurrentHashMap<String, BroadcastReceiver>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class Index extends PrescriptionTechnologyWithNavigationDrawer {
     }
 
     @Override
-    protected HashMap<String, BroadcastReceiver> GetBroadcastsMap() {
+    protected ConcurrentHashMap<String, BroadcastReceiver> GetBroadcastsMap() {
         BroadcastReceiver loginCompleted = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {

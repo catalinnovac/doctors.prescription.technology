@@ -12,6 +12,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import doctors.prescription.technology.R;
 import doctors.prescription.technology.code.navigation.drawer.Adapter;
@@ -26,6 +27,7 @@ import org.apache.cordova.api.CordovaPlugin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -45,7 +47,7 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
     private ListView mDrawerList;
     private CordovaPlugin activityResultCallback;
     private ActionBarDrawerToggle mDrawerToggle;
-    private HashMap<String, BroadcastReceiver> broadcastReceiverHashMap;
+    private ConcurrentHashMap<String, BroadcastReceiver> broadcastReceiverHashMap;
     //</editor-fold>
 
     //<editor-fold desc="Override">
@@ -80,6 +82,25 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
         );
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i) {
+                    case 0: //pending
+                        break;
+                    case 1://history
+                        break;
+                    case 2://declined
+                        break;
+                    case 3://query
+                        break;
+                    case 4: //invoices
+                        break;
+                    case 5: //messages
+                        break;
+                }
+            }
+        });
         PopulateLeftMenu();//populeaza listview din navigation drawer
         mDrawerList.setAdapter(new Adapter(this,
                 R.layout.left_drawer_item, items));
@@ -183,7 +204,7 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
     //</editor-fold>
 
     //<editor-fold desc="Abstract">
-    protected abstract HashMap<String, BroadcastReceiver> GetBroadcastsMap();
+    protected abstract ConcurrentHashMap<String, BroadcastReceiver> GetBroadcastsMap();
 
     //</editor-fold>
 
