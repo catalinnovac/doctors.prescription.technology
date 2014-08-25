@@ -1,38 +1,139 @@
-<!DOCTYPE HTML>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN"
+        "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">
 <html>
 <head>
-    <title>Cordova</title>
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css"/>
+    <title>Prescription Technology</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen"/>
     <script type="text/javascript" src="cordova.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="js/respond.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic"
+          rel="stylesheet" type="text/css"/>
 </head>
-<body>
-<h1>Hello World</h1>
+<body id="main-page">
 
-<div id="test-ajax"></div>
-<input type="button" id="btn" value="google"/>
-<input type="button" id="btn2" value="Go to Customer Address"/>
-<script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
-<script type="text/javascript">
-		$(function(){
-			$('#btn').click(function(){
-				$.ajax({
-					url : "http://google.ro",
-					method:"get"
-				}).done(function(result){$('#test-ajax').html(result);});
-			});
-			$('#btn2').click(function(){
-				console.log('catat is here');
-				window.prescription_technology.NavigateTo("prescription.technology.intent.CUSTOMER_ADDRESS");
-			});			
-		});
+<!-- Preloader -->
+<div id="page-preloader">
+    <img class="preloader" src="/themes/<%=currentTemplate%>/images/loading.gif" alt=""/>
+</div>
 
+<div class="container wrap">
+    <div class="row gutters">
+        <div class="col span_24">
+            <a href="/" id="logo" title="Prescription Technology - Doctors Interface"/>Prescription Technology - Doctors
+            Interface</a>
+            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface menu"/>Menu</a>
+        </div>
+    </div>
+</div>
 
+<div class="container wrap">
+    <h1>Doctors Interface</h1>
 
+    <div id="declined">
+        <div id="clone" class="cloneable">
+            <div id='edit-buttons'>
+                <a id="edit-link"></a>
+            </div>
+            <div id='customer-placeholder'>
+                <div id='customer-info'><span id="firstname"></span><span id="middleinitial"></span><span
+                        id="lastname"></span></div>
+                <div id='customer-addresses'>
+                    <div id='customer-shipping-address'>
+                        <p id="Street"></p>
 
+                        <p id="City"></p>
 
+                        <p id="Province"></p>
 
+                        <p id="Postal_Code"></p>
 
-</script>
+                        <p id="Country"></p>
+                    </div>
+                    <div id='customer-billing-address'>
+                        <p id="Street"></p>
+
+                        <p id="City"></p>
+
+                        <p id="Province"></p>
+
+                        <p id="Postal_Code"></p>
+
+                        <p id="Country"></p>
+                    </div>
+                </div>
+            </div>
+            <div id="Treatment&Order">
+                <p id="OrderNumber"></p>
+
+                <p id="OrderDate"></p>
+                <ul id="Meds">
+                    <li class="hide cloneable"><p id="MedName"></p></li>
+                </ul>
+            </div>
+            <div id="Assign_date">
+                <p id="assing_date"></p>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+            $(function () {
+                $('#nav-toggle').on('click', function (e) {
+                    e.preventDefault();
+                    alert('opening side panel');
+                    var extra = new Array();
+                    extra.push({ key: "open", value: "1" });
+                    doctors.sendMessage("DRAWER", JSON.stringify(extra));
+                });
+            });
+            $.ajax({
+                url: 'http://doctors.prescription.technology/ws/declined.asp',
+                type: 'GET',
+                beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
+            }).fail(function (xhr, textStatus, error) { alert(textStatus); })
+            .done(function (data, textStatus, xhr) {
+                alert(data);
+                var declined = JSON.parse(data);
+                var declinedList = $('#declined');
+                if (declined.Declined.length() > 0) {
+                    for (var i = 0; i < declined.Declined; i++) {
+                        var current_declined = declined.Declined[i];
+                        var clone = declinedList.find('#clone').clone();
+                        clone.find('#edit-link').attr('href', current_declined.OrderNumber.oid_url);
+                        clone.children('#customer-placeholder > #customer-info').children('#firstname').text(current_declined.customer.firstname);
+                        clone.children('#customer-placeholder > #customer-info').children('#middleinitial').text(current_declined.customer.middleinitial);
+                        clone.children('#customer-placeholder > #customer-info').children('#lastname').text(current_declined.customer.lastname);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Street').text(current_declined.customer.Shipping_address.Street);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#City').text(current_declined.customer.Shipping_address.City);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Province').text(current_declined.customer.Shipping_address.Province);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Postal_Code').text(current_declined.customer.Shipping_address.Postal_Code);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Country').text(current_declined.customer.Shipping_address.Country);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Street').text(current_declined.customer.Billing_address.Street);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#City').text(current_declined.customer.Billing_address.City);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Province').text(current_declined.customer.Billing_address.Province);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Postal_Code').text(current_declined.customer.Billing_address.Postal_Code);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Country').text(current_declined.customer.Billing_address.Country);
+                        clone.children('#Treatment&Order > #OrderNumber').text(current_declined.Treatment_Order.OrderNumber);
+                        clone.children('#Treatment&Order > #OrderDate').text(current_declined.Treatment_Order.OrderDate);
+                        for (var j = 0; j < current_declined.Treatment_Order.Meds.length() ; j++) {
+                            var li = clone.children('#Treatment&Order > #Meds').find('li.cloneable').clone();
+                            li.children('#MedName').text(current_declined.Treatment_Order.Meds[j].MedName);
+                            li.appendTo(clone.children('#Treatment&Order > #Meds'));
+                        }
+                        clone.children('#Assign_date > #assign_date').text(current_declined.Assign_date);
+                        clone.appendTo($('#declined'));
+                    }
+                } else {
+
+                }
+            });
+
+    </script>
+</div>
 </body>
 </html>

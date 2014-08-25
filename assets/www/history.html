@@ -1,38 +1,131 @@
-<!DOCTYPE HTML>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN"
+        "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">
 <html>
 <head>
-    <title>Cordova</title>
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css"/>
+    <title>Prescription Technology</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen"/>
     <script type="text/javascript" src="cordova.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="js/respond.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic"
+          rel="stylesheet" type="text/css"/>
 </head>
-<body>
-<h1>Hello World</h1>
+<body id="main-page">
 
-<div id="test-ajax"></div>
-<input type="button" id="btn" value="google"/>
-<input type="button" id="btn2" value="Go to Customer Address"/>
-<script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
-<script type="text/javascript">
-		$(function(){
-			$('#btn').click(function(){
-				$.ajax({
-					url : "http://google.ro",
-					method:"get"
-				}).done(function(result){$('#test-ajax').html(result);});
-			});
-			$('#btn2').click(function(){
-				console.log('catat is here');
-				window.prescription_technology.NavigateTo("prescription.technology.intent.CUSTOMER_ADDRESS");
-			});			
-		});
+<!-- Preloader -->
+<div id="page-preloader">
+    <img class="preloader" src="/themes/<%=currentTemplate%>/images/loading.gif" alt=""/>
+</div>
 
+<div class="container wrap">
+    <div class="row gutters">
+        <div class="col span_24">
+            <a href="/" id="logo" title="Prescription Technology - Doctors Interface"/>Prescription Technology - Doctors
+            Interface</a>
+            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface menu"/>Menu</a>
+        </div>
+    </div>
+</div>
 
+<div class="container wrap">
+    <h1>Doctors Interface</h1>
 
+    <div id="history">
+        <div id="clone" class="cloneable">
+            <div id='edit-buttons'>
+                <a id="edit-link"></a>
+            </div>
+            <div id='customer-placeholder'>
+                <div id='customer'>
+                    <span id="firstname"></span><span id="middleinitial"></span><span id="lastname"></span>
 
+                    <p id="email"></p>
 
+                    <p id="phone"></p>
 
+                    <p id="shipping_company"></p>
+                </div>
+                <div id='customer-info'>
+                    <p id="bmi"></p>
 
-</script>
+                    <p id="height"></p>
+
+                    <p id="weight"></p>
+
+                    <p id="language"></p>
+                </div>
+            </div>
+            <div id="Treatment&Order">
+                <p id="OrderNumber"></p>
+
+                <p id="OrderDate"></p>
+
+                <p id="OrderStatus"></p>
+                <ul id="Meds">
+                    <li class="hide cloneable"><p id="MedName"></p></li>
+                </ul>
+            </div>
+            <div id="Assign_date">
+                <p id="assing_date"></p>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+            $(function () {
+                $('#nav-toggle').on('click', function (e) {
+                    e.preventDefault();
+                    alert('opening side panel');
+                    var extra = new Array();
+                    extra.push({ key: "open", value: "1" });
+                    doctors.sendMessage("DRAWER", JSON.stringify(extra));
+                });
+            });
+            $.ajax({
+                url: 'http://doctors.prescription.technology/ws/history.asp',
+                type: 'GET',
+                beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
+            }).fail(function (xhr, textStatus, error) { alert(textStatus); })
+            .done(function (data, textStatus, xhr) {
+                alert(data);
+                var history = JSON.parse(data);
+                var historyList = $('#history');
+                if (history.History.length() > 0) {
+                    for (var i = 0; i < history.History; i++) {
+                        var current_history = history.History[i];
+                        var clone = historyList.find('#clone').clone();
+                        clone.find('#edit-link').attr('href', current_history.OrderNumber.oid_url);
+                        clone.children('#customer-placeholder > #customer').children('#firstname').text(current_history.customer.firstname);
+                        clone.children('#customer-placeholder > #customer').children('#middleinitial').text(current_history.customer.middleinitial);
+                        clone.children('#customer-placeholder > #customer').children('#lastname').text(current_history.customer.lastname);
+                        clone.children('#customer-placeholder > #customer').children('#email').text(current_history.customer.email);
+                        clone.children('#customer-placeholder > #customer').children('#phone').text(current_history.customer.phone);
+                        clone.children('#customer-placeholder > #customer').children('#shipping_company').text(current_history.customer.shipping_company);
+                        clone.children('#customer-placeholder > #customer-info').children('#bmi').text(current_history.customer.bmi);
+                        clone.children('#customer-placeholder > #customer-info').children('#height').text(current_history.customer.height);
+                        clone.children('#customer-placeholder > #customer-info').children('#weight').text(current_history.customer.weight);
+                        clone.children('#customer-placeholder > #customer-info').children('#language').text(current_history.customer.language);
+                        clone.children('#Treatment&Order > #OrderNumber').text(current_history.Treatment_Order.OrderNumber);
+                        clone.children('#Treatment&Order > #OrderDate').text(current_history.Treatment_Order.OrderDate);
+                        clone.children('#Treatment&Order > #OrderStatus').text(current_history.Treatment_Order.OrderStatus);
+                        for (var j = 0; j < current_history.Treatment_Order.Meds.length() ; j++) {
+                            var li = clone.children('#Treatment&Order > #Meds').find('li.cloneable').clone();
+                            li.children('#MedName').text(current_history.Treatment_Order.Meds[j].MedName);
+                            li.appendTo(clone.children('#Treatment&Order > #Meds'));
+                        }
+                        clone.children('#Assign_date > #assign_date').text(current_history.Assign_date);
+                        clone.appendTo($('#history'));
+                    }
+                } else {
+
+                }
+            });
+
+    </script>
+</div>
 </body>
 </html>

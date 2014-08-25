@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN"
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN"
         "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">
 <html>
 <head>
@@ -34,33 +34,104 @@
 
 <div class="container wrap">
     <h1>Doctors Interface</h1>
-    <textarea id="x"></textarea>
+
+    <div id="pendings">
+        <div id="clone" class="cloneable">
+            <div id='edit-buttons'>
+                <a id="edit-link"></a>
+            </div>
+            <div id='customer-placeholder'>
+                <div id='customer-info'><span id="firstname"></span><span id="middleinitial"></span><span
+                        id="lastname"></span></div>
+                <div id='customer-addresses'>
+                    <div id='customer-shipping-address'>
+                        <p id="Street"></p>
+
+                        <p id="City"></p>
+
+                        <p id="Province"></p>
+
+                        <p id="Postal_Code"></p>
+
+                        <p id="Country"></p>
+                    </div>
+                    <div id='customer-billing-address'>
+                        <p id="Street"></p>
+
+                        <p id="City"></p>
+
+                        <p id="Province"></p>
+
+                        <p id="Postal_Code"></p>
+
+                        <p id="Country"></p>
+                    </div>
+                </div>
+            </div>
+            <div id="Treatment&Order">
+                <p id="OrderNumber"></p>
+
+                <p id="OrderDate"></p>
+                <ul id="Meds">
+                    <li class="hide cloneable"><p id="MedName"></p></li>
+                </ul>
+            </div>
+            <div id="Assign_date">
+                <p id="assing_date"></p>
+            </div>
+        </div>
+    </div>
     <script type="text/javascript">
-                $(function(){
-                    $('#nav-toggle').on('click', function(e){
-                        e.preventDefault();
-                        alert('opening side panel');
-                        var extra = new Array();
-                        extra.push({ key:"open",value:"1"});
-                        doctors.sendMessage("DRAWER",JSON.stringify(extra));
-                    });
+            $(function () {
+                $('#nav-toggle').on('click', function (e) {
+                    e.preventDefault();
+                    alert('opening side panel');
+                    var extra = new Array();
+                    extra.push({ key: "open", value: "1" });
+                    doctors.sendMessage("DRAWER", JSON.stringify(extra));
                 });
-                var token = doctors.getToken();
-                $.ajax({
-                    url:'http://doctors.prescription.technology/ws/pending.asp',
-                    type : 'GET',
-                    beforeSend : function(xhr){ xhr.setRequestHeader('Authorization', token); }
-                }).fail(function(xhr,textStatus,error){alert(textStatus);})
-                .done(function(data,textStatus,xhr){$('#x').html(data);});
-                /*
-                $.get('http://doctors.prescription.technology/ws/pending.asp',function(data){
-                    $('#x').html(data);
-                });
-                */
+            });
+            $.ajax({
+                url: 'http://doctors.prescription.technology/ws/pending.asp',
+                type: 'GET',
+                beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
+            }).fail(function (xhr, textStatus, error) { alert(textStatus); })
+            .done(function (data, textStatus, xhr) {
+                alert(data);
+                var pendings = JSON.parse(data);
+                var pendingList = $('#pendings');
+                if (pendings.pending.length() > 0) {
+                    for (var i = 0; i < pendings.pending; i++) {
+                        var current_pending = pendings.pending[i];
+                        var clone = pendingList.find('#clone').clone();
+                        clone.find('#edit-link').attr('href', current_pending.OrderNumber.oid_url);
+                        clone.children('#customer-placeholder > #customer-info').children('#firstname').text(current_pending.customer.firstname);
+                        clone.children('#customer-placeholder > #customer-info').children('#middleinitial').text(current_pending.customer.middleinitial);
+                        clone.children('#customer-placeholder > #customer-info').children('#lastname').text(current_pending.customer.lastname);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Street').text(current_pending.customer.Shipping_address.Street);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#City').text(current_pending.customer.Shipping_address.City);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Province').text(current_pending.customer.Shipping_address.Province);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Postal_Code').text(current_pending.customer.Shipping_address.Postal_Code);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Country').text(current_pending.customer.Shipping_address.Country);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Street').text(current_pending.customer.Billing_address.Street);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#City').text(current_pending.customer.Billing_address.City);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Province').text(current_pending.customer.Billing_address.Province);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Postal_Code').text(current_pending.customer.Billing_address.Postal_Code);
+                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Country').text(current_pending.customer.Billing_address.Country);
+                        clone.children('#Treatment&Order > #OrderNumber').text(current_pending.Treatment_Order.OrderNumber);
+                        clone.children('#Treatment&Order > #OrderDate').text(current_pending.Treatment_Order.OrderDate);
+                        for (var j = 0; j < current_pending.Treatment_Order.Meds.length() ; j++) {
+                            var li = clone.children('#Treatment&Order > #Meds').find('li.cloneable').clone();
+                            li.children('#MedName').text(current_pending.Treatment_Order.Meds[j].MedName);
+                            li.appendTo(clone.children('#Treatment&Order > #Meds'));
+                        }
+                        clone.children('#Assign_date > #assign_date').text(current_pending.Assign_date);
+                        clone.appendTo($('#pendings'));
+                    }
+                } else {
 
-
-
-
+                }
+            });
 
     </script>
 </div>

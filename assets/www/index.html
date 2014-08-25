@@ -45,9 +45,12 @@
                         doctors.sendMessage("DRAWER",JSON.stringify(extra));
                     });
                 });
+
                 $.get('http://doctors.prescription.technology/ws/pending.asp',function(data){
                     $('#x').html(data);
                 });
+
+
     </script>
 </div>
 </body>

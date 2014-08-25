@@ -1,12 +1,105 @@
-<!DOCTYPE HTML>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN"
+        "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">
 <html>
 <head>
-    <title>Cordova</title>
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css"/>
+    <title>Prescription Technology</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen"/>
     <script type="text/javascript" src="cordova.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="js/respond.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic"
+          rel="stylesheet" type="text/css"/>
 </head>
-<body bgcolor="#e4f2f2">
-<h1>PRESCRIPTION DELIVERY</h1>
+<body id="main-page">
+
+<!-- Preloader -->
+<div id="page-preloader">
+    <img class="preloader" src="/themes/<%=currentTemplate%>/images/loading.gif" alt=""/>
+</div>
+
+<div class="container wrap">
+    <div class="row gutters">
+        <div class="col span_24">
+            <a href="/" id="logo" title="Prescription Technology - Doctors Interface"/>Prescription Technology - Doctors
+            Interface</a>
+            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface menu"/>Menu</a>
+        </div>
+    </div>
+</div>
+
+<div class="container wrap">
+    <h1>Doctors Interface</h1>
+
+    <div id="messages">
+        <div id="clone" class="cloneable">
+            <div id='action-buttons'>
+                <a id="action-link"></a>
+            </div>
+            <div id='customer-placeholder'>
+                <div id='customer'>
+                    <span id="firstname"></span><span id="middleinitial"></span><span id="lastname"></span>
+
+                    <p id="nr_of_unread_messages"></p>
+
+                    <p id="total_nr_of_unread_messages"></p>
+                </div>
+            </div>
+            <div id="Message">
+                <p id="message_header"></p>
+
+                <p id="message"></p>
+            </div>
+            <div id="Last_message_date">
+                <p id="last_message_date"></p>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+            $(function () {
+                $('#nav-toggle').on('click', function (e) {
+                    e.preventDefault();
+                    alert('opening side panel');
+                    var extra = new Array();
+                    extra.push({ key: "open", value: "1" });
+                    doctors.sendMessage("DRAWER", JSON.stringify(extra));
+                });
+            });
+            $.ajax({
+                url: 'http://doctors.prescription.technology/ws/messages.asp',
+                type: 'GET',
+                beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
+            }).fail(function (xhr, textStatus, error) { alert(textStatus); })
+            .done(function (data, textStatus, xhr) {
+                alert(data);
+                var messages = JSON.parse(data);
+                var messagesList = $('#messages');
+                if (messages.Messages.length() > 0) {
+                    for (var i = 0; i < messages.Messages; i++) {
+                        var current_messages = messages.Messages[i];
+                        var clone = messagesList.find('#clone').clone();
+                        clone.children('#action-buttons > #action-link').attr('href', current_messages.OrderNumber.oid_url);
+                        clone.children('#customer-placeholder > #customer').children('#firstname').text(current_messages.customer.firstname);
+                        clone.children('#customer-placeholder > #customer').children('#middleinitial').text(current_messages.customer.middleinitial);
+                        clone.children('#customer-placeholder > #customer').children('#lastname').text(current_messages.customer.lastname);
+                        clone.children('#customer-placeholder > #customer').children('#nr_of_unread_messages').text(current_messages.customer.nr_of_unread_messages);
+                        clone.children('#customer-placeholder > #customer').children('#total_nr_of_unread_messages').text(current_messages.customer.total_nr_of_unread_messages);
+                        clone.children('#Message > #message_header').text(current_messages.Message.message_header);
+                        clone.children('#Message > #message').text(current_messages.Message.message);
+                        clone.children('#Last_message_date > #last_message_date').text(current_messages.Assign_date);
+                        clone.appendTo($('#messages'));
+                    }
+                } else {
+
+                }
+            });
+
+
+    </script>
+</div>
 </body>
 </html>
