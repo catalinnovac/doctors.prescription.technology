@@ -49,12 +49,6 @@
 					var $loginForm = $('#login-form');
 					var $loginSubmit = $('#login-submit');
 					var $loginUser = $('#login-user');
-					
-                    $('#nav-toggle').on('click', function(e){
-                        e.preventDefault();
-                        alert('opening side panel');
-						doctors.sendMessage("OPEN_DRAWER");
-					});
 					$loginForm.on('click', '#login-submit', function(e){
 						e.preventDefault();
 						alert('logging in click on submit');
@@ -81,6 +75,7 @@
 				//PowerUp();
 				document.addEventListener("deviceready", PowerUp, true);       
 			});
+
 
 
 </script>

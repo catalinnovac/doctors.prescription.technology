@@ -95,9 +95,10 @@
                 url: 'http://doctors.prescription.technology/ws/pending.asp',
                 type: 'GET',
                 beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
-            }).fail(function (xhr, textStatus, error) { alert(textStatus); })
+            }).fail(function (xhr, textStatus, error) { alert(xhr.responseText); })
             .done(function (data, textStatus, xhr) {
                 alert(data);
+                console.log(data);
                 var pendings = JSON.parse(data);
                 var pendingList = $('#pendings');
                 if (pendings.pending.length() > 0) {
@@ -132,6 +133,7 @@
 
                 }
             });
+
 
     </script>
 </div>

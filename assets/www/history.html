@@ -25,32 +25,34 @@
 <div class="container wrap">
     <div class="row gutters">
         <div class="col span_24">
-            <a href="/" id="logo" title="Prescription Technology - Doctors Interface"/>Prescription Technology - Doctors
-            Interface</a>
-            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface menu"/>Menu</a>
+            <a href="/" id="logo" title="Prescription Technology - Doctors Interface">
+                Prescription Technology - Doctors
+                Interface
+            </a>
+            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface menu">Menu</a>
         </div>
     </div>
-</div>
+    </div>
 
 <div class="container wrap">
     <h1>Doctors Interface</h1>
 
     <div id="history">
         <div id="clone" class="cloneable">
-            <div id='edit-buttons'>
+            <div id="edit-buttons">
                 <a id="edit-link"></a>
             </div>
-            <div id='customer-placeholder'>
-                <div id='customer'>
+            <div id="customer-placeholder">
+                <div id="customer">
                     <span id="firstname"></span><span id="middleinitial"></span><span id="lastname"></span>
 
                     <p id="email"></p>
 
                     <p id="phone"></p>
 
-                    <p id="shipping_company"></p>
+                    <p id="shipping_country"></p>
                 </div>
-                <div id='customer-info'>
+                <div id="customer-info">
                     <p id="bmi"></p>
 
                     <p id="height"></p>
@@ -60,7 +62,7 @@
                     <p id="language"></p>
                 </div>
             </div>
-            <div id="Treatment&Order">
+            <div id="Treatment_Order">
                 <p id="OrderNumber"></p>
 
                 <p id="OrderDate"></p>
@@ -74,56 +76,66 @@
                 <p id="assing_date"></p>
             </div>
         </div>
+        </div>
+    <div id="history-placeholder">
+        xxx
     </div>
     <script type="text/javascript">
             $(function () {
-                $('#nav-toggle').on('click', function (e) {
+                $("#nav-toggle").on("click", function (e) {
                     e.preventDefault();
-                    alert('opening side panel');
                     var extra = new Array();
                     extra.push({ key: "open", value: "1" });
                     doctors.sendMessage("DRAWER", JSON.stringify(extra));
                 });
             });
             $.ajax({
-                url: 'http://doctors.prescription.technology/ws/history.asp',
-                type: 'GET',
-                beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
+                url: "http://doctors.prescription.technology/ws/history.asp",
+                type: "GET",
+                beforeSend: function (xhr) { xhr.setRequestHeader("Authorization", doctors.getToken()); }
             }).fail(function (xhr, textStatus, error) { alert(textStatus); })
             .done(function (data, textStatus, xhr) {
-                alert(data);
+                //alert(data);
                 var history = JSON.parse(data);
-                var historyList = $('#history');
-                if (history.History.length() > 0) {
-                    for (var i = 0; i < history.History; i++) {
-                        var current_history = history.History[i];
-                        var clone = historyList.find('#clone').clone();
-                        clone.find('#edit-link').attr('href', current_history.OrderNumber.oid_url);
-                        clone.children('#customer-placeholder > #customer').children('#firstname').text(current_history.customer.firstname);
-                        clone.children('#customer-placeholder > #customer').children('#middleinitial').text(current_history.customer.middleinitial);
-                        clone.children('#customer-placeholder > #customer').children('#lastname').text(current_history.customer.lastname);
-                        clone.children('#customer-placeholder > #customer').children('#email').text(current_history.customer.email);
-                        clone.children('#customer-placeholder > #customer').children('#phone').text(current_history.customer.phone);
-                        clone.children('#customer-placeholder > #customer').children('#shipping_company').text(current_history.customer.shipping_company);
-                        clone.children('#customer-placeholder > #customer-info').children('#bmi').text(current_history.customer.bmi);
-                        clone.children('#customer-placeholder > #customer-info').children('#height').text(current_history.customer.height);
-                        clone.children('#customer-placeholder > #customer-info').children('#weight').text(current_history.customer.weight);
-                        clone.children('#customer-placeholder > #customer-info').children('#language').text(current_history.customer.language);
-                        clone.children('#Treatment&Order > #OrderNumber').text(current_history.Treatment_Order.OrderNumber);
-                        clone.children('#Treatment&Order > #OrderDate').text(current_history.Treatment_Order.OrderDate);
-                        clone.children('#Treatment&Order > #OrderStatus').text(current_history.Treatment_Order.OrderStatus);
-                        for (var j = 0; j < current_history.Treatment_Order.Meds.length() ; j++) {
-                            var li = clone.children('#Treatment&Order > #Meds').find('li.cloneable').clone();
-                            li.children('#MedName').text(current_history.Treatment_Order.Meds[j].MedName);
-                            li.appendTo(clone.children('#Treatment&Order > #Meds'));
+                var historyList = $("#history");
+                //alert(history.Orders_History.length);
+                if (history.Orders_History.length > 0) {
+                    for (var i = 0; i < history.Orders_History.length; i++) {
+                        var current_history = history.Orders_History[i];
+                        var clone = historyList.find("#clone").clone();
+                        clone.prop("id","_" + current_history.OrderNumber.oid);
+                        clone.removeClass("cloneable");
+                        clone.find("#edit-link").attr("href", current_history.OrderNumber.oid_url);
+                        clone.children("#customer-placeholder > #customer").children("#firstname").text(current_history.customer.firstname);
+                        clone.children("#customer-placeholder > #customer").children("#middleinitial").text(current_history.customer.middleinitial);
+                        clone.children("#customer-placeholder > #customer").children("#lastname").text(current_history.customer.lastname);
+                        clone.children("#customer-placeholder > #customer").children("#email").text(current_history.customer.email);
+                        clone.children("#customer-placeholder > #customer").children("#phone").text(current_history.customer.phone);
+                        clone.children("#customer-placeholder > #customer").children("#shipping_country").text(current_history.customer.shipping_country);
+                        clone.children("#customer-placeholder > #customer-info").children("#bmi").text(current_history.customer.bmi);
+                        clone.children("#customer-placeholder > #customer-info").children("#height").text(current_history.customer.height);
+                        clone.children("#customer-placeholder > #customer-info").children("#weight").text(current_history.customer.weight);
+                        clone.children("#customer-placeholder > #customer-info").children("#language").text(current_history.customer.language);
+                        clone.children("#Treatment_Order > #OrderNumber").text(current_history.Treatment.oid);
+                        clone.children("#Treatment_Order > #OrderDate").text(current_history.Treatment.orderdate);
+                        clone.children("#Treatment_Order > #OrderStatus").text(current_history.Treatment.status);
+                        for (var j = 0; j < current_history.Treatment.Meds.length ; j++) {
+                            var li = clone.children("#Treatment_Order > #Meds").find("li.cloneable").clone();
+                            li.children("#MedName").text(current_history.Treatment.Meds[j].MedName)
+                            li.appendTo(clone.children("#Treatment_Order > #Meds"));
                         }
-                        clone.children('#Assign_date > #assign_date').text(current_history.Assign_date);
-                        clone.appendTo($('#history'));
+                        clone.children("#Assign_date > #assign_date").text(current_history.Assign_date);
+                        console.log( 'before: ' + $('#history-placeholder').html());
+                        clone.appendTo($("#history-placeholder"));
+                        console.log($("#history-placeholder").prop('id'));
+                        console.log(clone.prop('id'));
+                        console.log('after:' + $('#history-placeholder').html());
                     }
                 } else {
 
                 }
             });
+
 
     </script>
 </div>
@@ -131,10 +143,14 @@
     <div class="col span_12">
         This software and all connected databases are the exclusive property of
         <strong>HR Healthcare Ltd</strong><br>
-        All rights are reserved by <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
-        2HH. 01204 559 999</strong> <br>
-        All Intellectual Property Rights belong to <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting,
-        Bolton, BL2 2HH. 01204 559 999</strong>
+        All rights are reserved by <strong>
+        HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
+        2HH. 01204 559 999
+    </strong> <br>
+        All Intellectual Property Rights belong to <strong>
+        HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting,
+        Bolton, BL2 2HH. 01204 559 999
+    </strong>
     </div>
     <div class="col span_12">
         Any use, editing, changing, multiplication or commercial
