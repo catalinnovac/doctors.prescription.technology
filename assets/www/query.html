@@ -25,9 +25,11 @@
 <div class="container wrap">
     <div class="row gutters">
         <div class="col span_24">
-            <a href="/" id="logo" title="Prescription Technology - Doctors Interface"/>Prescription Technology - Doctors
-            Interface</a>
-            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface menu"/>Menu</a>
+            <a href="/" id="logo" title="Prescription Technology - Doctors Interface">
+                Prescription Technology - Doctors
+                Interface
+            </a>
+            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface menu">Menu</a>
         </div>
     </div>
 </div>
@@ -41,8 +43,9 @@
                 <a id="edit-link"></a>
             </div>
             <div id='customer-placeholder'>
-                <div id='customer-info'><span id="firstname"></span><span id="middleinitial"></span><span
-                        id="lastname"></span></div>
+                <div id='customer-info'>
+                    <span id="firstname"></span><span id="middleinitial"></span><span id="lastname"></span>
+                </div>
                 <div id='customer-addresses'>
                     <div id='customer-shipping-address'>
                         <p id="Street"></p>
@@ -82,7 +85,7 @@
         </div>
     </div>
     <script type="text/javascript">
-            $(function () {
+            function onDeviceReady() {
                 $('#nav-toggle').on('click', function (e) {
                     e.preventDefault();
                     alert('opening side panel');
@@ -90,50 +93,82 @@
                     extra.push({ key: "open", value: "1" });
                     doctors.sendMessage("DRAWER", JSON.stringify(extra));
                 });
-            });
-            $.ajax({
-                url: 'http://doctors.prescription.technology/ws/query.asp',
-                type: 'GET',
-                beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
-            }).fail(function (xhr, textStatus, error) { alert(textStatus); })
-            .done(function (data, textStatus, xhr) {
-                alert(data);
-                var query = JSON.parse(data);
-                var queryList = $('#query');
-                if (query.pending.length() > 0) {
-                    for (var i = 0; i < query.Query; i++) {
-                        var current_query = query.Query[i];
-                        var clone = queryList.find('#clone').clone();
-                        clone.find('#edit-link').attr('href', current_query.OrderNumber.oid_url);
-                        clone.children('#customer-placeholder > #customer-info').children('#firstname').text(current_query.customer.firstname);
-                        clone.children('#customer-placeholder > #customer-info').children('#middleinitial').text(current_query.customer.middleinitial);
-                        clone.children('#customer-placeholder > #customer-info').children('#lastname').text(current_query.customer.lastname);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Street').text(current_query.customer.Shipping_address.Street);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#City').text(current_query.customer.Shipping_address.City);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Province').text(current_query.customer.Shipping_address.Province);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Postal_Code').text(current_query.customer.Shipping_address.Postal_Code);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Country').text(current_query.customer.Shipping_address.Country);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Street').text(current_query.customer.Billing_address.Street);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#City').text(current_query.customer.Billing_address.City);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Province').text(current_query.customer.Billing_address.Province);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Postal_Code').text(current_query.customer.Billing_address.Postal_Code);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Country').text(current_query.customer.Billing_address.Country);
-                        clone.children('#Treatment&Order > #OrderNumber').text(current_query.Treatment_Order.OrderNumber);
-                        clone.children('#Treatment&Order > #OrderDate').text(current_query.Treatment_Order.OrderDate);
-                        for (var j = 0; j < current_query.Treatment_Order.Meds.length() ; j++) {
-                            var li = clone.children('#Treatment&Order > #Meds').find('li.cloneable').clone();
-                            li.children('#MedName').text(current_query.Treatment_Order.Meds[j].MedName);
-                            li.appendTo(clone.children('#Treatment&Order > #Meds'));
-                        }
-                        clone.children('#Assign_date > #assign_date').text(current_query.Assign_date);
-                        clone.appendTo($('#query'));
-                    }
-                } else {
 
-                }
-            });
+                $.ajax({
+                    url: 'http://doctors.prescription.technology/ws/queryorders.asp',
+                    type: 'GET',
+                    beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
+                }).fail(function (xhr, textStatus, error) { alert(xhr.responseText); })
+                .done(function (data, textStatus, xhr) {
+                    alert(data);
+                    var query = JSON.parse(data);
+                    if (query.Query_Orders.length > 0) {
+                        for (var i = 0; i < query.Query_Orders.length; i++) {
+                            var current_query = query.Query_Orders[i];
+                            var $clone = $('#clone').clone();
+                            $clone.find('#edit-link').attr('href', current_query.OrderNumber.oid_url);
+                            $clone.find('#firstname').text(current_query.customer.firstname);
+                            $clone.find('#middleinitial').text(current_query.customer.middleinitial);
+                            $clone.find('#lastname').text(current_query.customer.lastname);
+                            for (var k = 0; k < current_query.customer.Shipping_address.length ; k++) {
+                                var current_ship_addr = current_query.customer.Shipping_address[k];
+                                var $current_ship_clone = $clone.find('#customer-shipping-address').clone();
+                                $current_ship_clone.find('#Street').text(current_query.customer.Shipping_address.Street);
+                                $current_ship_clone.find('#City').text(current_query.customer.Shipping_address.City);
+                                $current_ship_clone.find('#Province').text(current_query.customer.Shipping_address.Province);
+                                $current_ship_clone.find('#Postal_Code').text(current_query.customer.Shipping_address.Postal_Code);
+                                $current_ship_clone.find('#Country').text(current_query.customer.Shipping_address.Country);
+                            }
+                            for (var k = 0; k < current_query.customer.Billing_address.length; k++) {
+                                var current_bill_addr = current_query.customer.Billing_address[k];
+                                var $current_bill_clone = $clone.find('#customer-billing-address').clone();
+                                $current_bill_clone.find('#Street').text($current_bill_clone.Street);
+                                $current_bill_clone.find('#City').text($current_bill_clone.City);
+                                $current_bill_clone.find('#Province').text($current_bill_clone.Province);
+                                $current_bill_clone.find('#Postal_Code').text($current_bill_clone.Postal_Code);
+                                $current_bill_clone.find('#Country').text($current_bill_clone.Country);
+                            }
+                            $clone.find('#OrderNumber').text(current_query.Treatment_Order.OrderNumber);
+                            $clone.find('#OrderDate').text(current_query.Treatment_Order.OrderDate);
+                            for (var j = 0; j < current_query.Treatment_Order.Meds.length ; j++) {
+                                var $li = $clone.find('#Meds').find('li.cloneable').clone();
+                                $li.find('#MedName').text(current_query.Treatment_Order.Meds[j].MedName);
+                                $li.appendTo($clone.find('#Meds'));
+                            }
+                            $clone.find('#assign_date').text(current_query.Assign_date);
+                            $clone.appendTo($('#query'));
+                        }
+                    } else {
+
+                    }
+                    var extra = new Array();
+                    extra.push({ key: "open", value: "0" });
+                    doctors.sendMessage("DRAWER", JSON.stringify(extra));
+                });
+            }
+            document.addEventListener("deviceready", onDeviceReady, false);
 
     </script>
 </div>
+<footer class="row">
+    <div class="col span_12">
+        This software and all connected databases are the exclusive property of
+        <strong>HR Healthcare Ltd</strong><br>
+        All rights are reserved by <strong>
+        HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
+        2HH. 01204 559 999
+    </strong> <br>
+        All Intellectual Property Rights belong to <strong>
+        HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting,
+        Bolton, BL2 2HH. 01204 559 999
+    </strong>
+    </div>
+    <div class="col span_12">
+        Any use, editing, changing, multiplication or commercial
+        use (including but not limited to selling, licensing of this software
+        and/or parts of it and/or its connected database information), independent
+        of any changes being done first, is prohibited.
+    </div>
+</footer>
 </body>
 </html>

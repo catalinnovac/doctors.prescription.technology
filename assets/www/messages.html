@@ -44,13 +44,11 @@
                 <div id='customer'>
                     <span id="firstname"></span><span id="middleinitial"></span><span id="lastname"></span>
 
-                    <p id="nr_of_unread_messages"></p>
-
-                    <p id="total_nr_of_unread_messages"></p>
+                    <p id="message_status"></p>
                 </div>
             </div>
             <div id="Message">
-                <p id="message_header"></p>
+                <a id="message_url"></a>
 
                 <p id="message"></p>
             </div>
@@ -60,7 +58,7 @@
         </div>
     </div>
     <script type="text/javascript">
-            $(function () {
+            function onDeviceReady() {
                 $('#nav-toggle').on('click', function (e) {
                     e.preventDefault();
                     alert('opening side panel');
@@ -68,36 +66,35 @@
                     extra.push({ key: "open", value: "1" });
                     doctors.sendMessage("DRAWER", JSON.stringify(extra));
                 });
-            });
-            $.ajax({
-                url: 'http://doctors.prescription.technology/ws/messages.asp',
-                type: 'GET',
-                beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
-            }).fail(function (xhr, textStatus, error) { alert(textStatus); })
-            .done(function (data, textStatus, xhr) {
-                alert(data);
-                var messages = JSON.parse(data);
-                var messagesList = $('#messages');
-                if (messages.Messages.length() > 0) {
-                    for (var i = 0; i < messages.Messages; i++) {
-                        var current_messages = messages.Messages[i];
-                        var clone = messagesList.find('#clone').clone();
-                        clone.children('#action-buttons > #action-link').attr('href', current_messages.OrderNumber.oid_url);
-                        clone.children('#customer-placeholder > #customer').children('#firstname').text(current_messages.customer.firstname);
-                        clone.children('#customer-placeholder > #customer').children('#middleinitial').text(current_messages.customer.middleinitial);
-                        clone.children('#customer-placeholder > #customer').children('#lastname').text(current_messages.customer.lastname);
-                        clone.children('#customer-placeholder > #customer').children('#nr_of_unread_messages').text(current_messages.customer.nr_of_unread_messages);
-                        clone.children('#customer-placeholder > #customer').children('#total_nr_of_unread_messages').text(current_messages.customer.total_nr_of_unread_messages);
-                        clone.children('#Message > #message_header').text(current_messages.Message.message_header);
-                        clone.children('#Message > #message').text(current_messages.Message.message);
-                        clone.children('#Last_message_date > #last_message_date').text(current_messages.Assign_date);
-                        clone.appendTo($('#messages'));
+                $.ajax({
+                    url: 'http://doctors.prescription.technology/ws/messages.asp',
+                    type: 'GET',
+                    beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
+                }).fail(function (xhr, textStatus, error) { alert(textStatus); })
+                .done(function (data, textStatus, xhr) {
+                    alert(data);
+                    var messages = JSON.parse(data);
+                    var messagesList = $('');
+                    if (messages.Messages.length > 0) {
+                        for (var i = 0; i < messages.Messages.length; i++) {
+                            var current_messages = messages.Messages[i];
+                            var $clone = $('#messages').find('#clone').clone();
+                            $clone.find('#action-link').attr('href', current_messages.OrderNumber.oid_url);
+                            $clone.find('#firstname').text(current_messages.customer.firstname);
+                            $clone.find('#middleinitial').text(current_messages.customer.middleinitial);
+                            $clone.find('#lastname').text(current_messages.customer.lastname);
+                            $clone.find('#message_status').text(current_messages.message_status);
+                            $clone.find('#message_url').prop("href", current_messages.Message.mesaj_url);
+                            $clone.find('#message').text(current_messages.Message.mesaj);
+                            $clone.find('#last_message_date').text(current_messages.Last_message_date);
+                            $clone.appendTo($('#messages'));
+                        }
+                    } else {
+
                     }
-                } else {
-
-                }
-            });
-
+                });
+            }
+            document.addEventListener("deviceready", onDeviceReady, false);
 
     </script>
 </div>
@@ -105,10 +102,14 @@
     <div class="col span_12">
         This software and all connected databases are the exclusive property of
         <strong>HR Healthcare Ltd</strong><br>
-        All rights are reserved by <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
-        2HH. 01204 559 999</strong> <br>
-        All Intellectual Property Rights belong to <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting,
-        Bolton, BL2 2HH. 01204 559 999</strong>
+        All rights are reserved by <strong>
+        HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
+        2HH. 01204 559 999
+    </strong> <br>
+        All Intellectual Property Rights belong to <strong>
+        HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting,
+        Bolton, BL2 2HH. 01204 559 999
+    </strong>
     </div>
     <div class="col span_12">
         Any use, editing, changing, multiplication or commercial
