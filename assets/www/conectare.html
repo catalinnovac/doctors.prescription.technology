@@ -54,6 +54,7 @@
 					e.preventDefault();
 					alert('logging in click on submit');
 					$pagePreloader.show();
+					console.log(data.getLogin());
 					data.getLogin().auth($loginEmail.val(), $loginPassword.val(),'1');
 				}).on('kewdown', '#loginemail, #loginpassword', function(e){
 					var code = e.keyCode || e.which;
@@ -62,6 +63,7 @@
 						e.preventDefault();
 						//Do something
 						alert('logging in via ENTER');
+						console.log(data.getLogin());
 						data.getLogin().auth($loginEmail.val(), $loginPassword.val(),'1');
 					}
 				});
@@ -73,12 +75,9 @@
 				$responseHolder.append(messages).show();
 			}
 			//-------------end------------------//
-
-			$(function() {
-				document.addEventListener("deviceready", PowerUp, true);
+				document.addEventListener("deviceready", PowerUp, false);
 				/* Only for in-browser (not in Android) testing */
 				//PowerUp();
-			});
         </script>
 	</body>
 </html>

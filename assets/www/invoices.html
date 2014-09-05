@@ -32,31 +32,44 @@
             <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface menu">Menu</a>
         </div>
     </div>
-    </div>
+</div>
 
 <div class="container wrap">
     <h1>Doctors Interface</h1>
 
-    <div id="invoices">
-        <div id="clone" class="cloneable">
-            <div id='edit-buttons'>
-                <a id="edit-link"></a>
-            </div>
-            <div id='customer-placeholder'>
-                <div id='customer'>
-                    <span id="firstname"></span><span id="middleinitial"></span><span id="lastname"></span>
-                </div>
-            </div>
-            <div id="Treatment&Order">
-                <span id="OrderNumber"></span> / <span id="OrderDate"></span>
-            </div>
-            <div id="Assign_date">
-                <p id="assing_date"></p>
-            </div>
+    <div id="calendar">
+        <ul id="months">
+            <li id="anchor"></li>
+        </ul>
+        <div id="days">
         </div>
-        </div>
+    </div>
     <script type="text/javascript">
-            $(function () {
+            function OnDeviceReady() {
+                var date = new Date();
+                // 8 7 6 5 4 3 2 1 0 11 10 9 8 7 6 5 4 3 2 1 0 11 10 9
+                var mm = date.getMonth();
+                var yy = date.getYear();
+                var monthArray = new Array();
+                var pivot = mm;
+                while (mm >= 0) {
+                    //console.log(mm);
+                    var date = new Date(yy, mm, 0, 0, 0, 0, 0); // luna din anul curent
+                    var date1 = new Date(yy - 1, mm, 0, 0, 0, 0, 0); //aceasi luna din anul anterior
+                    monthArray.push(date);
+                    monthArray.push(date1);
+                    mm--;
+                }
+                while (pivot <= 11) {
+                    //console.log(pivot);
+                    var date = new Date(yy, pivot, 0, 0, 0, 0, 0); // luna din anul curent
+                    var date1 = new Date(yy - 1, pivot, 0, 0, 0, 0, 0); //aceasi luna din anul anterior
+                    monthArray.push(date);
+                    monthArray.push(date1);
+                    pivot++;
+                }
+                console.log(monthArray[i].length);
+
                 $('#nav-toggle').on('click', function (e) {
                     e.preventDefault();
                     alert('opening side panel');
@@ -64,40 +77,45 @@
                     extra.push({ key: "open", value: "1" });
                     doctors.sendMessage("DRAWER", JSON.stringify(extra));
                 });
-            });
-            $.ajax({
-                url: 'http://doctors.prescription.technology/ws/invoices.asp',
-                type: 'GET',
-                beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
-            }).fail(function (xhr, textStatus, error) { alert(textStatus); })
-            .done(function (data, textStatus, xhr) {
-                alert(data);
-                var invoices = JSON.parse(data);
-                var invoicesList = $('#invoices');
-                if (invoices.Invoices.length() > 0) {
-                    for (var i = 0; i < invoices.Invoices; i++) {
-                        var current_invoices = invoices.Invoices[i];
-                        var clone = invoicesList.find('#clone').clone();
-                        clone.find('#edit-link').attr('href', current_invoices.OrderNumber.oid_url);
-                        clone.children('#customer-placeholder > #customer-info').children('#firstname').text(current_invoices.customer.firstname);
-                        clone.children('#customer-placeholder > #customer-info').children('#middleinitial').text(current_invoices.customer.middleinitial);
-                        clone.children('#customer-placeholder > #customer-info').children('#lastname').text(current_invoices.customer.lastname);
-                        clone.children('#Treatment&Order > #OrderNumber').text(current_invoices.Treatment_Order.OrderNumber);
-                        clone.children('#Treatment&Order > #OrderDate').text(current_invoices.Treatment_Order.OrderDate);
-                        clone.children('#Treatment&Order > #OrderStatus').text(current_invoices.Treatment_Order.OrderStatus);
-                        for (var j = 0; j < current_invoices.Treatment_Order.Meds.length() ; j++) {
-                            var li = clone.children('#Treatment&Order > #Meds').find('li.cloneable').clone();
-                            li.children('#MedName').text(current_invoices.Treatment_Order.Meds[j].MedName);
-                            li.appendTo(clone.children('#Treatment&Order > #Meds'));
+
+
+
+                /*
+                $.ajax({
+                    url: 'http://doctors.prescription.technology/ws/invoices.asp',
+                    type: 'GET',
+                    beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
+                }).fail(function (xhr, textStatus, error) { alert(textStatus); })
+                .done(function (data, textStatus, xhr) {
+                    alert(data);
+                    var invoices = JSON.parse(data);
+                    var invoicesList = $('#invoices');
+                    if (invoices.Invoices.length() > 0) {
+                        for (var i = 0; i < invoices.Invoices; i++) {
+                            var current_invoices = invoices.Invoices[i];
+                            var clone = invoicesList.find('#clone').clone();
+                            clone.find('#edit-link').attr('href', current_invoices.OrderNumber.oid_url);
+                            clone.children('#customer-placeholder > #customer-info').children('#firstname').text(current_invoices.customer.firstname);
+                            clone.children('#customer-placeholder > #customer-info').children('#middleinitial').text(current_invoices.customer.middleinitial);
+                            clone.children('#customer-placeholder > #customer-info').children('#lastname').text(current_invoices.customer.lastname);
+                            clone.children('#Treatment&Order > #OrderNumber').text(current_invoices.Treatment_Order.OrderNumber);
+                            clone.children('#Treatment&Order > #OrderDate').text(current_invoices.Treatment_Order.OrderDate);
+                            clone.children('#Treatment&Order > #OrderStatus').text(current_invoices.Treatment_Order.OrderStatus);
+                            for (var j = 0; j < current_invoices.Treatment_Order.Meds.length() ; j++) {
+                                var li = clone.children('#Treatment&Order > #Meds').find('li.cloneable').clone();
+                                li.children('#MedName').text(current_invoices.Treatment_Order.Meds[j].MedName);
+                                li.appendTo(clone.children('#Treatment&Order > #Meds'));
+                            }
+                            clone.children('#Assign_date > #assign_date').text(current_invoices.Assign_date);
+                            clone.appendTo($('#invoices'));
                         }
-                        clone.children('#Assign_date > #assign_date').text(current_invoices.Assign_date);
-                        clone.appendTo($('#invoices'));
+                    } else {
+
                     }
-                } else {
-
-                }
-            });
-
+                });
+                */
+            }
+            document.addEventListener("deviceready", OnDeviceReady, false);
 
     </script>
 </div>
