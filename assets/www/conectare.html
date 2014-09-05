@@ -42,13 +42,13 @@
 			</form>
 		</div>
 		<script type="text/javascript">
+			var $pagePreloader = $('#page-preloader');
 			function PowerUp() {
 				var $loginForm = $('#loginform');
 				var $loginEmail = $('#loginemail');
 				var $loginPassword = $('#loginpassword');
 				var $responseHolder = $('#response-holder');
 				var $responseHolder2 = $('#response-holder2');
-				var $pagePreloader = $('#page-preloader');
 					
 				$loginForm.on('touchstart click', '#login-submit', function(e){
 					e.preventDefault();
