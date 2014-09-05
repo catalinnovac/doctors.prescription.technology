@@ -33,7 +33,7 @@
 
     <application
             android:allowBackup="true"
-            android:icon="@drawable/ic_launcher"
+            android:icon="@drawable/logo_pt"
             android:label="@string/index"
             android:theme="@style/prescriptionTheme">
         <activity

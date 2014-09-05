@@ -44,7 +44,7 @@
 		color: #333;
 		text-transform: uppercase;
 		font-weight: 300;
-		font: 300 normal 0.9rem/1.8em Open Sans, Arial, sans-serif;
+		font: 300 normal 1.1rem/1.8em Open Sans, Arial, sans-serif;
 	}
 	input[type="text"],
 	input[type="password"],
@@ -57,12 +57,13 @@
 		width: 100%;
 		background: none repeat scroll 0 0 #fff;
 		color: #005982;
-		height: 3rem;
-		line-height: 3rem;
+		height: 50px;
+		line-height: 25px;
 		margin: 0 auto 1rem;
 
 		border: 1px solid #179cd8;
-		padding: 0 1rem;
+		padding: 1rem;
+		padding: 0.5rem 12px;
 		text-decoration: none;
 		width: 100%;
 		max-width: 600px;
@@ -70,19 +71,19 @@
 		font-size: 1.1rem;
 		font-weight: 300;
 	}
+	select {
+		/*
+		-webkit-appearance: listbox;
+		*/
+		-webkit-appearance: menulist-text;
+	}
 	textarea {
 		height: auto;
 		line-height: 1.5em;
 		max-width: 100%; /* Pentru editare in colorbox cu span pe doua coloane - Ex: Medical Questions */
 	}
-	select {
-		height: 1.8rem;
-		padding: 4px;
-	}
 	small { line-height: 1.3em}
-	
-	
-		
+
 	a {
 		text-decoration: none;
 		color: #009ee0;
@@ -127,9 +128,9 @@
 	input.btn-big,
 	button.btn-big,
 	a.btn-big {
-		font-size: 1.5rem;
+		font-size: 1.3rem;
 		height: auto;
-		padding: 1rem 2rem;
+		padding: 1rem;
 	}
 
 	a.btn-link,
@@ -147,10 +148,10 @@
 	.btn-text { display: inline-block; padding: 1rem;}
 	.btn-icon { 
 		float: right; 
-		height: 4.2rem; 
-		line-height: 4.2rem;
-		padding-left: 2rem;
-		margin-left: 2rem;
+		height: 3.8rem; 
+		line-height: 3.8rem;
+		padding-left: 1rem;
+		margin-left: 1rem;
 		border-left: 1px solid #6fc0f2;
 		font-size: 2rem;
 	}
@@ -191,6 +192,35 @@
 	}
 	.force-wrap { word-wrap: break-word; }
 	
+
+	.actions {
+	}
+		.actions li {
+			margin-bottom: 1px;
+		}
+			.actions li a {
+				display: block;
+				color: #fff;
+			}
+			.actions li a span {
+				background: #caecf1;
+				padding: .6rem;
+				display: block;
+				width: 100%;
+				height: 2.8rem;
+				text-align: left;
+			}
+			.actions li a span.actions-icon {
+				float: left;
+				padding: .6rem 1rem;
+				text-align: center;
+				width: 4rem;
+				border-right: 2px solid #e4f3f5;
+			}
+				.actions li a i {
+					color: #ec9062;
+				}
+	
 	/* Pickadate */
 	body .picker__nav--next, body .picker__nav--prev {
 		height: 2em;
@@ -225,10 +255,10 @@
 			background: #015982;
 			color: #e9edf7;
 		}
-		#login-page header { background: #E9EDF7; }
-		#login-page header #info { background: none; }
+		#conectare header { background: #E9EDF7; }
+		#conectare header #info { background: none; }
 		
-		#login-page .wrap {
+		#conectare .wrap {
 			max-width: 600px;
 		}
 		
@@ -246,12 +276,23 @@
 				/* http://ivomynttinen.com/blog/a-guide-for-creating-a-better-retina-web/ */
 				#logo {
 					float: left;
-					width: 248px;
-					height: 68px;
-					margin: 3rem 0 2rem;
-					text-indent: -99999px;
-					background: url('../img/logo_PT.png') 0 0 no-repeat;
+					width: 125px;
+					height: 34px;
+					margin: 4rem 0 2rem;
+					background: none;
 				}
+					#logo img {
+						width: 125px;
+						height: 34px;
+					}
+				#conectare #logo {
+					width: 249px;
+					height: 68px;
+				}
+					#conectare #logo img {
+						width: 249px;
+						height: 68px;
+					}
 				#nav-toggle {
 					float: right;
 					width: 40px;
@@ -264,15 +305,17 @@
 				/*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/
 				@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
 					#logo{
+						/*
 						background-image: url('../img/logo_PT@2x.png');
 						background-size: 100px 100px;
+						*/
 					}
 					#nav-toggle { 
 						background: transparent url('../img/icon_menu@2x.png') no-repeat;
 						background-size: 40px 37px;
 					}
 				}
-			#login-page > footer { display: none; }
+			#conectare > footer { display: none; }
 		
 		#logged-in {
 			float: left;
@@ -314,7 +357,7 @@
 		display: none;
 		vertical-align: middle;
 	}
-	#login-page #page-preloader {
+	#conectare #page-preloader {
 		top: 0;
 	}
 		img.preloader {
