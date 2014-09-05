@@ -1,88 +1,85 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Prescription Technology</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-    <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen"/>
-    <link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen"/>
-    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
-    <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen"/>
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="js/respond.min.js"></script>
-    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="js/custom.jquery.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic"
-          rel="stylesheet" type="text/css"/>
-</head>
-<body id="login-page">
-<!-- Preloader -->
-<div id="page-preloader">
-    <img class="preloader" src="img/loading.gif" alt=""/>
-</div>
+	<head>
+		<title>Prescription Technology</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+		<link rel="stylesheet" type="text/css" href="css/reset.css" media="screen"/>
+		<link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen"/>
+		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+		<link rel="stylesheet" type="text/css" href="css/styles.css" media="screen"/>
+		<script type="text/javascript" src="cordova.js"></script>
+		<script type="text/javascript" src="js/respond.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="js/custom.jquery.js"></script>
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic" rel="stylesheet" type="text/css"/>
+	</head>
+	<body id="login-page">
+		<!-- Preloader -->
+		<div id="page-preloader">
+			<img class="preloader" src="img/loading.gif" alt=""/>
+		</div>
 
-<div class="container wrap">
-    <div class="row gutters">
-        <div class="col span_24">
-            <a href="/" id="logo" title="Prescription Technology - Doctors Interface"/>Prescription Technology - Doctors
-            Interface</a>
-            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface menu"/>Menu</a>
-        </div>
-    </div>
-</div>
+		<div class="container wrap">
+			<div class="row gutters">
+				<div class="col span_24">
+					<a href="/" id="logo" title="Prescription Technology - Doctors Interface"/>Prescription Technology - Doctors
+					Interface</a>
+					<a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface menu"/>Menu</a>
+				</div>
+			</div>
+		</div>
 
-<div class="container wrap">
-    <h1>Doctors Interface</h1>
+		<div class="container wrap">
+			<h1>Doctors Interface</h1>
 
-    <form id="login-form" action="" method="post" class="row gutters">
-        <div class="col span_24">
-            <input type="text" id="login-user" name="login-user" value="" placeholder="Enter your username"/>
-            <input type="password" id="login-pass" name="login-pass" value="" placeholder="Enter your username"/>
-            <button type="submit" class="btn btn-big has-icon" id="login-submit">
-                <div class="btn-text">Sign in</div>
-                <div class="btn-icon"><i class="fa fa-angle-double-right"></i></div>
-            </button>
-        </div>
-    </form>
-</div>
-<script type="text/javascript">
-				function PowerUp() {
-					var $loginForm = $('#login-form');
-					var $loginSubmit = $('#login-submit');
-					var $loginUser = $('#login-user');
-					
-                    $('#nav-toggle').on('click', function(e){
-                        e.preventDefault();
-                        alert('opening side panel');
-						doctors.sendMessage("OPEN_DRAWER");
-					});
-					$loginForm.on('click', '#login-submit', function(e){
+			<form id="login-form" action="" method="post" class="row gutters">
+				<div class="col span_24">
+					<input type="text" id="login-user" name="login-user" value="" placeholder="Enter your username"/>
+					<input type="password" id="login-pass" name="login-pass" value="" placeholder="Enter your username"/>
+					<button type="submit" class="btn btn-big has-icon" id="login-submit">
+						<div class="btn-text">Sign in</div>
+						<div class="btn-icon"><i class="fa fa-angle-double-right"></i></div>
+					</button>
+				</div>
+			</form>
+		</div>
+		<script type="text/javascript">
+			function PowerUp() {
+				var $loginForm = $('#login-form');
+				var $loginSubmit = $('#login-submit');
+				var $loginUser = $('#login-user');
+				
+				$('#nav-toggle').on('click', function(e){
+					e.preventDefault();
+					alert('opening side panel');
+					doctors.sendMessage("OPEN_DRAWER");
+				});
+				$loginForm.on('click', '#login-submit', function(e){
+					e.preventDefault();
+					alert('logging in click on submit');
+					data.getLogin().auth($('#login-user').val(),$('#login-pass').val(),'1');
+				}).on('kewdown', '#login-user, #login-pass', function(e){
+					var code = e.keyCode || e.which;
+					if(code == 13) { //Enter keycode
 						e.preventDefault();
-						alert('logging in click on submit');
+						//Do something
+						alert('logging in via ENTER');
 						data.getLogin().auth($('#login-user').val(),$('#login-pass').val(),'1');
-					}).on('kewdown', '#login-user, #login-pass', function(e){
-						var code = e.keyCode || e.which;
-						if(code == 13) { //Enter keycode
-							e.preventDefault();
-							//Do something
-							alert('logging in via ENTER');
-							data.getLogin().auth($('#login-user').val(),$('#login-pass').val(),'1');
-						}
-					});
-
-				};
-				//---- added by cata 15.08.2014 ----//
-
-					function OnloginErrorEventHandler(){
-						alert('Invalid credentials');
 					}
-					//-------------end------------------//
+				});
+
+			};
+			//---- added by cata 15.08.2014 ----//
+
+			function OnloginErrorEventHandler(){
+				alert('Invalid credentials');
+			}
+			//-------------end------------------//
 
 			$(function() {
 				//PowerUp();
 				document.addEventListener("deviceready", PowerUp, true);       
 			});
-
-
-</script>
-</body>
+		</script>
+	</body>
 </html>
