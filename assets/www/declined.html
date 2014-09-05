@@ -25,9 +25,11 @@
 <div class="container wrap">
     <div class="row gutters">
         <div class="col span_24">
-            <a href="/" id="logo" title="Prescription Technology - Doctors Interface"/>Prescription Technology - Doctors
-            Interface</a>
-            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface menu"/>Menu</a>
+            <a href="/" id="logo" title="Prescription Technology - Doctors Interface">
+                Prescription Technology - Doctors
+                Interface
+            </a>
+            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface menu">Menu</a>
         </div>
     </div>
 </div>
@@ -41,8 +43,9 @@
                 <a id="edit-link"></a>
             </div>
             <div id='customer-placeholder'>
-                <div id='customer-info'><span id="firstname"></span><span id="middleinitial"></span><span
-                        id="lastname"></span></div>
+                <div id='customer-info'>
+                    <span id="firstname"></span><span id="middleinitial"></span><span id="lastname"></span>
+                </div>
                 <div id='customer-addresses'>
                     <div id='customer-shipping-address'>
                         <p id="Street"></p>
@@ -82,7 +85,7 @@
         </div>
     </div>
     <script type="text/javascript">
-            $(function () {
+            function onDeviceReady() {
                 $('#nav-toggle').on('click', function (e) {
                     e.preventDefault();
                     alert('opening side panel');
@@ -90,48 +93,62 @@
                     extra.push({ key: "open", value: "1" });
                     doctors.sendMessage("DRAWER", JSON.stringify(extra));
                 });
-            });
-            $.ajax({
-                url: 'http://doctors.prescription.technology/ws/declined.asp',
-                type: 'GET',
-                beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
-            }).fail(function (xhr, textStatus, error) { alert(textStatus); })
-            .done(function (data, textStatus, xhr) {
-                alert(data);
-                var declined = JSON.parse(data);
-                var declinedList = $('#declined');
-                if (declined.Declined.length() > 0) {
-                    for (var i = 0; i < declined.Declined; i++) {
-                        var current_declined = declined.Declined[i];
-                        var clone = declinedList.find('#clone').clone();
-                        clone.find('#edit-link').attr('href', current_declined.OrderNumber.oid_url);
-                        clone.children('#customer-placeholder > #customer-info').children('#firstname').text(current_declined.customer.firstname);
-                        clone.children('#customer-placeholder > #customer-info').children('#middleinitial').text(current_declined.customer.middleinitial);
-                        clone.children('#customer-placeholder > #customer-info').children('#lastname').text(current_declined.customer.lastname);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Street').text(current_declined.customer.Shipping_address.Street);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#City').text(current_declined.customer.Shipping_address.City);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Province').text(current_declined.customer.Shipping_address.Province);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Postal_Code').text(current_declined.customer.Shipping_address.Postal_Code);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Country').text(current_declined.customer.Shipping_address.Country);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Street').text(current_declined.customer.Billing_address.Street);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#City').text(current_declined.customer.Billing_address.City);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Province').text(current_declined.customer.Billing_address.Province);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Postal_Code').text(current_declined.customer.Billing_address.Postal_Code);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Country').text(current_declined.customer.Billing_address.Country);
-                        clone.children('#Treatment&Order > #OrderNumber').text(current_declined.Treatment_Order.OrderNumber);
-                        clone.children('#Treatment&Order > #OrderDate').text(current_declined.Treatment_Order.OrderDate);
-                        for (var j = 0; j < current_declined.Treatment_Order.Meds.length() ; j++) {
-                            var li = clone.children('#Treatment&Order > #Meds').find('li.cloneable').clone();
-                            li.children('#MedName').text(current_declined.Treatment_Order.Meds[j].MedName);
-                            li.appendTo(clone.children('#Treatment&Order > #Meds'));
-                        }
-                        clone.children('#Assign_date > #assign_date').text(current_declined.Assign_date);
-                        clone.appendTo($('#declined'));
-                    }
-                } else {
 
-                }
-            });
+                $.ajax({
+                    url: 'http://doctors.prescription.technology/ws/declinedorders.asp',
+                    type: 'GET',
+                    beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
+                }).fail(function (xhr, textStatus, error) { alert(xhr.responseText); })
+                .done(function (data, textStatus, xhr) {                    
+                    var declined = JSON.parse(data);
+                    if (declined.Declined_Orders.length > 0) {
+                        for (var i = 0; i < declined.Declined_Orders.length; i++) {
+                            var current_declined = declined.Declined_Orders[i];
+                            var $clone = $('#clone').clone();
+                            $clone.prop("id", "Item-" + current_declined.OrderNumber.oid);
+                            $clone.find('#edit-link').attr('href', current_declined.OrderNumber.oid_url);
+                            $clone.find('#firstname').text(current_declined.customer.firstname);
+                            $clone.find('#middleinitial').text(current_declined.customer.middleinitial);
+                            $clone.find('#lastname').text(current_declined.customer.lastname);
+                            for (var k = 0; k < current_declined.customer.Shipping_address.length ; k++) {
+                                var current_ship_addr = current_declined.customer.Shipping_address[k];
+                                var $ship_addr_clone = $clone.find('#customer-shipping-address').clone();
+                                $ship_addr_clone.find('#Street').text(current_ship_addr.Street);
+                                $ship_addr_clone.find('#City').text(current_ship_addr.City);
+                                $ship_addr_clone.find('#Province').text(current_ship_addr.Province);
+                                $ship_addr_clone.find('#Postal_Code').text(current_ship_addr.Postal_Code);
+                                $ship_addr_clone.find('#Country').text(current_ship_addr.Country);
+                                $ship_addr_clone.appendTo($clone.find('#customer-shipping-address'));
+                            }
+                            for (var k = 0; k < current_declined.customer.Billing_address; k++) {
+                                var current_bill_addr = current_declined.customer.Billing_address[k];
+                                var $bill_addr_clone = $clone.find('#customer-billing-address').clone();
+                                $bill_addr_clone.find('#Street').text(current_bill_addr.Street);
+                                $bill_addr_clone.find('#City').text(current_bill_addr.City);
+                                $bill_addr_clone.find('#Province').text(current_bill_addr.Province);
+                                $bill_addr_clone.find('#Postal_Code').text(current_bill_addr.Postal_Code);
+                                $bill_addr_clone.find('#Country').text(current_bill_addr.Country);
+                                $bill_addr_clone.appendTo($clone.find('#customer-billing-address'));
+                            }
+                            $clone.find('#OrderNumber').text(current_declined.Treatment_Order.OrderNumber);
+                            $clone.find('#OrderDate').text(current_declined.Treatment_Order.OrderDate);
+                            for (var j = 0; j < current_declined.Treatment_Order.Meds.length ; j++) {
+                                var $li = $clone.find('#Meds').find('li.cloneable').clone();
+                                $li.children('#MedName').text(current_declined.Treatment_Order.Meds[j].MedName);
+                                $li.appendTo($clone.find('#Meds'));
+                            }
+                            $clone.find('#assign_date').text(current_declined.Assign_date);
+                            $clone.appendTo($('#declined'));                            
+                        }
+                    } else {
+
+                    }                    
+                    var extra = new Array();
+                    extra.push({ key: "open", value: "0" });
+                    doctors.sendMessage("DRAWER", JSON.stringify(extra));
+                });
+            }
+            document.addEventListener("deviceready", onDeviceReady, false);
 
     </script>
 </div>
@@ -139,10 +156,14 @@
     <div class="col span_12">
         This software and all connected databases are the exclusive property of
         <strong>HR Healthcare Ltd</strong><br>
-        All rights are reserved by <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
-        2HH. 01204 559 999</strong> <br>
-        All Intellectual Property Rights belong to <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting,
-        Bolton, BL2 2HH. 01204 559 999</strong>
+        All rights are reserved by <strong>
+        HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
+        2HH. 01204 559 999
+    </strong> <br>
+        All Intellectual Property Rights belong to <strong>
+        HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting,
+        Bolton, BL2 2HH. 01204 559 999
+    </strong>
     </div>
     <div class="col span_12">
         Any use, editing, changing, multiplication or commercial

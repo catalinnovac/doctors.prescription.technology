@@ -1,88 +1,91 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN"
-        "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">
+          "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">
 <html>
 <head>
     <title>Prescription Technology</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-    <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen"/>
-    <link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen"/>
-    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
-    <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen" />
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/respond.min.js"></script>
     <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic"
-          rel="stylesheet" type="text/css"/>
+          rel="stylesheet" type="text/css" />
 </head>
 <body id="main-page">
 
-<!-- Preloader -->
-<div id="page-preloader">
-    <img class="preloader" src="/themes/<%=currentTemplate%>/images/loading.gif" alt=""/>
-</div>
+    <!-- Preloader -->
+    <div id="page-preloader">
+        <img class="preloader" src="/themes/<%=currentTemplate%>/images/loading.gif" alt="" />
+    </div>
 
-<div class="container wrap">
-    <div class="row gutters">
-        <div class="col span_24">
-            <a href="/" id="logo" title="Prescription Technology - Doctors Interface"/>Prescription Technology - Doctors
-            Interface</a>
-            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface menu"/>Menu</a>
+    <div class="container wrap">
+        <div class="row gutters">
+            <div class="col span_24">
+                <a href="/" id="logo" title="Prescription Technology - Doctors Interface">
+                    Prescription Technology - Doctors
+                    Interface
+                </a>
+                <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface menu">Menu</a>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="container wrap">
-    <h1>Doctors Interface</h1>
+    <div class="container wrap">
+        <h1>Doctors Interface</h1>
 
-    <div id="pendings">
-        <div id="clone" class="cloneable">
-            <div id='edit-buttons'>
-                <a id="edit-link"></a>
-            </div>
-            <div id='customer-placeholder'>
-                <div id='customer-info'><span id="firstname"></span><span id="middleinitial"></span><span
-                        id="lastname"></span></div>
-                <div id='customer-addresses'>
-                    <div id='customer-shipping-address'>
-                        <p id="Street"></p>
-
-                        <p id="City"></p>
-
-                        <p id="Province"></p>
-
-                        <p id="Postal_Code"></p>
-
-                        <p id="Country"></p>
+        <div id="pendings">
+            <div id="clone" class="cloneable">
+                <div class='edit-buttons'>
+                    <a id="edit-link"></a>
+                </div>
+                <div class='customer-placeholder'>
+                    <div class='customer-info'>
+                        <span id="firstname"></span><span id="middleinitial"></span><span id="lastname"></span>
                     </div>
-                    <div id='customer-billing-address'>
-                        <p id="Street"></p>
+                    <div class='customer-addresses'>
+                        <div id='customer-shipping-address'>
+                            <p id="Street"></p>
 
-                        <p id="City"></p>
+                            <p id="City"></p>
 
-                        <p id="Province"></p>
+                            <p id="Province"></p>
 
-                        <p id="Postal_Code"></p>
+                            <p id="Postal_Code"></p>
 
-                        <p id="Country"></p>
+                            <p id="Country"></p>
+                        </div>
+                        <div id='customer-billing-address'>
+                            <p id="Street"></p>
+
+                            <p id="City"></p>
+
+                            <p id="Province"></p>
+
+                            <p id="Postal_Code"></p>
+
+                            <p id="Country"></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div id="Treatment&Order">
-                <p id="OrderNumber"></p>
+                <div class="Treatment_Order">
+                    <p id="OrderNumber"></p>
 
-                <p id="OrderDate"></p>
-                <ul id="Meds">
-                    <li class="hide cloneable"><p id="MedName"></p></li>
-                </ul>
-            </div>
-            <div id="Assign_date">
-                <p id="assing_date"></p>
+                    <p id="OrderDate"></p>
+                    <ul id="Meds">
+                        <li class="hide cloneable"><p id="MedName"></p></li>
+                    </ul>
+                </div>
+                <div class="Assign_date">
+                    <p id="assing_date"></p>
+                </div>
             </div>
         </div>
-    </div>
-    <script type="text/javascript">
-            $(function () {
+        <script type="text/javascript">
+            function OnDeviceReady() {
                 $('#nav-toggle').on('click', function (e) {
                     e.preventDefault();
                     alert('opening side panel');
@@ -90,68 +93,78 @@
                     extra.push({ key: "open", value: "1" });
                     doctors.sendMessage("DRAWER", JSON.stringify(extra));
                 });
-            });
-            $.ajax({
-                url: 'http://doctors.prescription.technology/ws/pending.asp',
-                type: 'GET',
-                beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
-            }).fail(function (xhr, textStatus, error) { alert(xhr.responseText); })
-            .done(function (data, textStatus, xhr) {
-                alert(data);
-                console.log(data);
-                var pendings = JSON.parse(data);
-                var pendingList = $('#pendings');
-                if (pendings.pending.length() > 0) {
-                    for (var i = 0; i < pendings.pending; i++) {
-                        var current_pending = pendings.pending[i];
-                        var clone = pendingList.find('#clone').clone();
-                        clone.find('#edit-link').attr('href', current_pending.OrderNumber.oid_url);
-                        clone.children('#customer-placeholder > #customer-info').children('#firstname').text(current_pending.customer.firstname);
-                        clone.children('#customer-placeholder > #customer-info').children('#middleinitial').text(current_pending.customer.middleinitial);
-                        clone.children('#customer-placeholder > #customer-info').children('#lastname').text(current_pending.customer.lastname);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Street').text(current_pending.customer.Shipping_address.Street);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#City').text(current_pending.customer.Shipping_address.City);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Province').text(current_pending.customer.Shipping_address.Province);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Postal_Code').text(current_pending.customer.Shipping_address.Postal_Code);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-shipping-address').find('#Country').text(current_pending.customer.Shipping_address.Country);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Street').text(current_pending.customer.Billing_address.Street);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#City').text(current_pending.customer.Billing_address.City);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Province').text(current_pending.customer.Billing_address.Province);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Postal_Code').text(current_pending.customer.Billing_address.Postal_Code);
-                        clone.children('#customer-placeholder > #customer-addresses').children('#customer-billing-address').find('#Country').text(current_pending.customer.Billing_address.Country);
-                        clone.children('#Treatment&Order > #OrderNumber').text(current_pending.Treatment_Order.OrderNumber);
-                        clone.children('#Treatment&Order > #OrderDate').text(current_pending.Treatment_Order.OrderDate);
-                        for (var j = 0; j < current_pending.Treatment_Order.Meds.length() ; j++) {
-                            var li = clone.children('#Treatment&Order > #Meds').find('li.cloneable').clone();
-                            li.children('#MedName').text(current_pending.Treatment_Order.Meds[j].MedName);
-                            li.appendTo(clone.children('#Treatment&Order > #Meds'));
+                $.ajax({
+                    url: 'http://doctors.prescription.technology/ws/pending.asp',
+                    type: 'GET',
+                    beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
+                }).fail(function (xhr, textStatus, error) { alert(xhr.responseText); })
+                .done(function (data, textStatus, xhr) {
+                    alert(data);
+                    console.log(data);
+                    var pendings = JSON.parse(data);
+                    if (pendings.Pending.length > 0) {
+                        for (var i = 0; i < pendings.Pending.length ; i++) {
+                            var current_pending = pendings.Pending[i];
+                            var $clone = $('#pendings').find('#clone').clone();
+                            $clone.find('#edit-link').attr('href', current_pending.OrderNumber.oid_url);
+                            $clone.find('#firstname').text(current_pending.customer.firstname);
+                            $clone.find('#middleinitial').text(current_pending.customer.middleinitial);
+                            $clone.find('#lastname').text(current_pending.customer.lastname);
+                            for (var k = 0; k < current_pending.Shipping_address.length ; k++) {
+                                var current_ship = current_pending.Shipping_address[k];
+                                var $current_ship_clone = $('#customer-shipping-address').clone();
+                                $current_ship_clone.find('#Street').text(current_ship.Street);
+                                $current_ship_clone.find('#City').text(current_ship.City);
+                                $current_ship_clone.find('#Province').text(current_ship.Province);
+                                $current_ship_clone.find('#Postal_Code').text(current_ship.Postal_Code);
+                                $current_ship_clone.find('#Country').text(current_ship.Country);
+                            }
+                            for (var k = 0; k < current_pending.Billing_address.length ; k++) {
+                                var current_bill = current_pending.Billing_address[k];
+                                var $current_bill_clone = $('#customer-billing-address').clone();
+                                $current_bill_clone.find('#Street').text(current_bill.Street);
+                                $current_bill_clone.find('#City').text(current_bill.City);
+                                $current_bill_clone.find('#Province').text(current_bill.Province);
+                                $current_bill_clone.find('#Postal_Code').text(current_bill.Postal_Code);
+                                $current_bill_clone.find('#Country').text(current_bill.Country);
+                            }
+                            $clone.find('#OrderNumber').text(current_pending.Treatment_Order.OrderNumber);
+                            $clone.find('#OrderDate').text(current_pending.Treatment_Order.OrderDate);
+                            for (var j = 0; j < current_pending.Treatment_Order.Meds.length ; j++) {
+                                var $li = $clone.find('#Meds').find('li.cloneable').clone();
+                                $li.children('#MedName').text(current_pending.Treatment_Order.Meds[j].MedName);
+                                $li.appendTo($clone.find('#Meds'));
+                            }
+                            $clone.find('#assign_date').text(current_pending.Assign_date);
+                            $clone.appendTo($('#pendings'));
                         }
-                        clone.children('#Assign_date > #assign_date').text(current_pending.Assign_date);
-                        clone.appendTo($('#pendings'));
+                    } else {
+
                     }
-                } else {
-
-                }
-            });
-
-
-    </script>
-</div>
-<footer class="row">
-    <div class="col span_12">
-        This software and all connected databases are the exclusive property of
-        <strong>HR Healthcare Ltd</strong><br>
-        All rights are reserved by <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
-        2HH. 01204 559 999</strong> <br>
-        All Intellectual Property Rights belong to <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting,
-        Bolton, BL2 2HH. 01204 559 999</strong>
+                });
+            }
+            document.addEventListener("deviceready", OnDeviceReady, false);
+        </script>
     </div>
-    <div class="col span_12">
-        Any use, editing, changing, multiplication or commercial
-        use (including but not limited to selling, licensing of this software
-        and/or parts of it and/or its connected database information), independent
-        of any changes being done first, is prohibited.
-    </div>
-</footer>
+    <footer class="row">
+        <div class="col span_12">
+            This software and all connected databases are the exclusive property of
+            <strong>HR Healthcare Ltd</strong><br>
+            All rights are reserved by <strong>
+                HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
+                2HH. 01204 559 999
+            </strong> <br>
+            All Intellectual Property Rights belong to <strong>
+                HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting,
+                Bolton, BL2 2HH. 01204 559 999
+            </strong>
+        </div>
+        <div class="col span_12">
+            Any use, editing, changing, multiplication or commercial
+            use (including but not limited to selling, licensing of this software
+            and/or parts of it and/or its connected database information), independent
+            of any changes being done first, is prohibited.
+        </div>
+    </footer>
 </body>
 </html>
