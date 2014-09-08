@@ -136,7 +136,7 @@ function onDeviceReady() {
 						return true;
 					} else {
 						// Error - Reading local storage data
-						messages += '<p class="alert error">Could not read local storage data</p><p class="alert error">' + message + '</p>';
+						messages += '<p class="alert error">Error G01: Could not read local storage data</p><p class="alert error">' + message + '</p>';
 					}
 				} else {
 					// Error - Credentials error
@@ -145,7 +145,7 @@ function onDeviceReady() {
 				}
 			} catch (err) {
 				// Error - Misc
-				messages = '<p class="alert error">Call succceeded, but parsing got an error: ' + err.message + '.</p>';
+				messages = '<p class="alert error">Error G02: Call succceeded, but parsing got an error: ' + err.message + '.</p>';
 				$responseHolder.hide().html(messages).fadeIn('fast');
 				$responseHolder2.hide().html('<p class="alert error">response: ' + response + '</p>').fadeIn('fast');
 			}

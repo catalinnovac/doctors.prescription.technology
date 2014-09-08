@@ -1,51 +1,75 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN"
-        "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">
+<!DOCTYPE html>
 <html>
-<head>
-    <title>Prescription Technology</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-    <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen"/>
-    <link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen"/>
-    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
-    <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen"/>
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="js/respond.min.js"></script>
-    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic"
-          rel="stylesheet" type="text/css"/>
-</head>
-<body id="main-page">
+	<head>
+		<title>Prescription Technology</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="css/reset.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/styles.css" media="screen" />
+		<script type="text/javascript" src="cordova.js"></script>
+		<script type="text/javascript" src="js/respond.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="js/custom.jquery.js"></script>
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic" rel="stylesheet" type="text/css" />
+	</head>
+	<body id="index">
+		<!-- Preloader -->
+		<div id="page-preloader">
+			<img class="preloader" src="img/loading.gif" alt=""/>
+		</div>
+		
+		<div class="container wrap">
+			<div class="row gutters">
+				<div class="col span_24">
+					<a href="/" id="logo" title="Prescription Technology - Doctors Interface" /><img src="img/logo_PT.png" alt="" /></a>
+					<a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface Menu" />Menu</a>
+				</div>
+			</div>
+			<div class="row gutters">
+				<div class="col span_24">
+					<h1>Invoices</h1>
+					<div id="calendar">
+						<ul class="left-cal" id="months">
+							<li id="anchor"></li>
+							<li id="may-2014"><span class="year 2014">2014</span><span class="month may"></span></li>
+							<li id="june-2014"><span class="year 2014">2014</span><span class="month june"></span></li>
+							<li id="july-2014"><span class="year 2014">2014</span><span class="month july"></span></li>
+							<li id="august-2014"><span class="year 2014">2014</span><span class="month august"></span></li>
+							<li id="september-2014"><span class="year 2014">2014</span><span class="month september"></span></li>
+							<li id="october-2014"><span class="year 2014">2014</span><span class="month october"></span></li>
+							<li id="november-2014"><span class="year 2014">2014</span><span class="month november"></span></li>
+							<li id="december-2014"><span class="year 2014">2014</span><span class="month december"></span></li>
+							<li id="january-2015"><span class="year 2015">2015</span><span class="month january"></span></li>
+						</ul>
+						<ul class="right-cal" id="cal-days">
+							<li id="anchor"></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
 
-<!-- Preloader -->
-<div id="page-preloader">
-    <img class="preloader" src="/themes/<%=currentTemplate%>/images/loading.gif" alt=""/>
-</div>
-
-<div class="container wrap">
-    <div class="row gutters">
-        <div class="col span_24">
-            <a href="/" id="logo" title="Prescription Technology - Doctors Interface">
-                Prescription Technology - Doctors
-                Interface
-            </a>
-            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface menu">Menu</a>
-        </div>
-    </div>
-</div>
-
-<div class="container wrap">
-    <h1>Doctors Interface</h1>
-
-    <div id="calendar">
-        <ul id="months">
-            <li id="anchor"></li>
-        </ul>
-        <div id="days">
-        </div>
-    </div>
-    <script type="text/javascript">
-            function OnDeviceReady() {
+		<footer class="container wrap">
+			<div class="row gutters">
+				<div class="col span_12">
+					This software and all connected databases are the exclusive property of
+					<strong>HR Healthcare Ltd</strong><br>
+					All rights are reserved by <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
+					2HH. 01204 559 999</strong> <br>
+					All Intellectual Property Rights belong to <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting,
+					Bolton, BL2 2HH. 01204 559 999</strong>
+				</div>
+				<div class="col span_12">
+					Any use, editing, changing, multiplication or commercial
+					use (including but not limited to selling, licensing of this software
+					and/or parts of it and/or its connected database information), independent
+					of any changes being done first, is prohibited.
+				</div>
+			</div>
+		</footer>
+		<script type="text/javascript">
+			function PowerUp() {
                 var date = new Date();
                 // 8 7 6 5 4 3 2 1 0 11 10 9 8 7 6 5 4 3 2 1 0 11 10 9
                 var mm = date.getMonth();
@@ -68,17 +92,14 @@
                     monthArray.push(date1);
                     pivot++;
                 }
-                console.log(monthArray[i].length);
+                console.log(monthArray);
 
-                $('#nav-toggle').on('click', function (e) {
-                    e.preventDefault();
-                    alert('opening side panel');
+				$('#nav-toggle').on('touchstart click', function(e){
+					e.preventDefault();
                     var extra = new Array();
-                    extra.push({ key: "open", value: "1" });
-                    doctors.sendMessage("DRAWER", JSON.stringify(extra));
-                });
-
-
+                    extra.push({ key:"open",value:"1"});
+                    doctors.sendMessage("DRAWER",JSON.stringify(extra));
+				});
 
                 /*
                 $.ajax({
@@ -114,31 +135,13 @@
                     }
                 });
                 */
-            }
-            document.addEventListener("deviceready", OnDeviceReady, false);
-
-    </script>
-</div>
-<footer class="row">
-    <div class="col span_12">
-        This software and all connected databases are the exclusive property of
-        <strong>HR Healthcare Ltd</strong><br>
-        All rights are reserved by <strong>
-        HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
-        2HH. 01204 559 999
-    </strong> <br>
-        All Intellectual Property Rights belong to <strong>
-        HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting,
-        Bolton, BL2 2HH. 01204 559 999
-    </strong>
-    </div>
-    <div class="col span_12">
-        Any use, editing, changing, multiplication or commercial
-        use (including but not limited to selling, licensing of this software
-        and/or parts of it and/or its connected database information), independent
-        of any changes being done first, is prohibited.
-    </div>
-</footer>
-
-</body>
+            };
+			$(function() {
+	            document.addEventListener("deviceready", PowerUp, false);
+				
+				/* Only for in-browser (not in Android) testing */
+				//PowerUp();
+			});
+	    </script>
+	</body>
 </html>

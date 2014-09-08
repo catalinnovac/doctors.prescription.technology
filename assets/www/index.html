@@ -26,30 +26,34 @@
 					<a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface Menu" />Menu</a>
 				</div>
 			</div>
+			<div class="row gutters">
+				<div class="col span_24">
+					<h1>Doctors Interface</h1>
+					<textarea id="x"></textarea>
+s
+				</div>
+			</div>
 		</div>
 
-		<div class="container wrap">
-	    <h1>Doctors Interface</h1>
-	    <textarea id="x"></textarea>
-	</div>
-	<footer class="container wrap">
-	    <div class="col span_12">
-	        This software and all connected databases are the exclusive property of
-	        <strong>HR Healthcare Ltd</strong><br>
-	        All rights are reserved by <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
-	        2HH. 01204 559 999</strong> <br>
-	        All Intellectual Property Rights belong to <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting,
-	        Bolton, BL2 2HH. 01204 559 999</strong>
-	    </div>
-	    <div class="col span_12">
-	        Any use, editing, changing, multiplication or commercial
-	        use (including but not limited to selling, licensing of this software
-	        and/or parts of it and/or its connected database information), independent
-	        of any changes being done first, is prohibited.
-	    </div>
-	</footer>
-    <script type="text/javascript">
-			
+		<footer class="container wrap">
+			<div class="row gutters">
+				<div class="col span_12">
+					This software and all connected databases are the exclusive property of
+					<strong>HR Healthcare Ltd</strong><br>
+					All rights are reserved by <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
+					2HH. 01204 559 999</strong> <br>
+					All Intellectual Property Rights belong to <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting,
+					Bolton, BL2 2HH. 01204 559 999</strong>
+				</div>
+				<div class="col span_12">
+					Any use, editing, changing, multiplication or commercial
+					use (including but not limited to selling, licensing of this software
+					and/or parts of it and/or its connected database information), independent
+					of any changes being done first, is prohibited.
+				</div>
+			</div>
+		</footer>
+		<script type="text/javascript">
 			function PowerUp() {
 				$('#nav-toggle').on('touchstart click', function(e){
 					e.preventDefault();
@@ -60,12 +64,15 @@
 				});
 			};
 			$(function() {
-				document.addEventListener("deviceready", PowerUp, true);
+				document.addEventListener("deviceready", PowerUp, false);
+			
+				/* Only for in-browser (not in Android) testing */
+				//PowerUp();
 
                 $.get('http://doctors.prescription.technology/ws/pending.asp',function(data){
                     $('#x').html(data);
                 });
 			});
-    </script>
+		</script>
 	</body>
 </html>

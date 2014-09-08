@@ -52,9 +52,9 @@
 					
 				$loginForm.on('touchstart click', '#login-submit', function(e){
 					e.preventDefault();
-					alert('logging in click on submit');
+					//alert('logging in click on submit');
 					$pagePreloader.show();
-					console.log(data.getLogin());
+					//console.log(data.getLogin());
 					data.getLogin().auth($loginEmail.val(), $loginPassword.val(),'1');
 				}).on('kewdown', '#loginemail, #loginpassword', function(e){
 					var code = e.keyCode || e.which;
@@ -71,13 +71,13 @@
 			//---- added by cata 15.08.2014 ----//
 			function OnloginErrorEventHandler(){
 				$pagePreloader.fadeOut();
-				var messages = '<p class="alert error">Could not read local storage data</p>';
-				$responseHolder.append(messages).show();
+				var messages = '<p class="alert error">Error L01: Authentication failed.</p>';
+				$responseHolder.html(messages).show();
 			}
 			//-------------end------------------//
-				document.addEventListener("deviceready", PowerUp, false);
-				/* Only for in-browser (not in Android) testing */
-				//PowerUp();
+			document.addEventListener("deviceready", PowerUp, false);
+			/* Only for in-browser (not in Android) testing */
+			//PowerUp();
         </script>
 	</body>
 </html>
