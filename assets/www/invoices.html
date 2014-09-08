@@ -46,29 +46,47 @@
     </div>
     <script type="text/javascript">
             function OnDeviceReady() {
+                var month = new Array();
+                month[0] = "January";
+                month[1] = "February";
+                month[2] = "March";
+                month[3] = "April";
+                month[4] = "May";
+                month[5] = "June";
+                month[6] = "July";
+                month[7] = "August";
+                month[8] = "September";
+                month[9] = "October";
+                month[10] = "November";
+                month[11] = "December";
+
                 var date = new Date();
                 // 8 7 6 5 4 3 2 1 0 11 10 9 8 7 6 5 4 3 2 1 0 11 10 9
                 var mm = date.getMonth();
                 var yy = date.getYear();
+                alert(yy);
                 var monthArray = new Array();
                 var pivot = mm;
                 while (mm >= 0) {
                     //console.log(mm);
-                    var date = new Date(yy, mm, 0, 0, 0, 0, 0); // luna din anul curent
-                    var date1 = new Date(yy - 1, mm, 0, 0, 0, 0, 0); //aceasi luna din anul anterior
+                    var date = new Date(yy, mm, 1, 0, 0, 0, 0); // luna din anul curent
+                    var date1 = new Date(yy - 1, mm, 1, 0, 0, 0, 0); //aceasi luna din anul anterior
                     monthArray.push(date);
                     monthArray.push(date1);
                     mm--;
                 }
                 while (pivot <= 11) {
                     //console.log(pivot);
-                    var date = new Date(yy, pivot, 0, 0, 0, 0, 0); // luna din anul curent
-                    var date1 = new Date(yy - 1, pivot, 0, 0, 0, 0, 0); //aceasi luna din anul anterior
+                    pivot++;
+                    var date = new Date(yy, pivot, 1, 0, 0, 0, 0); // luna din anul curent
+                    var date1 = new Date(yy - 1, pivot, 1, 0, 0, 0, 0); //aceasi luna din anul anterior
                     monthArray.push(date);
                     monthArray.push(date1);
-                    pivot++;
                 }
-                console.log(monthArray[i].length);
+                for (var i = 0; i < monthArray.length; i++) {
+                    console.log(monthArray[i].getFullYear() + " " + month[monthArray[i].getMonth()]);
+                    //$('<option></option>').html(monthArray[i].getFullYear() + " " + month[monthArray[i].getMonth()]).appendTo($('months'));
+                }
 
                 $('#nav-toggle').on('click', function (e) {
                     e.preventDefault();
@@ -116,6 +134,7 @@
                 */
             }
             document.addEventListener("deviceready", OnDeviceReady, false);
+
 
     </script>
 </div>
