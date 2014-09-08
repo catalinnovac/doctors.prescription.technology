@@ -92,14 +92,16 @@
 				</div>
 			</div>
 		</footer>
+
 		<script type="text/javascript">
 			function PowerUp() {
 				$('#nav-toggle').on('touchstart click', function(e){
 					e.preventDefault();
                     var extra = new Array();
-                    extra.push({ key: "open", value: "1" });
-                    doctors.sendMessage("DRAWER", JSON.stringify(extra));
-                });
+                    extra.push({ key:"open",value:"1"});
+                    doctors.sendMessage("DRAWER",JSON.stringify(extra));
+				});
+
                 $.ajax({
                     url: 'http://doctors.prescription.technology/ws/history.asp',
                     type: 'GET',
