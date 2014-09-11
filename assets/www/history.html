@@ -31,44 +31,37 @@
 					<h1>History</h1>
 
 				    <div id="history">
-				        <div id="clone">
+				        <div id="clonable">
 				            <div class="edit-buttons">
-				                <a id="edit-link"></a>
+				                <a class="oid_url"></a>
 				            </div>
 				            <div class="customer-placeholder">
 				                <div class="customer">
-				                    <span id="firstname"></span><span id="middleinitial"></span><span id="lastname"></span>
-
-				                    <p id="email"></p>
-
-				                    <p id="phone"></p>
-
-				                    <p id="shipping_country"></p>
+				                    <span class="autoupdate" data-term="firstname"></span><span class="autoupdate" data-term="middleinitial"></span><span class="autoupdate" data-term="lastname"></span>
+				                    <p class="autoupdate" data-term="email"></p>
+				                    <p class="autoupdate" data-term="phone"></p>
+				                    <p class="autoupdate" data-term="shipping_country"></p>
 				                </div>
 				                <div class="customer-info">
-				                    <p id="bmi"></p>
-
-				                    <p id="height"></p>
-
-				                    <p id="weight"></p>
-
-				                    <p id="language"></p>
+				                    <p class="autoupdate" data-term="bmi"></p>
+				                    <p class="autoupdate" data-term="height"></p>
+				                    <p class="autoupdate" data-term="weight"></p>
+				                    <p class="autoupdate" data-term="language"></p>
 				                </div>
 				            </div>
-				            <div class="Treatment_Order">
-				                <p id="OrderNumber"></p>
-
-				                <p id="OrderDate"></p>
-
-				                <p id="OrderStatus"></p>
-				                <ul id="Meds">
-				                    <li class="cloneable"><p id="MedName"></p></li>
+				            <div class="treatment">
+				                <p class="autoupdate" data-term="oid"></p>
+				                <p class="autoupdate" data-term="orderdate"></p>
+				                <p class="autoupdate" data-term="status"></p>
+				                <ul class="meds-list">
+				                    <li class="clonable"><p class="autoupdate" data-term="MedName"></p></li>
 				                </ul>
 				            </div>
-				            <div class="Assign_date">
-				                <p id="assign_date"></p>
+				            <div class="assign_date">
+				                <p class="autoupdate" data-term="Assign_date"></p>
 				            </div>
 				        </div>
+						<div id="response-holder" data-url="http://doctors.prescription.technology/ws/history.asp"></div>
 				    </div>
 				</div>
 			</div>
@@ -95,6 +88,12 @@
 
 		<script type="text/javascript">
 			function PowerUp() {
+				var oLocalStorage = new classLocalStorage();
+				var $clonable = $('#clonable');
+				var $responseHolder = $('#response-holder');
+				var $pagePreloader = $('#page-preloader');
+				$pagePreloader.show();
+				
 				$('#nav-toggle').on('touchstart click', function(e){
 					e.preventDefault();
                     var extra = new Array();
@@ -103,48 +102,56 @@
 				});
 
                 $.ajax({
-                    url: 'http://doctors.prescription.technology/ws/history.asp',
+                    url: $responseHolder.data('url'),
                     type: 'GET',
                     beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
-                }).fail(function (xhr, textStatus, error) { alert(textStatus); })
-                .done(function (data, textStatus, xhr) {
-                    //alert(data);
-                    var history = JSON.parse(data);
-                    if (history.Orders_History.length > 0) {
-                        for (var i = 0; i < history.Orders_History.length; i++) {
-                            var current_history = history.Orders_History[i];
-                            var $clone = $($("#clone").clone(true));
-                            $clone.prop("id", "_" + current_history.OrderNumber.oid);
-                            $clone.removeClass("cloneable");
-                            $clone.find("#edit-link").attr("href", current_history.OrderNumber.oid_url);
-                            $clone.find("#firstname").text(current_history.customer.firstname);
-                            $clone.find("#middleinitial").text(current_history.customer.middleinitial);
-                            $clone.find("#lastname").text(current_history.customer.lastname);
-                            $clone.find("#email").text(current_history.customer.email);
-                            $clone.find("#phone").text(current_history.customer.phone);
-                            $clone.find("#shipping_country").text(current_history.customer.shipping_country);
-                            $clone.find("#bmi").text(current_history.customer.bmi);
-                            $clone.find("#height").text(current_history.customer.height);
-                            $clone.find("#weight").text(current_history.customer.weight);
-                            $clone.find("#language").text(current_history.customer.language);
-                            $clone.find("#OrderNumber").text(current_history.Treatment.oid);
-                            $clone.find("#OrderDate").text(current_history.Treatment.orderdate);
-                            $clone.find("#OrderStatus").text(current_history.Treatment.status);
-                            for (var j = 0; j < current_history.Treatment.Meds.length ; j++) {
-                                var $li = $($clone.find("#Meds").find("li.cloneable").clone(true));
-                                $li.find("#MedName").text(current_history.Treatment.Meds[j].MedName)
-                                $li.appendTo($clone.find("#Meds"));
-                            }
-                            $clone.find("#assign_date").text(current_history.Assign_date);
-                            $clone.appendTo($('#history'));
+                }).fail(function (response) { 
+						// Failure
+						var json = $.parseJSON(response);
+						var messages = ''
+										+ '<p class="alert error">status: ' + json.status + '</p>'
+										+ '<p class="alert error">message: ' + json.message + '</p>'
+										;
+						$responseHolder.append(messages).show();
+				}).done(function (dataRaw, textStatus, xhr) {
+                    var data = JSON.parse(dataRaw);
+                    if (data.Orders_History.length > 0) {
+						var $editLink = false;
+                        for (var i = 0; i < data.Orders_History.length; i++) {
+                            var current_data = data.Orders_History[i];
+                            var $clone = $clonable.clone(true);
+                            $clone.prop("id", "_" + current_data.OrderNumber.oid).addClass('clone');
+
+							$editLink = $clone.find("a.oid_url"); 
+							$editLink.prop('href', current_data.OrderNumber.oid_url);
+                            
+							oLocalStorage.UpdatePageElements(current_data.customer);							
+							oLocalStorage.UpdatePageElements(current_data.Treatment);
+							
+							/* Treatment Meds */
+							var $medsList = $clone.find('.meds-list');
+                            var $li = $medsList.find("li.clonable").clone(true);
+                            for (var j = 0; j < current_data.Treatment.Meds.length ; j++) {
+								oLocalStorage.UpdatePageElements(current_data.Treatment.Meds[j], $li);
+                                $li.appendTo($medsList);
+                            };
+							
+							/* Assign Date */
+							oLocalStorage.UpdatePageElements(current_data.Assign_date, $clone.find(".assign_date"));
+							
+							/* Set the clone alive */
+                            $clone.appendTo($responseHolder);
                         }
                     } else {
-                        $('<p></p>').html("No history yet").appendTo($('#history'));
+						messages = '<p>No history yet</p>';
+						$responseHolder.append(messages).show();
                     }
                     var extra = new Array();
                     extra.push({ key: "open", value: "0" });
                     doctors.sendMessage("DRAWER", JSON.stringify(extra));
-                });
+				}).always(function() {
+					$pagePreloader.fadeOut();
+				});
             };
 			$(function() {
 	            document.addEventListener("deviceready", PowerUp, false);

@@ -6,6 +6,7 @@ function classLocalStorage() {
 function onDeviceReady() {	
 	var $responseHolder2 = $('#response-holder2');
 	var $responseHolder3 = $('#response-holder3');
+	var $body = $('body');
 	var messages = '';
 	
 	/* Class Local Storage definitions */
@@ -154,9 +155,14 @@ function onDeviceReady() {
 		return false;
 	};
 
-	classLocalStorage.prototype.UpdatePageElements = function() {
-		var _this = this;
-		$('.autoupdate').each(function() {
+	classLocalStorage.prototype.UpdatePageElements = function(_this, $domTree) {
+		if (typeof _this == 'undefined') {
+			var _this = this;
+		};
+		if (typeof $domTree == 'undefined') {
+			var $domTree = $body;
+		}
+		$domTree.find('.autoupdate').each(function() {
 			var $this = $(this);			
 			$this.hide();
 			if ($this.is('input') || $this.is('select') || $this.is('textarea')) {
