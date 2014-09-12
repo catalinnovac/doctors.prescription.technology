@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Prescription Technology</title>
+		<title>Declined - Prescription Technology</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 		<link rel="stylesheet" type="text/css" href="css/reset.css" media="screen" />
 		<link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen" />
@@ -35,44 +35,40 @@
 				            <div class="edit-buttons">
 				                <a class="oid_url"></a>
 				            </div>
-				            <div class="customer-placeholder">
+				            <div class="customer-info">
 				                <h3 class="customer">
 				                    <span class="autoupdate" data-term="firstname"></span><span class="autoupdate" data-term="middleinitial"></span><span class="autoupdate" data-term="lastname"></span>
 								</h3>
 								<div class="customer-addresses">
-									<div class="customer-shipping-addresses">
-										<div class="customer-shipping-address clonable">
-											<p class="autoupdate" data-term="Street"></p>
-											<p class="autoupdate" data-term="City"></p>
-											<p class="autoupdate" data-term="Province"></p>
-											<p class="autoupdate" data-term="Postal_Code"></p>
-											<p class="autoupdate" data-term="Country"></p>
+									<div class="customer-shipping-addresses row-gutters">
+										<div class="customer-shipping-address clonable col span_12">
+											<label>Shipping address</label>
+											<p>Street <strong class="autoupdate" data-term="Street"></strong></p>
+											<p>City <strong class="autoupdate" data-term="City"></strong></p>
+											<p>Province <strong class="autoupdate" data-term="Province"></strong></p>
+											<p>Postal <strong code class="autoupdate" data-term="Postal_Code"></strong></p>
+											<p>Country <strong class="autoupdate" data-term="Country"></strong></p>
 										</div>
 									</div>
-									<div class="customer-billing-addresses">
-										<div class="customer-billing-address clonable">
-											<p class="autoupdate" data-term="Street"></p>
-											<p class="autoupdate" data-term="City"></p>
-											<p class="autoupdate" data-term="Province"></p>
-											<p class="autoupdate" data-term="Postal_Code"></p>
-											<p class="autoupdate" data-term="Country"></p>
+									<div class="customer-billing-addresses row-gutters">
+										<div class="customer-billing-address clonable col span_12">
+											<label>Billing address</label>
+											<p>Street <strong class="autoupdate" data-term="Street"></strong></p>
+											<p>City <strong class="autoupdate" data-term="City"></strong></p>
+											<p>Province <strong class="autoupdate" data-term="Province"></strong></p>
+											<p>Postal <strong code class="autoupdate" data-term="Postal_Code"></strong></p>
+											<p>Country <strong class="autoupdate" data-term="Country"></strong></p>
 										</div>
 									</div>
 								</div>
 							</div>
 				            <div class="treatment">
-				                <p class="autoupdate" data-term="oid"></p>
-				                <p class="autoupdate" data-term="orderdate"></p>
-				                <p class="autoupdate" data-term="status"></p>
+				                <p class="autoupdate" data-term="OrderNumber"></p>
+				                <p class="autoupdate" data-term="OrderDate"></p>
 				                <ul class="meds-list">
 				                    <li class="clonable"><p class="autoupdate" data-term="MedName"></p></li>
 				                </ul>
 				            </div>
-							<!--
-				            <div class="assign_date">
-				                <p class="autoupdate" data-term="Assign_date"></p>
-				            </div>
-							-->
 				        </div>
 						<div id="response-holder" data-url="http://doctors.prescription.technology/ws/declinedorders.asp"></div>
 				    </div>
@@ -130,66 +126,78 @@
                     var data = JSON.parse(dataRaw);
                     if (data.Declined_Orders.length > 0) {
 						var $editLink = false;
-                        //for (var i = 0; i < data.Declined_Orders.length; i++) {
                         var current_data = false;
                         var $clone = false;
-						for (var i = 0; i < 5; i++) {
+						console.log('data: ' + JSON.stringify(data));
+						//console.log('data.Declined_Orders.length: ' + data.Declined_Orders.length);
+                        for (var i = 0; i < data.Declined_Orders.length; i++) {
+						//for (var i = 0; i < 3; i++) {
 							$clone = $clonable.clone(true);
                             current_data = data.Declined_Orders[i];
                             $clone.prop("id", "_" + current_data.OrderNumber.oid).addClass('clone');
 
-							$editLink = $clone.find("a.oid_url"); 
+							$editLink = $clone.first("a.oid_url"); 
 							$editLink.prop('href', current_data.OrderNumber.oid_url);
 							
+							//console.log('current_data.customer.firstname + lastname: ' + current_data.customer.firstname + ' ' + current_data.customer.lastname);
+							//console.log('current_data.customer.Shipping_address.length: ' + current_data.customer.Shipping_address.length);
+							
 							/*
-							console.log('current_data.customer: ' + current_data.customer);
 							console.log('current_data.customer.length: ' + current_data.customer.length);
-							console.log('current_data.Treatment: ' + current_data.Treatment);
-							console.log('current_data.Treatment.length: ' + current_data.Treatment.length);
-							console.log('current_data.customer.Shipping_address: ' + current_data.customer.Shipping_address);
-							console.log('current_data.customer.Shipping_address.length: ' + current_data.customer.Shipping_address.length);
-							console.log('current_data.customer.Billing_address: ' + current_data.customer.Billing_address);
 							console.log('current_data.customer.Billing_address.length: ' + current_data.customer.Billing_address.length);
+							console.log('current_data.Treatment.Meds.length: ' + current_data.Treatment.Meds.length);
+							
+							console.log('current_data.customer: ' + current_data.customer);
+							console.log('current_data.Treatment: ' + current_data.Treatment);
+							console.log('current_data.customer.Shipping_address: ' + current_data.customer.Shipping_address);
+							console.log('current_data.customer.Billing_address: ' + current_data.customer.Billing_address);
 							console.log('current_data.Treatment.Meds: ' + current_data.Treatment.Meds);
 							//console.log('current_data.Assign_date: ' + current_data.Assign_date);
                             */
 							
-							oLocalStorage.UpdatePageElements(current_data.customer);
-							console.log('end UpdatePageElements(current_data.customer)');
-							oLocalStorage.UpdatePageElements(current_data.Treatment);
-							console.log('end UpdatePageElements(current_data.Treatment)');
+							oLocalStorage.UpdatePageElements(current_data.customer, $clone.find('div.customer-info'));
+							//console.log('end UpdatePageElements(current_data.customer)');
+							oLocalStorage.UpdatePageElements(current_data.Treatment, $clone.find('div.treatment'));
+							//console.log('end UpdatePageElements(current_data.Treatment)');
 							
 							/* Shipping addresses */
-							var $csaCloneHolder = $('.customer-shipping-addresses');
-							var $csaClone = $('.customer-shipping-address.clonable');
+							var $csaCloneHolder = $clone.find('div.customer-shipping-addresses');
+							var $csaClonable = $clone.find('div.customer-shipping-address.clonable');
+							var $csaClone = false;
 							for (var k = 0; k < current_data.customer.Shipping_address.length ; k++) {
+								$csaClone = $csaClonable.clone(true);
 								oLocalStorage.UpdatePageElements(current_data.customer.Shipping_address[k], $csaClone);
-                                $csaClone.appendTo($csaCloneHolder);
-								console.log('end UpdatePageElements(current_data.customer.Shipping_address['+k+'])');
+                                $csaClone.removeClass('clonable').appendTo($csaCloneHolder);
+								//console.log('end UpdatePageElements(current_data.customer.Shipping_address['+k+'])');
                             }
 							/* Billing addresses */
-							var $cbaCloneHolder = $('.customer-billing-addresses');
-							var $cbaClone = $('.customer-billing-address.clonable');
+							var $cbaCloneHolder = $clone.find('div.customer-billing-addresses');
+							var $cbaClonable = $clone.find('div.customer-billing-address.clonable');
+							var $cbaClone = false;
 							for (var k = 0; k < current_data.customer.Billing_address.length ; k++) {
+								$cbaClone = $cbaClonable.clone(true);
 								oLocalStorage.UpdatePageElements(current_data.customer.Billing_address[k], $cbaClone);
-                                $cbaClone.appendTo($cbaCloneHolder);
-								console.log('end UpdatePageElements(current_data.customer.Billing_address['+k+'])');
+                                $cbaClone.removeClass('clonable').appendTo($cbaCloneHolder);
+								console.log('$cbaCloneHolder.prop("class"): ' + $cbaCloneHolder.prop("class"));
+								console.log('$cbaClonable.prop("class"): ' + $cbaClonable.prop("class"));
+								console.log('$cbaClone.html(): ' + $cbaClone.html());
+								//console.log('end UpdatePageElements(current_data.customer.Billing_address['+k+'])');
                             }
 							
 							/* Treatment Meds */
-							var $medsList = $clone.find('.meds-list');
+							var $medsList = $clone.find('ul.meds-list');
                             var $li = $medsList.find("li.clonable").clone(true);
                             for (var j = 0; j < current_data.Treatment.Meds.length ; j++) {
 								oLocalStorage.UpdatePageElements(current_data.Treatment.Meds[j], $li);
-                                $li.appendTo($medsList);
-								console.log('end UpdatePageElements(current_data.Treatment.Meds['+j+'])');
+                                $li.removeClass('clonable').appendTo($medsList);
+								//console.log('end UpdatePageElements(current_data.Treatment.Meds['+j+'])');
                             };
 							
 							/* Assign Date */
 							//oLocalStorage.UpdatePageElements(current_data.Assign_date, $clone.find(".assign_date"));
 							
 							/* Set the clone alive */
-                            $clone.appendTo($responseHolder);
+                            $clone.removeClass('clonable').appendTo($responseHolder);
                         }
                     } else {
 						messages = '<p>No history yet</p>';

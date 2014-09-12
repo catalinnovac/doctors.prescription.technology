@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Prescription Technology</title>
+		<title>History - Prescription Technology</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 		<link rel="stylesheet" type="text/css" href="css/reset.css" media="screen" />
 		<link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen" />
@@ -35,18 +35,22 @@
 				            <div class="edit-buttons">
 				                <a class="oid_url"></a>
 				            </div>
-				            <div class="customer-placeholder">
-				                <div class="customer">
+				            <div class="customer-info">
+				                <h3 class="customer">
 				                    <span class="autoupdate" data-term="firstname"></span><span class="autoupdate" data-term="middleinitial"></span><span class="autoupdate" data-term="lastname"></span>
-				                    <p class="autoupdate" data-term="email"></p>
-				                    <p class="autoupdate" data-term="phone"></p>
-				                    <p class="autoupdate" data-term="shipping_country"></p>
-				                </div>
-				                <div class="customer-info">
-				                    <p class="autoupdate" data-term="bmi"></p>
-				                    <p class="autoupdate" data-term="height"></p>
-				                    <p class="autoupdate" data-term="weight"></p>
-				                    <p class="autoupdate" data-term="language"></p>
+								</h3>
+								<div class="row gutters">
+									<div class="col span_12">
+					                    <p class="autoupdate" data-term="email"></p>
+					                    <p class="autoupdate" data-term="phone"></p>
+					                    <p class="autoupdate" data-term="shipping_country"></p>
+					                </div>
+					                <div class="col span_12">
+					                    <p class="autoupdate" data-term="bmi"></p>
+					                    <p class="autoupdate" data-term="height"></p>
+					                    <p class="autoupdate" data-term="weight"></p>
+					                    <p class="autoupdate" data-term="language"></p>
+									</div>
 				                </div>
 				            </div>
 				            <div class="treatment">
@@ -104,7 +108,7 @@
                 $.ajax({
                     url: $responseHolder.data('url'),
                     type: 'GET',
-                    beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
+                    beforeSend: function (xhr) { if (typeof doctors != 'undefined') { xhr.setRequestHeader('Authorization', doctors.getToken()); } }
                 }).fail(function (response) { 
 						// Failure
 						var json = $.parseJSON(response);
@@ -117,27 +121,31 @@
                     var data = JSON.parse(dataRaw);
                     if (data.Orders_History.length > 0) {
 						var $editLink = false;
+                        var current_data = false;
+                        var $clone = false;
+						var $customerInfo = $clonable.first('div.customer-info');
+						var $treatment = $clonable.first('div.treatment');
                         for (var i = 0; i < data.Orders_History.length; i++) {
-                            var current_data = data.Orders_History[i];
-                            var $clone = $clonable.clone(true);
+                            $clone = $clonable.clone(true);
+                            current_data = data.Orders_History[i];
                             $clone.prop("id", "_" + current_data.OrderNumber.oid).addClass('clone');
 
-							$editLink = $clone.find("a.oid_url"); 
+							$editLink = $clone.first("a.oid_url"); 
 							$editLink.prop('href', current_data.OrderNumber.oid_url);
                             
-							oLocalStorage.UpdatePageElements(current_data.customer);							
-							oLocalStorage.UpdatePageElements(current_data.Treatment);
+							oLocalStorage.UpdatePageElements(current_data.customer, $customerInfo);							
+							oLocalStorage.UpdatePageElements(current_data.Treatment, $treatment);
 							
 							/* Treatment Meds */
-							var $medsList = $clone.find('.meds-list');
-                            var $li = $medsList.find("li.clonable").clone(true);
+							var $medsList = $clone.first('ul.meds-list');
+                            var $li = $medsList.first("li.clonable").clone(true);
                             for (var j = 0; j < current_data.Treatment.Meds.length ; j++) {
 								oLocalStorage.UpdatePageElements(current_data.Treatment.Meds[j], $li);
                                 $li.appendTo($medsList);
                             };
 							
 							/* Assign Date */
-							oLocalStorage.UpdatePageElements(current_data.Assign_date, $clone.find(".assign_date"));
+							oLocalStorage.UpdatePageElements(current_data.Assign_date, $clone.first(".assign_date"));
 							
 							/* Set the clone alive */
                             $clone.appendTo($responseHolder);

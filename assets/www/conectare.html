@@ -59,11 +59,11 @@
 				}).on('kewdown', '#loginemail, #loginpassword', function(e){
 					var code = e.keyCode || e.which;
 					if(code == 13) { //Enter keycode
-						$pagePreloader.show();
 						e.preventDefault();
+						$pagePreloader.show();
 						//Do something
-						alert('logging in via ENTER');
-						console.log(data.getLogin());
+						//alert('logging in via ENTER');
+						//console.log(data.getLogin());
 						data.getLogin().auth($loginEmail.val(), $loginPassword.val(),'1');
 					}
 				});

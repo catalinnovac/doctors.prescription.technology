@@ -29,7 +29,8 @@
 		font: 400 normal 1.75rem/1.5em Open Sans, Arial, sans-serif;
 	}
 	h3 {
-		color: #1C5C87;
+		color: #179cd8;
+		font-size: 18px;
 	}
 	h3 strong {
 		font-weight: 600;
@@ -162,6 +163,9 @@
 	}
 	
 	/* Misc */
+	.clonable {
+		display: none;
+	}
 	.rosu { color: #f00; }
 	.clearfloat { clear: both; }
 	.butoane { min-height: 3em; }
