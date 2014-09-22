@@ -162,15 +162,26 @@ function onDeviceReady() {
 		if (typeof $domTree == 'undefined') {
 			var $domTree = $body;
 		}
+		//console.log('$domTree.class: ' + $domTree.prop('class'));
 		$domTree.find('.autoupdate').each(function() {
 			var $this = $(this);			
-			$this.hide();
+			//$this.hide();
+
 			if ($this.is('input') || $this.is('select') || $this.is('textarea')) {
 				$this.val(_this[$this.data('term')]);
 			} else {
-				$this.html(_this[$this.data('term')]).show();
+				$this.html(_this[$this.data('term')]);
 			}
-			$this.show();
+			//$this.show();
+
+			// TEMP
+			//console.log('$this.data(term): ' + $this.data('term'));
+			/*
+			if ($this.data('term') == 'firstname') {
+				console.log('Detected firstname replacement');
+				console.log('$this.html(): ' + $this.html());
+			}
+			*/
 		})
 	}
 	

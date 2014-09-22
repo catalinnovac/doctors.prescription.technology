@@ -351,7 +351,7 @@
 		z-index: 800;
 		
 		position: absolute;
-		top: 4rem;
+		top: 4srem;
 		left: 0;
 		/* 2014.03.14 - To test! */
 		position: fixed;
@@ -360,12 +360,13 @@
 	.ajax-loader {
 		display: none;
 		vertical-align: middle;
+		text-align: center;
 	}
 	#conectare #page-preloader {
 		top: 0;
 	}
-		img.preloader {
-			margin:15% auto 0; 
+		#page-preloader img {
+			margin:20% auto 0; 
 			display:block;
 		}
 		
@@ -784,6 +785,15 @@
 			content: attr(data-title);
 		}
 	
+	
+	.response-holder > div {
+		margin-bottom: 1px;
+		padding: 1rem;
+		background: #fff;
+	}
+	.response-holder > div:nth-child(2n+2) {
+		background: #f6fbfc;
+	}
 	
 	/* LEGACY */
 	/* Messages */

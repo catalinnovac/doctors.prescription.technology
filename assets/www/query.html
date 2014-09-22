@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Prescription Technology</title>
+		<title>Query - Prescription Technology</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 		<link rel="stylesheet" type="text/css" href="css/reset.css" media="screen" />
 		<link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen" />
@@ -15,8 +15,8 @@
 	</head>
 	<body id="index">
 		<!-- Preloader -->
-		<div id="page-preloader">
-			<img class="preloader" src="img/loading.gif" alt=""/>
+		<div id="page-preloader" class="ajax-loader">
+			<img src="img/loading.gif" alt=""/>
 		</div>
 		
 		<div class="container wrap">
@@ -29,52 +29,59 @@
 			<div class="row gutters">
 				<div class="col span_24">
 					<h1>Query</h1>
-				    <div id="query">
-				        <div id="clone" class="cloneable">
-				            <div id='edit-buttons'>
-				                <a id="edit-link"></a>
+
+				    <div id="declined" class="superholder">
+				        <div class="clonable">
+				            <div class="edit-buttons">
+				                <a class="oid_url"></a>
 				            </div>
-				            <div id='customer-placeholder'>
-				                <div id='customer-info'>
-				                    <span id="firstname"></span><span id="middleinitial"></span><span id="lastname"></span>
-				                </div>
-				                <div id='customer-addresses'>
-				                    <div id='customer-shipping-address'>
-				                        <p id="Street"></p>
-
-				                        <p id="City"></p>
-
-				                        <p id="Province"></p>
-
-				                        <p id="Postal_Code"></p>
-
-				                        <p id="Country"></p>
-				                    </div>
-				                    <div id='customer-billing-address'>
-				                        <p id="Street"></p>
-
-				                        <p id="City"></p>
-
-				                        <p id="Province"></p>
-
-				                        <p id="Postal_Code"></p>
-
-				                        <p id="Country"></p>
-				                    </div>
+				            <div class="customer-info">
+				                <h3 class="customer">
+				                    <span class="autoupdate" data-term="firstname"></span>&nbsp;<span class="autoupdate" data-term="middleinitial"></span>&nbsp;<span class="autoupdate" data-term="lastname"></span>
+								</h3>
+								<div class="customer-addresses">
+									<div class="customer-shipping-addresses row-gutters">
+										<div class="customer-shipping-address clonable col span_12">
+											<label>Shipping address</label>
+											<p>Street <strong class="autoupdate" data-term="Street"></strong></p>
+											<p>City <strong class="autoupdate" data-term="City"></strong></p>
+											<p>Province <strong class="autoupdate" data-term="Province"></strong></p>
+											<p>Postal <strong code class="autoupdate" data-term="Postal_Code"></strong></p>
+											<p>Country <strong class="autoupdate" data-term="Country"></strong></p>
+										</div>
+									</div>
+									<div class="customer-billing-addresses row-gutters">
+										<div class="customer-billing-address clonable col span_12">
+											<label>Billing address</label>
+											<p>Street <strong class="autoupdate" data-term="Street"></strong></p>
+											<p>City <strong class="autoupdate" data-term="City"></strong></p>
+											<p>Province <strong class="autoupdate" data-term="Province"></strong></p>
+											<p>Postal <strong code class="autoupdate" data-term="Postal_Code"></strong></p>
+											<p>Country <strong class="autoupdate" data-term="Country"></strong></p>
+										</div>
+									</div>
 				                </div>
 				            </div>
-				            <div id="Treatment&Order">
-				                <p id="OrderNumber"></p>
-
-				                <p id="OrderDate"></p>
-				                <ul id="Meds">
-				                    <li class="hide cloneable"><p id="MedName"></p></li>
+				            <div class="order">
+								<label>Order</label>
+				                <p class="autoupdate" data-term="OrderNumber"></p>
+				                <p class="autoupdate" data-term="OrderDate"></p>
+				                <p class="autoupdate" data-term="status"></p>
+				            </div>
+				            <div class="treatment">
+								<label>Meds</label>
+				                <ul class="meds-list">
+				                    <li class="clonable"><p class="autoupdate" data-term="MedName"></p></li>
 				                </ul>
 				            </div>
-				            <div id="Assign_date">
-				                <p id="assing_date"></p>
-				            </div>
+				            <div class="assign_date">
+				                <p class="autoupdate" data-term="Assign_date"></p>
+							</div>
 				        </div>
+						<div class="response-holder" data-url="http://doctors.prescription.technology/ws/ajax.orders.getQuery.asp"></div>
+						<div class="ajax-loader">
+							<img class="preloader" src="img/loading.gif" alt=""/>
+						</div>
 				    </div>
 				</div>
 			</div>
@@ -101,6 +108,13 @@
 
 		<script type="text/javascript">
 			function PowerUp() {
+				var oLocalStorage = new classLocalStorage();
+				var $superholder = $('div.superholder');
+				var $clonable = $superholder.children('div.clonable');
+				var $localResponseHolder = $superholder.children('div.response-holder');
+				var $localPreloader = $superholder.children('div.ajax-loader');
+				$localPreloader.fadeIn('fast');
+				
 				$('#nav-toggle').on('touchstart click', function(e){
 					e.preventDefault();
                     var extra = new Array();
@@ -109,63 +123,114 @@
 				});
 
                 $.ajax({
-                    url: 'http://doctors.prescription.technology/ws/queryorders.asp',
+                    url: $localResponseHolder.data('url'),
                     type: 'GET',
-                    beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
-                }).fail(function (xhr, textStatus, error) { alert(xhr.responseText); })
-                .done(function (data, textStatus, xhr) {
-                    alert(data);
-                    var query = JSON.parse(data);
-                    if (query.Query_Orders.length > 0) {
-                        for (var i = 0; i < query.Query_Orders.length; i++) {
-                            var current_query = query.Query_Orders[i];
-                            var $clone = $('#clone').clone();
-                            $clone.find('#edit-link').attr('href', current_query.OrderNumber.oid_url);
-                            $clone.find('#firstname').text(current_query.customer.firstname);
-                            $clone.find('#middleinitial').text(current_query.customer.middleinitial);
-                            $clone.find('#lastname').text(current_query.customer.lastname);
-                            for (var k = 0; k < current_query.customer.Shipping_address.length ; k++) {
-                                var current_ship_addr = current_query.customer.Shipping_address[k];
-                                var $current_ship_clone = $clone.find('#customer-shipping-address').clone();
-                                $current_ship_clone.find('#Street').text(current_query.customer.Shipping_address.Street);
-                                $current_ship_clone.find('#City').text(current_query.customer.Shipping_address.City);
-                                $current_ship_clone.find('#Province').text(current_query.customer.Shipping_address.Province);
-                                $current_ship_clone.find('#Postal_Code').text(current_query.customer.Shipping_address.Postal_Code);
-                                $current_ship_clone.find('#Country').text(current_query.customer.Shipping_address.Country);
-                            }
-                            for (var k = 0; k < current_query.customer.Billing_address.length; k++) {
-                                var current_bill_addr = current_query.customer.Billing_address[k];
-                                var $current_bill_clone = $clone.find('#customer-billing-address').clone();
-                                $current_bill_clone.find('#Street').text($current_bill_clone.Street);
-                                $current_bill_clone.find('#City').text($current_bill_clone.City);
-                                $current_bill_clone.find('#Province').text($current_bill_clone.Province);
-                                $current_bill_clone.find('#Postal_Code').text($current_bill_clone.Postal_Code);
-                                $current_bill_clone.find('#Country').text($current_bill_clone.Country);
-                            }
-                            $clone.find('#OrderNumber').text(current_query.Treatment_Order.OrderNumber);
-                            $clone.find('#OrderDate').text(current_query.Treatment_Order.OrderDate);
-                            for (var j = 0; j < current_query.Treatment_Order.Meds.length ; j++) {
-                                var $li = $clone.find('#Meds').find('li.cloneable').clone();
-                                $li.find('#MedName').text(current_query.Treatment_Order.Meds[j].MedName);
-                                $li.appendTo($clone.find('#Meds'));
-                            }
-                            $clone.find('#assign_date').text(current_query.Assign_date);
-                            $clone.appendTo($('#query'));
+                    beforeSend: function (xhr) { if (typeof doctors != 'undefined') { xhr.setRequestHeader('Authorization', doctors.getToken()); } }
+                }).fail(function (response) { 
+					// Failure
+					//var json = $.parseJSON(response);
+					var messages = ''
+									+ '<p class="alert error">status: ' + response.status + '</p>'
+									+ '<p class="alert error">message: ' + response.statusText + '</p>'
+									;
+					$localResponseHolder.append(messages).show();
+				}).done(function (response) {
+					var data = JSON.parse(response);
+                    if (data.orders.length > 0) {
+						var $editLink = false;
+                        var current_data = false;
+                        var $clone = false;
+						var $customer = $clonable.find('h3.customer');
+						var $order = $clonable.find('div.order');
+						var $treatment = $clonable.find('div.treatment');
+                        for (var i = 0; i < data.orders.length; i++) {
+							$clone = $clonable.clone(true);
+                            current_data = data.orders[i];
+                            $clone.prop("id", "_" + current_data.OrderNumber.oid).addClass('clone');
+
+							$editLink = $clone.find("a.oid_url"); 
+							$editLink.prop('href', current_data.OrderNumber.oid_url);
+							
+							//console.log('current_data.customer.firstname + lastname: ' + current_data.customer.firstname + ' ' + current_data.customer.lastname);
+							//console.log('current_data.customer.Shipping_address.length: ' + current_data.customer.Shipping_address.length);
+							
+							/*
+							console.log('current_data.customer.length: ' + current_data.customer.length);
+							console.log('current_data.customer.Billing_address.length: ' + current_data.customer.Billing_address.length);
+							console.log('current_data.Treatment.Meds.length: ' + current_data.Treatment.Meds.length);
+							
+							console.log('current_data.customer: ' + current_data.customer);
+							console.log('current_data.customer.Shipping_address: ' + current_data.customer.Shipping_address);
+							console.log('current_data.customer.Billing_address: ' + current_data.customer.Billing_address);
+							console.log('current_data.Treatment.Meds: ' + current_data.Treatment.Meds);
+							//console.log('current_data.Assign_date: ' + current_data.Assign_date);
+                            */
+							//console.log('current_data.Treatment: ' + JSON.stringify(current_data.Treatment));
+							
+							oLocalStorage.UpdatePageElements(current_data.customer, $customer);
+							oLocalStorage.UpdatePageElements(current_data.Order, $order);
+							oLocalStorage.UpdatePageElements(current_data.Treatment, $treatment);
+							//console.log('end UpdatePageElements(current_data.Treatment)');
+							
+							/* Shipping addresses */
+							var $csaCloneHolder = $clone.find('div.customer-shipping-addresses');
+							var $csaClonable = $clone.find('div.customer-shipping-address.clonable');
+							var $csaClone = false;
+							if (typeof current_data.customer.Shipping_address != 'undefined') {
+								for (var k = 0; k < current_data.customer.Shipping_address.length ; k++) {
+									$csaClone = $csaClonable.clone(true);
+									oLocalStorage.UpdatePageElements(current_data.customer.Shipping_address[k], $csaClone);
+									$csaClone.removeClass('clonable').appendTo($csaCloneHolder);
+									//console.log('end UpdatePageElements(current_data.customer.Shipping_address['+k+'])');
+								}
+							}
+							/* Billing addresses */
+							var $cbaCloneHolder = $clone.find('div.customer-billing-addresses');
+							var $cbaClonable = $clone.find('div.customer-billing-address.clonable');
+							var $cbaClone = false;
+							if (typeof current_data.customer.Billing_address != 'undefined') {
+								for (var k = 0; k < current_data.customer.Billing_address.length ; k++) {
+									$cbaClone = $cbaClonable.clone(true);
+									oLocalStorage.UpdatePageElements(current_data.customer.Billing_address[k], $cbaClone);
+									$cbaClone.removeClass('clonable').appendTo($cbaCloneHolder);
+								}
+							}
+							
+							/* Treatment Meds */
+							var $medsList = $clone.find('ul.meds-list');
+                            var $li = $medsList.find("li.clonable").clone(true);
+							if (typeof current_data.customer.Treatment != 'undefined') {
+								for (var j = 0; j < current_data.Treatment.Meds.length ; j++) {
+									oLocalStorage.UpdatePageElements(current_data.Treatment.Meds[j], $li);
+									$li.removeClass('clonable').appendTo($medsList);
+									//console.log('end UpdatePageElements(current_data.Treatment.Meds['+j+'])');
+								};
+							};
+							
+							/* Assign Date */
+							oLocalStorage.UpdatePageElements(current_data.Assign_date, $clone.find(".assign_date"));
+							
+							/* Set the clone alive */
+                            $clone.prop('display', 'none').removeClass('clonable').appendTo($localResponseHolder).fadeIn();
                         }
                     } else {
-
+						messages = '<p>No history yet</p>';
+						$localResponseHolder.append(messages).show();
                     }
                     var extra = new Array();
                     extra.push({ key: "open", value: "0" });
                     doctors.sendMessage("DRAWER", JSON.stringify(extra));
-                });
+				}).always(function(response) {
+					console.log('response: ' + response);
+					$localPreloader.fadeOut('fast');
+				});
             };
 			$(function() {
 	            document.addEventListener("deviceready", PowerUp, false);
 				
 				/* Only for in-browser (not in Android) testing */
 				//PowerUp();
-			})
+			});
 	    </script>
 	</body>
 </html>
