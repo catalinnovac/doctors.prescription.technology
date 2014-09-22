@@ -33,7 +33,7 @@
 				    <div id="history" class="superholder">
 				        <div class="clonable">
 				            <div class="edit-buttons">
-				                <a class="oid_url"></a>
+				                <a class="OrderURL"></a>
 				            </div>
 				            <div class="customer-info">
 				                <h3 class="customer">
@@ -68,7 +68,7 @@
 				                <p class="autoupdate" data-term="OrderDate"></p>
 				                <p class="autoupdate" data-term="status"></p>
 				            </div>
-				            <div class="treatment">
+				            <div class="meds">
 								<label>Meds</label>
 				                <ul class="meds-list">
 				                    <li class="clonable"><p class="autoupdate" data-term="MedName"></p></li>
@@ -140,61 +140,66 @@
 						var $editLink = false;
                         var current_data = false;
                         var $clone = false;
-						var $customer = $clonable.find('h3.customer');
-						var $order = $clonable.find('div.order');
-						var $treatment = $clonable.find('div.treatment');
+						var $customer = false;
+						var $order = false;
+						var $meds = false;
                         for (var i = 0; i < data.orders.length; i++) {
-							$clone = $clonable.clone(true);
-                            current_data = data.orders[i];
-                            $clone.prop("id", "_" + current_data.OrderNumber.oid).addClass('clone');
+							current_data = data.orders[i];
+							if (typeof current_data.Order != 'undefined' && typeof current_data.Order.OrderNumber != 'undefined') {
+								$clone = $clonable.clone(true);
+								$clone.prop("id", "_" + current_data.Order.OrderNumber).addClass('clone');
 
-							$editLink = $clone.find("a.oid_url"); 
-							$editLink.prop('href', current_data.OrderNumber.oid_url);
-                            
-							oLocalStorage.UpdatePageElements(current_data.customer, $customer);							
-							oLocalStorage.UpdatePageElements(current_data.Order, $order);
-							oLocalStorage.UpdatePageElements(current_data.Treatment, $treatment);
-							
-							/* Shipping addresses */
-							var $csaCloneHolder = $clone.find('div.customer-shipping-addresses');
-							var $csaClonable = $clone.find('div.customer-shipping-address.clonable');
-							var $csaClone = false;
-							if (typeof current_data.customer.Shipping_address != 'undefined') {
-								for (var k = 0; k < current_data.customer.Shipping_address.length ; k++) {
-									$csaClone = $csaClonable.clone(true);
-									oLocalStorage.UpdatePageElements(current_data.customer.Shipping_address[k], $csaClone);
-									$csaClone.removeClass('clonable').appendTo($csaCloneHolder);
-									//console.log('end UpdatePageElements(current_data.customer.Shipping_address['+k+'])');
+								$customer = $clone.find('h3.customer');
+								$order = $clone.find('div.order');
+								$meds = $clone.find('div.meds');
+
+								$editLink = $clone.find("a.OrderURL"); 
+								$editLink.prop('href', current_data.Order.OrderURL);
+								
+								oLocalStorage.UpdatePageElements(current_data.customer, $customer);							
+								oLocalStorage.UpdatePageElements(current_data.Order, $order);
+								//oLocalStorage.UpdatePageElements(current_data.Meds, $meds);
+								
+								/* Shipping addresses */
+								var $csaCloneHolder = $clone.find('div.customer-shipping-addresses');
+								var $csaClonable = $clone.find('div.customer-shipping-address.clonable');
+								var $csaClone = false;
+								if (typeof current_data.customer.Shipping_address != 'undefined') {
+									for (var k = 0; k < current_data.customer.Shipping_address.length ; k++) {
+										$csaClone = $csaClonable.clone(true);
+										oLocalStorage.UpdatePageElements(current_data.customer.Shipping_address[k], $csaClone);
+										$csaClone.removeClass('clonable').appendTo($csaCloneHolder);
+										//console.log('end UpdatePageElements(current_data.customer.Shipping_address['+k+'])');
+									}
 								}
-							}
-							/* Billing addresses */
-							var $cbaCloneHolder = $clone.find('div.customer-billing-addresses');
-							var $cbaClonable = $clone.find('div.customer-billing-address.clonable');
-							var $cbaClone = false;
-							if (typeof current_data.customer.Billing_address != 'undefined') {
-								for (var k = 0; k < current_data.customer.Billing_address.length ; k++) {
-									$cbaClone = $cbaClonable.clone(true);
-									oLocalStorage.UpdatePageElements(current_data.customer.Billing_address[k], $cbaClone);
-									$cbaClone.removeClass('clonable').appendTo($cbaCloneHolder);
+								/* Billing addresses */
+								var $cbaCloneHolder = $clone.find('div.customer-billing-addresses');
+								var $cbaClonable = $clone.find('div.customer-billing-address.clonable');
+								var $cbaClone = false;
+								if (typeof current_data.customer.Billing_address != 'undefined') {
+									for (var k = 0; k < current_data.customer.Billing_address.length ; k++) {
+										$cbaClone = $cbaClonable.clone(true);
+										oLocalStorage.UpdatePageElements(current_data.customer.Billing_address[k], $cbaClone);
+										$cbaClone.removeClass('clonable').appendTo($cbaCloneHolder);
+									}
 								}
-							}
-							
-							/* Treatment Meds */
-							var $medsList = $clone.find('ul.meds-list');
-                            var $li = $medsList.find("li.clonable").clone(true);
-							if (typeof current_data.customer.Treatment != 'undefined') {
-								for (var j = 0; j < current_data.Treatment.Meds.length ; j++) {
-									oLocalStorage.UpdatePageElements(current_data.Treatment.Meds[j], $li);
-									$li.removeClass('clonable').appendTo($medsList);
-									//console.log('end UpdatePageElements(current_data.Treatment.Meds['+j+'])');
+								
+								/* Meds */
+								var $medsList = $clone.find('ul.meds-list');
+								var $li = $medsList.find("li.clonable").clone(true);
+								if (typeof current_data.Meds != 'undefined') {
+									for (var j = 0; j < current_data.Meds.length ; j++) {
+										oLocalStorage.UpdatePageElements(current_data.Meds[j], $li);
+										$li.removeClass('clonable').appendTo($medsList);
+									};
 								};
-							};
-							
-							/* Assign Date */
-							oLocalStorage.UpdatePageElements(current_data.Assign_date, $clone.find(".assign_date"));
-							
-							/* Set the clone alive */
-                            $clone.prop('display', 'none').removeClass('clonable').appendTo($localResponseHolder).fadeIn();
+								
+								/* Assign Date */
+								oLocalStorage.UpdatePageElements(current_data.Assign_date, $clone.find(".assign_date"));
+								
+								/* Set the clone alive */
+								$clone.prop('display', 'none').removeClass('clonable').appendTo($localResponseHolder).fadeIn();
+							}
                         }
                     } else {
 						messages = '<p>No history yet</p>';
