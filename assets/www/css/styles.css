@@ -894,8 +894,7 @@
 					height:60px !important;
 				}
 	
-	
-	
+
 	@media ( min-width : 768px ) {
 		body > header #info, 
 		body > header > nav.row, 
@@ -978,6 +977,10 @@
 				content: '';
 				display: none;
 			}
+			
+	}
+	
+	@media ( min-width : 1024px ) {
 
 		#calendar .paginare,
 		.calendar {
@@ -989,5 +992,4 @@
 			.calendar .has-orders > a .fa {
 				display: inline;
 			}
-			
 	}
