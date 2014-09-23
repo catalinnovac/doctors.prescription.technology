@@ -694,36 +694,56 @@
 		}
 		
 	/* Calendar - for messages in doctors interface */
-	.calendar td {
-		border: none;
-		border-bottom: 2px solid #009ee0;
+	.calendar {
+		width: 100%;
 	}
-	.calendar .date {
-		text-align: center;
-	}
-	.calendar p, .calendar .has-orders > a { 
-		display: block;
-		text-align: center; 
-	}
-	.calendar .has-orders {
-		border-bottom-color: #f00;
-	}
-	.calendar .has-orders > a {
-		font-size: 0.7em;
-	}
-	.calendar .hidden-info {
-		position: absolute;
-		background: #f00;
-		-moz-box-shadow: 0 0 10px #ccc;
-		-webkit-box-shadow: 0 0 10px #ccc;
-		-o-box-shadow: 0 0 10px #ccc;
-		box-shadow: 0 0 10px #ccc;
-	}
-		.calendar .hidden-info a {
-			color: #fff;
+		.calendar th, .calendar td {
+			padding: 0 0 .2rem;
 		}
-	
-	
+		.calendar td {
+			border: none;
+			border-bottom: 2px solid #009ee0;
+			width: 14.28%;
+			-moz-box-sizing: border-box;
+			-webkit-box-sizing: border-box;
+			box-sizing: border-box;
+		}
+		.calendar .date {
+			text-align: center;
+		}
+		.calendar h3 {
+			margin: .3rem 0;
+		}		
+		.calendar p, .calendar .has-orders > a { 
+			display: block;
+			text-align: center; 
+		}
+		.calendar td p {
+			font-size: .6rem;
+			padding: 0 .2rem;
+		}
+		.calendar .has-orders {
+			border-bottom-color: #f00;
+		}
+		.calendar .has-orders > a {
+			font-size: 0.5em;
+		}
+		.calendar .has-orders .date {
+			color: #f00;
+		}
+		.calendar .hidden-info {
+			position: absolute;
+			background: #f00;
+			-moz-box-shadow: 0 0 10px #ccc;
+			-webkit-box-shadow: 0 0 10px #ccc;
+			-o-box-shadow: 0 0 10px #ccc;
+			box-shadow: 0 0 10px #ccc;
+		}
+			.calendar .hidden-info a {
+				color: #fff;
+			}
+		
+		
 /*	Responsive tables 
 	Source: http://elvery.net/demo/responsive-tables/ */
 	/* Force table to not be like tables anymore */
@@ -936,4 +956,8 @@
 				content: '';
 				display: none;
 			}
+			
+		.calendar {
+			width: auto;
+		}
 	}
