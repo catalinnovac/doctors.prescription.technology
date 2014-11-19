@@ -19,9 +19,9 @@ import doctors.prescription.technology.R;
 import doctors.prescription.technology.code.navigation.drawer.Adapter;
 import doctors.prescription.technology.code.navigation.drawer.DrawerToggle;
 import doctors.prescription.technology.code.navigation.drawer.Item;
+import doctors.prescription.technology.code.webview.CustomCordovaWebView;
 import doctors.prescription.technology.code.webview.WebViewInterface;
 import org.apache.cordova.Config;
-import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.api.CordovaInterface;
 import org.apache.cordova.api.CordovaPlugin;
 
@@ -36,12 +36,16 @@ import java.util.concurrent.Executors;
  * Created by novac on 24-Jul-14.
  */
 public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activity implements CordovaInterface {
-    private final String TAG = "PRESCRIPTION TECHNOLOGY";
+
+    //<editor-fold desc="Final">
+    private static final String TAG = "PRESCRIPTION TECHNOLOGY";
     private final ExecutorService threadPool = Executors.newCachedThreadPool();
-    //<editor-fold desc="Fields"
+    //</editor-fold>
+
+    //<editor-fold desc="Fields">
     public HashMap<String, View> NavigationDrawerViews = new HashMap<String, View>();
     public DrawerLayout mDrawerLayout;
-    public CordovaWebView appView;
+    public CustomCordovaWebView appView;
     boolean activityResultKeepRunning;
     boolean keepRunning;
     List<Item> items;
@@ -70,7 +74,7 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
         */
 
         setContentView(R.layout.activity_main);
-        appView = (CordovaWebView) findViewById(R.id.cordova_main_webview);
+        appView = (CustomCordovaWebView) findViewById(R.id.cordova_main_webview);
         Config.init(this);
         appView.getSettings().setJavaScriptEnabled(true);
         //adauga interfata dintre code behind si cod client
@@ -112,16 +116,30 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
         PopulateLeftMenu();//populeaza listview din navigation drawer
         mDrawerList.setAdapter(new Adapter(this,
                 R.layout.left_drawer_item, items));
-        synchronized (this) {
-            //populeaza harta de receiver-e din activity-ul curent
-            broadcastReceiverHashMap = GetBroadcastsMap();
-            for (String key : broadcastReceiverHashMap.keySet()) {
-                //inregistreaza fiecare receiver
-                registerReceiver(broadcastReceiverHashMap.get(key), new IntentFilter(key));
-            }
-        }
         //deschide meniu lateral(stanga)
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //populeaza harta de receiver-e din activity-ul curent
+        broadcastReceiverHashMap = GetBroadcastsMap();
+        for (String key : broadcastReceiverHashMap.keySet()) {
+            //inregistreaza fiecare receiver
+            registerReceiver(broadcastReceiverHashMap.get(key), new IntentFilter(key));
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        for (String key : broadcastReceiverHashMap.keySet()) {
+            //unregister fiecare receiver
+            unregisterReceiver(broadcastReceiverHashMap.get(key));
+            broadcastReceiverHashMap.remove(key);
+        }
     }
 
     @Override
@@ -134,13 +152,6 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
     @Override
     protected void onStop() {
         super.onStop();
-        synchronized (this) {
-            for (String key : broadcastReceiverHashMap.keySet()) {
-                //unregister fiecare receiver
-                unregisterReceiver(broadcastReceiverHashMap.get(key));
-                broadcastReceiverHashMap.remove(key);
-            }
-        }
     }
 
     @Override

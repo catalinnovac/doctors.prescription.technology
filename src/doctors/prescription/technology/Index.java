@@ -4,7 +4,9 @@ import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
@@ -28,12 +30,24 @@ public class Index extends PrescriptionTechnologyWithNavigationDrawer {
         appView.addJavascriptInterface(dataContext, "data");
         appView.getSettings().setDomStorageEnabled(true);
         appView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        appView.loadUrl("file:///android_asset/www/conectare.html");
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             Log.v(TAG, query);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String TOKEN = sharedPreferences.getString("TOKEN", null);
+        if (TOKEN != null) {
+            Intent loginCompletedItent = new Intent("LOGIN_COMPLETED");
+            loginCompletedItent.putExtra("TOKEN", TOKEN);
+            sendBroadcast(loginCompletedItent);
+        } else
+            appView.loadUrl("file:///android_asset/www/conectare.html");
     }
 
     @Override
@@ -61,6 +75,7 @@ public class Index extends PrescriptionTechnologyWithNavigationDrawer {
                 Log.v(TAG, String.valueOf(intent.hasExtra("TOKEN")));
                 if (intent.hasExtra("TOKEN")) {
                     appView.loadUrl("file:///android_asset/www/index.html");
+                    appView.clearHistory();
                     mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 } else {
                     appView.sendJavascript("OnloginErrorEventHandler();");
@@ -84,5 +99,4 @@ public class Index extends PrescriptionTechnologyWithNavigationDrawer {
         map.put("DRAWER", drawer);
         return map;
     }
-
 }

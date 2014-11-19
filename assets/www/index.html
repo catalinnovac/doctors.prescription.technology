@@ -1,77 +1,87 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Prescription Technology</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-		<link rel="stylesheet" type="text/css" href="css/reset.css" media="screen" />
-		<link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen" />
-		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
-		<link rel="stylesheet" type="text/css" href="css/styles.css" media="screen" />
-		<script type="text/javascript" src="cordova.js"></script>
-		<script type="text/javascript" src="js/respond.min.js"></script>
-		<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
-		<script type="text/javascript" src="js/custom.jquery.js"></script>
-		<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic" rel="stylesheet" type="text/css" />
-	</head>
-	<body id="index">
-		<!-- Preloader -->
-		<div id="page-preloader">
-			<img class="preloader" src="img/loading.gif" alt=""/>
-		</div>
-		
-		<div class="container wrap">
-			<div class="row gutters">
-				<div class="col span_24">
-					<a href="/" id="logo" title="Prescription Technology - Doctors Interface" /><img src="img/logo_PT.png" alt="" /></a>
-					<a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface Menu" />Menu</a>
-				</div>
-			</div>
-			<div class="row gutters">
-				<div class="col span_24">
-					<h1>Doctors Interface</h1>
-					<textarea id="x"></textarea>
-				</div>
-			</div>
-		</div>
+<head>
+    <title>Prescription Technology</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen"/>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/respond.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/custom.jquery.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic"
+          rel="stylesheet" type="text/css"/>
+</head>
+<body id="index">
+<!-- Preloader -->
+<div id="page-preloader">
+    <img class="preloader" src="img/loading.gif" alt=""/>
+</div>
 
-		<footer class="container wrap">
-			<div class="row gutters">
-				<div class="col span_12">
-					This software and all connected databases are the exclusive property of
-					<strong>HR Healthcare Ltd</strong><br>
-					All rights are reserved by <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
-					2HH. 01204 559 999</strong> <br>
-					All Intellectual Property Rights belong to <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting,
-					Bolton, BL2 2HH. 01204 559 999</strong>
-				</div>
-				<div class="col span_12">
-					Any use, editing, changing, multiplication or commercial
-					use (including but not limited to selling, licensing of this software
-					and/or parts of it and/or its connected database information), independent
-					of any changes being done first, is prohibited.
-				</div>
-			</div>
-		</footer>
-		<script type="text/javascript">
+<div class="container wrap">
+    <div class="row gutters">
+        <div class="col span_24">
+            <a href="/" id="logo" title="Prescription Technology - Doctors Interface"/><img src="img/logo_PT.png"
+                                                                                            alt=""/></a>
+            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface Menu"/>Menu</a>
+        </div>
+    </div>
+    <div class="row gutters">
+        <div class="col span_24">
+            <h1>Doctors Interface</h1>
+            <textarea id="x"></textarea>
+        </div>
+    </div>
+</div>
+
+<footer class="container wrap">
+    <div class="row gutters">
+        <div class="col span_12">
+            This software and all connected databases are the exclusive property of
+            <strong>HR Healthcare Ltd</strong><br>
+            All rights are reserved by <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
+            2HH. 01204 559 999</strong> <br>
+            All Intellectual Property Rights belong to <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters
+            Meeting,
+            Bolton, BL2 2HH. 01204 559 999</strong>
+        </div>
+        <div class="col span_12">
+            Any use, editing, changing, multiplication or commercial
+            use (including but not limited to selling, licensing of this software
+            and/or parts of it and/or its connected database information), independent
+            of any changes being done first, is prohibited.
+        </div>
+    </div>
+</footer>
+<script type="text/javascript">
 			function PowerUp() {
 				$('#nav-toggle').on('touchstart click', function(e){
 					e.preventDefault();
-                    alert('opening side panel');
                     var extra = new Array();
                     extra.push({ key:"open",value:"1"});
                     doctors.sendMessage("DRAWER",JSON.stringify(extra));
 				});
+				//document.addEventListener("backbutton", onBackPressed, false);
 			};
-			$(function() {
-				document.addEventListener("deviceready", PowerUp, false);
-			
-				/* Only for in-browser (not in Android) testing */
-				//PowerUp();
+			/*
+			function onBackPressed(e){
+			    console.log('back pressed');
+			    //console.log($.mobile.activePage);
+                if($.mobile.activePage.is('#homepage')){
+                    e.preventDefault();
+                    navigator.app.exitApp();
+                }
+                else {
+                    navigator.app.backHistory();
+                }
+			};
+			*/
+			document.addEventListener("deviceready", PowerUp, false);
 
-                $.get('http://doctors.prescription.technology/ws/pending.asp',function(data){
-                    $('#x').html(data);
-                });
-			});
-		</script>
-	</body>
+
+
+</script>
+</body>
 </html>

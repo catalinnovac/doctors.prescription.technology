@@ -1,15 +1,15 @@
-package doctors.prescription.technology.code.navigation.drawer;
+package doctors.prescription.technology.code.webview;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import org.apache.cordova.CordovaWebView;
 
 /**
- * Created by novac on 04-Aug-14.
+ * Created by novac on 25-Sep-14.
  */
 public class CustomCordovaWebView extends CordovaWebView {
-
     public CustomCordovaWebView(Context context) {
         super(context);
     }
@@ -37,6 +37,15 @@ public class CustomCordovaWebView extends CordovaWebView {
     @Override
     public void handleDestroy() {
         super.handleDestroy();
+    }
+
+    @Override
+    public boolean backHistory() {
+        Log.v(TAG, this.getUrl());
+        if (this.getUrl().equals("file:///android_asset/www/conectare.html")) {
+            return false;
+        } else
+            return super.backHistory();
     }
 
 }
