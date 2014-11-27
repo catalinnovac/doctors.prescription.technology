@@ -230,34 +230,40 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
     //<editor-fold desc="Private">
     private void PopulateLeftMenu() {
         items = new ArrayList<Item>();
+
         Item pendingItem = new Item();
         pendingItem.counter = 1;
         pendingItem.iconRes = R.drawable.ic_drawer;
         pendingItem.title = R.string.pending_menu_title;
         pendingItem.isHeader = false;
         items.add(pendingItem);
+
         Item historyItem = new Item();
         historyItem.counter = 6;
         historyItem.iconRes = R.drawable.ic_drawer;
         historyItem.title = R.string.history_menu_title;
         historyItem.isHeader = false;
         items.add(historyItem);
+
         Item declinedItem = new Item();
         declinedItem.counter = 18;
         declinedItem.iconRes = R.drawable.ic_drawer;
         declinedItem.title = R.string.declined_menu_title;
         declinedItem.isHeader = false;
         items.add(declinedItem);
+
         Item queryItem = new Item();
         queryItem.iconRes = R.drawable.ic_drawer;
         queryItem.title = R.string.query_menu_title;
         queryItem.isHeader = false;
         items.add(queryItem);
+
         Item invoicesItem = new Item();
         invoicesItem.iconRes = R.drawable.ic_drawer;
         invoicesItem.title = R.string.invoices_menu_title;
         invoicesItem.isHeader = false;
         items.add(invoicesItem);
+
         Item messagesItem = new Item();
         messagesItem.iconRes = R.drawable.ic_drawer;
         messagesItem.title = R.string.messages_menu_title;

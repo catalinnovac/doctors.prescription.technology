@@ -1,82 +1,99 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Prescription Technology</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-		<link rel="stylesheet" type="text/css" href="css/reset.css" media="screen" />
-		<link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen" />
-		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
-		<link rel="stylesheet" type="text/css" href="css/styles.css" media="screen" />
-		<script type="text/javascript" src="cordova.js"></script>
-		<script type="text/javascript" src="js/respond.min.js"></script>
-		<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
-		<script type="text/javascript" src="js/custom.jquery.js"></script>
-		<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic" rel="stylesheet" type="text/css" />
-	</head>
-	<body id="index">
-		<!-- Preloader -->
-		<div id="page-preloader">
-			<img class="preloader" src="img/loading.gif" alt=""/>
-		</div>
-		
-		<div class="container wrap">
-			<div class="row gutters">
-				<div class="col span_24">
-					<a href="/" id="logo" title="Prescription Technology - Doctors Interface" /><img src="img/logo_PT.png" alt="" /></a>
-					<a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface Menu" />Menu</a>
-				</div>
-			</div>
-			<div class="row gutters">
-				<div class="col span_24">
-					<h1>Messages</h1>
+<head>
+    <title>Prescription Technology</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen"/>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/respond.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/custom.jquery.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic"
+          rel="stylesheet" type="text/css"/>
+</head>
+<body id="index">
+<!-- Preloader -->
+<div id="page-preloader">
+    <img class="preloader" src="img/loading.gif" alt=""/>
+</div>
 
-				    <div id="messages">
-				        <div id="clone" class="cloneable">
-				            <div id='action-buttons'>
-				                <a id="action-link"></a>
-				            </div>
-				            <div id='customer-placeholder'>
-				                <div id='customer'>
-				                    <span id="firstname"></span><span id="middleinitial"></span><span id="lastname"></span>
+<div class="container wrap">
+    <div class="row gutters">
+        <div class="col span_24">
+            <a href="/" id="logo" title="Prescription Technology - Doctors Interface"/><img src="img/logo_PT.png"
+                                                                                            alt=""/></a>
+            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface Menu"/>Menu</a>
+        </div>
+    </div>
+    <div class="row gutters">
+        <div class="col span_24">
+            <h1>Messages</h1>
 
-				                    <p id="message_status"></p>
-				                </div>
-				            </div>
-				            <div id="Message">
-				                <a id="message_url"></a>
+            <div id="messages" class="superholder">
+                <div class="clonable">
+                    <div class="order">
+                        <a class="OrderURL"><p class="autoupdate" data-term="orderNumber"></p></a>
+                    </div>
+                    <div class='customer-info'>
+                        <h3 class="customer">
+                            <span class="autoupdate" data-term="firstname"></span>&nbsp;<span class="autoupdate"
+                                                                                              data-term="middleinitial"></span>&nbsp;<span
+                                class="autoupdate" data-term="lastname"></span>
+                        </h3>
 
-				                <p id="message"></p>
-				            </div>
-				            <div id="Last_message_date">
-				                <p id="last_message_date"></p>
-				            </div>
-				        </div>
-				    </div>
-				</div>
-			</div>
-		</div>
+                        <p class="autoupdate" data-term="messageStatus"></p>
+                    </div>
+                    <div class="message-info">
+                        <a class="mesajURL">View discussion</a>
 
-		<footer class="container wrap">
-			<div class="row gutters">
-				<div class="col span_12">
-					This software and all connected databases are the exclusive property of
-					<strong>HR Healthcare Ltd</strong><br>
-					All rights are reserved by <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
-					2HH. 01204 559 999</strong> <br>
-					All Intellectual Property Rights belong to <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting,
-					Bolton, BL2 2HH. 01204 559 999</strong>
-				</div>
-				<div class="col span_12">
-					Any use, editing, changing, multiplication or commercial
-					use (including but not limited to selling, licensing of this software
-					and/or parts of it and/or its connected database information), independent
-					of any changes being done first, is prohibited.
-				</div>
-			</div>
-		</footer>
+                        <p class="autoupdate" data-term="mesaj"></p>
+                    </div>
+                    <div class="last_message_date">
+                        <p class="autoupdate" data-term="LastMessageDate"></p>
+                    </div>
+                </div>
+                <div class="response-holder"
+                     data-url="http://doctors.prescription.technology/ws/ajax.orders.getMessages.asp"></div>
+                <div class="ajax-loader">
+                    <img class="preloader" src="img/loading.gif" alt=""/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-		<script type="text/javascript">
+<footer class="container wrap">
+    <div class="row gutters">
+        <div class="col span_12">
+            This software and all connected databases are the exclusive property of
+            <strong>HR Healthcare Ltd</strong><br>
+            All rights are reserved by <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
+            2HH. 01204 559 999</strong> <br>
+            All Intellectual Property Rights belong to <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters
+            Meeting,
+            Bolton, BL2 2HH. 01204 559 999</strong>
+        </div>
+        <div class="col span_12">
+            Any use, editing, changing, multiplication or commercial
+            use (including but not limited to selling, licensing of this software
+            and/or parts of it and/or its connected database information), independent
+            of any changes being done first, is prohibited.
+        </div>
+    </div>
+</footer>
+
+<script type="text/javascript">
 			function PowerUp() {
+				var oLocalStorage = new classLocalStorage();
+				var $superholder = $('div.superholder');
+				var $clonable = $superholder.children('div.clonable');
+				var $localResponseHolder = $superholder.children('div.response-holder');
+				var $localPreloader = $superholder.children('div.ajax-loader');
+				$localPreloader.fadeIn('fast');
+
 				$('#nav-toggle').on('touchstart click', function(e){
 					e.preventDefault();
                     var extra = new Array();
@@ -85,39 +102,78 @@
 				});
 
                 $.ajax({
-                    url: 'http://doctors.prescription.technology/ws/messages.asp',
+                    url: $localResponseHolder.data('url'),
                     type: 'GET',
-                    beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
-                }).fail(function (xhr, textStatus, error) { alert(textStatus); })
-                .done(function (data, textStatus, xhr) {
-                    alert(data);
-                    var messages = JSON.parse(data);
-                    var messagesList = $('');
-                    if (messages.Messages.length > 0) {
-                        for (var i = 0; i < messages.Messages.length; i++) {
-                            var current_messages = messages.Messages[i];
-                            var $clone = $('#messages').find('#clone').clone();
-                            $clone.find('#action-link').attr('href', current_messages.OrderNumber.oid_url);
-                            $clone.find('#firstname').text(current_messages.customer.firstname);
-                            $clone.find('#middleinitial').text(current_messages.customer.middleinitial);
-                            $clone.find('#lastname').text(current_messages.customer.lastname);
-                            $clone.find('#message_status').text(current_messages.message_status);
-                            $clone.find('#message_url').prop("href", current_messages.Message.mesaj_url);
-                            $clone.find('#message').text(current_messages.Message.mesaj);
-                            $clone.find('#last_message_date').text(current_messages.Last_message_date);
-                            $clone.appendTo($('#messages'));
+                    beforeSend: function (xhr) { if (typeof doctors != 'undefined') { xhr.setRequestHeader('Authorization', doctors.getToken()); } }
+                }).fail(function (response) {
+					// Failure
+					//var json = $.parseJSON(response);
+					var messages = ''
+									+ '<p class="alert error">status: ' + response.status + '</p>'
+									+ '<p class="alert error">message: ' + response.statusText + '</p>'
+									;
+					$localResponseHolder.append(messages).show();
+				}).done(function (response) {
+					var data = JSON.parse(response);
+                    if (typeof data !== "undefined" && typeof data.Messages !== "undefined" && data.Messages.length > 0) {
+                        var current_data = false;
+                        var $clone = false;
+						var $customer = false;
+						var $order = false;
+						var $message = false;
+                        for (var i = 0; i < data.Messages.length; i++) {
+							current_data = data.Messages[i];
+							if (typeof current_data.Order != 'undefined' && typeof current_data.Order.orderNumber != 'undefined') {
+								$clone = $clonable.clone(true);
+								$clone.prop("id", "_" + current_data.Order.orderNumber).addClass('clone');
+
+								$customer = $clone.find('h3.customer');
+								$order = $clone.find('div.order');
+								$editLink = $clone.find("a.OrderURL");
+								$editLink.prop('href', current_data.Order.orderURL);
+                                var $messgeStatusHolder = $clone.find('div.customer-info');
+								oLocalStorage.UpdatePageElements(current_data.Customer, $customer);
+								oLocalStorage.UpdatePageElements(current_data.Order, $order);
+								oLocalStorage.UpdatePageElements(current_data.Message, $messgeStatusHolder);
+								 /* Message */
+								$message = $clone.find('div.message-info');
+								var $mesajLink = $message.find('a.mesajURL');
+								$mesajLink.prop('href',current_data.Message.mesajURL);
+                                oLocalStorage.UpdatePageElements(current_data.Message, $message);
+
+								/* Last Message Date */
+								oLocalStorage.UpdatePageElements(current_data, $clone.find(".last_message_date"));
+
+								/* Set the clone alive */
+								$clone.prop('display', 'none').removeClass('clonable').appendTo($localResponseHolder).fadeIn();
+							}
                         }
                     } else {
-                        $('<p></p>').html("No messages yet").appendTo($('#history'));
+                        var data = JSON.parse(response);
+                        if(typeof data !== "undefined" && typeof data.message !== "undefined"){
+						    messages = '<p>'+data.message+'</p>';
+						    $localResponseHolder.append(messages).show();
+						}
                     }
-                });
+                    var extra = new Array();
+                    extra.push({ key: "open", value: "0" });
+                    doctors.sendMessage("DRAWER", JSON.stringify(extra));
+				}).always(function(response) {
+					console.log('response: ' + response);
+					$localPreloader.fadeOut('fast');
+				});
             };
 			$(function() {
 	            document.addEventListener("deviceready", PowerUp, false);
-				
+
 				/* Only for in-browser (not in Android) testing */
 				//PowerUp();
-			})
-	    </script>
-	</body>
+			});
+
+
+
+
+
+</script>
+</body>
 </html>
