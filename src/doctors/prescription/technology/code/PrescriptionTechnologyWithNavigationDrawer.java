@@ -5,17 +5,23 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import doctors.prescription.technology.R;
+import doctors.prescription.technology.code.http.HttpMethod;
+import doctors.prescription.technology.code.http.Request;
+import doctors.prescription.technology.code.http.RequestRunnable;
 import doctors.prescription.technology.code.navigation.drawer.Adapter;
 import doctors.prescription.technology.code.navigation.drawer.DrawerToggle;
 import doctors.prescription.technology.code.navigation.drawer.Item;
@@ -24,13 +30,15 @@ import doctors.prescription.technology.code.webview.WebViewInterface;
 import org.apache.cordova.Config;
 import org.apache.cordova.api.CordovaInterface;
 import org.apache.cordova.api.CordovaPlugin;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * Created by novac on 24-Jul-14.
@@ -53,6 +61,7 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
     private CordovaPlugin activityResultCallback;
     private ActionBarDrawerToggle mDrawerToggle;
     private ConcurrentHashMap<String, BroadcastReceiver> broadcastReceiverHashMap;
+    private Request request;
     //</editor-fold>
 
     //<editor-fold desc="Override">
@@ -114,8 +123,6 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
             }
         });
         PopulateLeftMenu();//populeaza listview din navigation drawer
-        mDrawerList.setAdapter(new Adapter(this,
-                R.layout.left_drawer_item, items));
         //deschide meniu lateral(stanga)
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
@@ -230,7 +237,70 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
     //<editor-fold desc="Private">
     private void PopulateLeftMenu() {
         items = new ArrayList<Item>();
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        request = new Request(this);
+        request.setRequestMethod(HttpMethod.GET);
+        request.BeforeDoRequestInBackgroundHandler = new RequestRunnable() {
+            @Override
+            public void run() {
+                HttpUriRequest httpUriRequest = (HttpUriRequest) getArgs().get("request");
+                httpUriRequest.addHeader("Authorization", sharedPreferences.getString("TOKEN", null));
+            }
+        };
+        request.PostExecuteHandler = new RequestRunnable() {
+            @Override
+            public void run() {
+                String response = getArgs().get("response").toString();
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray menus = jsonObject.getJSONArray("Menu");
+                    for (int i = 0; i < menus.length(); i++) {
+                        JSONObject menu = menus.getJSONObject(i);
+                        String menuName = menu.getString("name");
+                        String counter = menu.getString("counter");
+                        int iconResource = 0;
+                        Log.v(TAG, "MENU NAME:" + menuName);
+                        Item item = new Item();
 
+                        if (menuName.equals("Pending"))
+                            item.iconRes = R.drawable.adjust4;
+                        else if (menuName.equals("History"))
+                            item.iconRes = R.drawable.big37;
+                        else if (menuName.equals("Declined"))
+                            item.iconRes = R.drawable.thumbs27;
+                        else if (menuName.equals("Query"))
+                            item.iconRes = R.drawable.white24;
+                        else if (menuName.equals("Invoices"))
+                            item.iconRes = R.drawable.list30;
+                        else if (menuName.equals("Messages"))
+                            item.iconRes = R.drawable.speech59;
+
+                        if (counter != null && counter.length() > 0)
+                            item.counter = Integer.decode(counter);
+                        else
+                            item.counter = 0;
+                        item.title = menuName;
+                        item.isHeader = false;
+                        items.add(item);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        request.execute(Constants.MENU_DATABINDING_URL);
+        try {
+            request.get(30, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
+        mDrawerList.setAdapter(new Adapter(this,
+                R.layout.left_drawer_item, items));
+        /*
         Item pendingItem = new Item();
         pendingItem.counter = 1;
         pendingItem.iconRes = R.drawable.ic_drawer;
@@ -269,6 +339,7 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
         messagesItem.title = R.string.messages_menu_title;
         messagesItem.isHeader = false;
         items.add(messagesItem);
+        */
     }
     //</editor-fold>
 

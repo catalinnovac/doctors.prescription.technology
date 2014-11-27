@@ -156,7 +156,7 @@
 					$localResponseHolder.append(messages).show();
 				}).done(function (response) {
 					var data = JSON.parse(response);
-                    if (data.orders.length > 0) {
+                    if (typeof data !=="undefined" && typeof data.orders !== "undefined" && data.orders.length > 0) {
 						var $editLink = false;
                         var current_data = false;
                         var $clone = false;
@@ -222,8 +222,10 @@
 							}
                         }
                     } else {
-						messages = '<p>No history yet</p>';
-						$localResponseHolder.append(messages).show();
+						if(typeof data !== "undefined" && typeof data.message !== "undefined"){
+						    messages = '<p class="alert error">'+data.message+'</p>';
+						    $localResponseHolder.append(messages).show();
+						}
                     }
                     var extra = new Array();
                     extra.push({ key: "open", value: "0" });
