@@ -1,416 +1,517 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Prescription Technology</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-		<link rel="stylesheet" type="text/css" href="css/reset.css" media="screen" />
-		<link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen" />
-		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
-		<link rel="stylesheet" type="text/css" href="css/styles.css" media="screen" />
-		<script type="text/javascript" src="cordova.js"></script>
-		<script type="text/javascript" src="js/respond.min.js"></script>
-		<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
-		<script type="text/javascript" src="js/custom.jquery.js"></script>
-		<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic" rel="stylesheet" type="text/css" />
-	</head>
-	<body id="index">
-		<!-- Preloader -->
-		<div id="page-preloader" class="ajax-loader">
-			<img src="img/loading.gif" alt=""/>
-		</div>
-		
-		<div class="container wrap">
-			<div class="row gutters">
-				<div class="col span_24">
-					<a href="/" id="logo" title="Prescription Technology - Doctors Interface" /><img src="img/logo_PT.png" alt="" /></a>
-					<a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface Menu" />Menu</a>
-				</div>
-			</div>
-			<div class="row gutters">
-				<div class="col span_24">
-					<h1>Invoices</h1>
-					<div id="calendar">
-						<!--
-						<ul class="left-cal" id="months">
-							<li id="anchor"></li>
-							<li id="may-2014"><span class="year 2014">2014</span><span class="month may">May</span></li>
-							<li id="june-2014"><span class="year 2014">2014</span><span class="month june">June</span></li>
-							<li id="july-2014"><span class="year 2014">2014</span><span class="month july">July</span></li>
-							<li id="august-2014"><span class="year 2014">2014</span><span class="month august">August</span></li>
-							<li id="september-2014"><span class="year 2014">2014</span><span class="month september">September</span></li>
-							<li id="october-2014"><span class="year 2014">2014</span><span class="month october">October</span></li>
-							<li id="november-2014"><span class="year 2014">2014</span><span class="month november">November</span></li>
-							<li id="december-2014"><span class="year 2014">2014</span><span class="month december">December</span></li>
-							<li id="january-2015"><span class="year 2015">2015</span><span class="month january">January</span></li>
-						</ul>
-						<ul class="right-cal" id="cal-days">
-							<li id="anchor"></li>
-						</ul>
-						-->
+<head>
+    <title>Prescription Technology</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen"/>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/respond.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/custom.jquery.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic"
+          rel="stylesheet" type="text/css"/>
+</head>
+<body id="index">
+<!-- Preloader -->
+<div id="page-preloader" class="ajax-loader">
+    <img src="img/loading.gif" alt=""/>
+</div>
 
-					<form class="form-paginare" method="get" action="#">
-						<!-- Navigare 'dumb' -->
-						<div class="paginare modul-navigare-paginare">
-							<a title="« August" href="invoice.asp?x=8/23/2014"><i class="fa fa-caret-left"></i> August</a>
-							<span class="current"><strong title="September">September</strong></span>
-							<a title="October »" href="invoice.asp?x=10/23/2014">October <i class="fa fa-caret-right"></i></a>
-						</div>
-					</form>
-						<table class="prezentare data calendar auto">
-							<!--colgroup>
-								<col width="100px">
-								<col width="100px">
-								<col width="100px">
-								<col width="100px">
-								<col width="100px">
-								<col width="100px">
-								<col width="100px">
-							</colgroup-->
-							<thead>
-								<tr>
-									<th>Sun</th>
-									<th>Mon</th>
-									<th>Tue</th>
-									<th>Wed</th>
-									<th>Thu</th>
-									<th>Fri</th>
-									<th>Sat</th>
-								</tr>
-							</thead>
+<div class="container wrap">
+<div class="row gutters">
+    <div class="col span_24">
+        <a href="/" id="logo" title="Prescription Technology - Doctors Interface"/><img src="img/logo_PT.png"
+                                                                                        alt=""/></a>
+        <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface Menu"/>Menu</a>
+    </div>
+</div>
+<div class="row gutters">
+<div class="col span_24">
+<h1>Invoices</h1>
 
-							<tbody>
-								<tr>
-									<td class="weekend ">
-										<h3 class="date">1</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="">
-										<h3 class="date">2</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="">
-										<h3 class="date">3</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="">
-										<h3 class="date">4</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="">
-										<h3 class="date">5</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="">
-										<h3 class="date">6</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="weekend ">
-										<h3 class="date">7</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-								</tr>
-							
-								<tr>
-								
-									<td class="weekend ">
-										<h3 class="date">8</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="">
-										<h3 class="date">9</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="">
-										<h3 class="date">10</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="">
-										<h3 class="date">11</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="">
-										<h3 class="date">12</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="">
-										<h3 class="date">13</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="weekend ">
-										<h3 class="date">14</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-								</tr>
-							
-								<tr>
-								
-									<td class="weekend ">
-										<h3 class="date">15</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="">
-										<h3 class="date">16</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class=" has-orders">
-										<!--span class="no-of-orders">1</span-->
-										<h3 class="date">17</h3>
-										
-										<a title="Show" class="colorbox cboxElement" href="http://doctors.prescription.technology/ws/ajax_get_orders_by_day.asp?date=2014-09-17">view&nbsp;<span>5</span>&nbsp;<i class="fa fa-caret-down"></i></a>
-									</td>							
-										
-									<td class="">
-										<h3 class="date">18</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="">
-										<h3 class="date">19</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="">
-										<h3 class="date">20</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="weekend ">
-										<h3 class="date">21</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-								</tr>
-							
-								<tr>
-								
-									<td class="weekend ">
-										<h3 class="date">22</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="">
-										<h3 class="date">23</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="">
-										<h3 class="date">24</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="">
-										<h3 class="date">25</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="">
-										<h3 class="date">26</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="">
-										<h3 class="date">27</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="weekend ">
-										<h3 class="date">28</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-								</tr>
-							
-								<tr>
-								
-									<td class="weekend ">
-										<h3 class="date">29</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="">
-										<h3 class="date">30</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="out-of-month">
-										<h3 class="date">1</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="out-of-month">
-										<h3 class="date">2</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="out-of-month">
-										<h3 class="date">3</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="out-of-month">
-										<h3 class="date">4</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="weekend out-of-month">
-										<h3 class="date">5</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-								</tr>
-							
-								<tr>
-								
-									<td class="weekend out-of-month">
-										<h3 class="date">6</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="out-of-month">
-										<h3 class="date">7</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="out-of-month">
-										<h3 class="date">8</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="out-of-month">
-										<h3 class="date">9</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="out-of-month">
-										<h3 class="date">10</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="out-of-month">
-										<h3 class="date">11</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-										
-									<td class="weekend out-of-month">
-										<h3 class="date">12</h3>
-										<p title="Number of orders for this day">&nbsp;</p>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
+<div id="calendar" class="hide">
+<!--
+<ul class="left-cal" id="months">
+    <li id="anchor"></li>
+    <li id="may-2014"><span class="year 2014">2014</span><span class="month may">May</span></li>
+    <li id="june-2014"><span class="year 2014">2014</span><span class="month june">June</span></li>
+    <li id="july-2014"><span class="year 2014">2014</span><span class="month july">July</span></li>
+    <li id="august-2014"><span class="year 2014">2014</span><span class="month august">August</span></li>
+    <li id="september-2014"><span class="year 2014">2014</span><span class="month september">September</span></li>
+    <li id="october-2014"><span class="year 2014">2014</span><span class="month october">October</span></li>
+    <li id="november-2014"><span class="year 2014">2014</span><span class="month november">November</span></li>
+    <li id="december-2014"><span class="year 2014">2014</span><span class="month december">December</span></li>
+    <li id="january-2015"><span class="year 2015">2015</span><span class="month january">January</span></li>
+</ul>
+<ul class="right-cal" id="cal-days">
+    <li id="anchor"></li>
+</ul>
+-->
+<form class="form-paginare" method="get" action="#">
+    <!-- Navigare 'dumb' -->
+    <div class="paginare modul-navigare-paginare">
+        <a class="l_ant"></a>
+        <span class="current"><strong></strong></span>
+        <a class="l_post"></a>
+    </div>
+</form>
+<div id="test-calendar"></div>
+<table class="prezentare data calendar auto">
+<!--colgroup>
+    <col width="100px">
+    <col width="100px">
+    <col width="100px">
+    <col width="100px">
+    <col width="100px">
+    <col width="100px">
+    <col width="100px">
+</colgroup-->
+<thead>
+<tr>
+    <th>Sun</th>
+    <th>Mon</th>
+    <th>Tue</th>
+    <th>Wed</th>
+    <th>Thu</th>
+    <th>Fri</th>
+    <th>Sat</th>
+</tr>
+</thead>
+<!--
+<tbody>
+                                                            <tr>
+                                                                <td class="weekend ">
+                                                                    <h3 class="date">1</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
 
-		<footer class="container wrap">
-			<div class="row gutters">
-				<div class="col span_12">
-					This software and all connected databases are the exclusive property of
-					<strong>HR Healthcare Ltd</strong><br>
-					All rights are reserved by <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
-					2HH. 01204 559 999</strong> <br>
-					All Intellectual Property Rights belong to <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting,
-					Bolton, BL2 2HH. 01204 559 999</strong>
-				</div>
-				<div class="col span_12">
-					Any use, editing, changing, multiplication or commercial
-					use (including but not limited to selling, licensing of this software
-					and/or parts of it and/or its connected database information), independent
-					of any changes being done first, is prohibited.
-				</div>
-			</div>
-		</footer>
-		<script type="text/javascript">
-			function PowerUp() {
-                var date = new Date();
-                // 8 7 6 5 4 3 2 1 0 11 10 9 8 7 6 5 4 3 2 1 0 11 10 9
-                var mm = date.getMonth();
-                var yy = date.getYear();
-                var monthArray = new Array();
-                var pivot = mm;
-                while (mm >= 0) {
-                    //console.log(mm);
-                    var date = new Date(yy, mm, 0, 0, 0, 0, 0); // luna din anul curent
-                    var date1 = new Date(yy - 1, mm, 0, 0, 0, 0, 0); //aceasi luna din anul anterior
-                    monthArray.push(date);
-                    monthArray.push(date1);
-                    mm--;
-                }
-                while (pivot <= 11) {
-                    //console.log(pivot);
-                    var date = new Date(yy, pivot, 0, 0, 0, 0, 0); // luna din anul curent
-                    var date1 = new Date(yy - 1, pivot, 0, 0, 0, 0, 0); //aceasi luna din anul anterior
-                    monthArray.push(date);
-                    monthArray.push(date1);
-                    pivot++;
-                }
-                console.log(monthArray);
+                                                                <td class="">
+                                                                    <h3 class="date">2</h3>
+    -                                                                <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
 
-				$('#nav-toggle').on('touchstart click', function(e){
-					e.preventDefault();
-                    var extra = new Array();
-                    extra.push({ key:"open",value:"1"});
-                    doctors.sendMessage("DRAWER",JSON.stringify(extra));
-				});
+                                                                <td class="">
+                                                                    <h3 class="date">3</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
 
-                /*
+                                                                <td class="">
+                                                                    <h3 class="date">4</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="">
+                                                                    <h3 class="date">5</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="">
+                                                                    <h3 class="date">6</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="weekend ">
+                                                                    <h3 class="date">7</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                            </tr>
+
+                                                            <tr>
+
+                                                                <td class="weekend ">
+                                                                    <h3 class="date">8</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="">
+                                                                    <h3 class="date">9</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="">
+                                                                    <h3 class="date">10</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="">
+                                                                    <h3 class="date">11</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="">
+                                                                    <h3 class="date">12</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="">
+                                                                    <h3 class="date">13</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="weekend ">
+                                                                    <h3 class="date">14</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                            </tr>
+
+                                                            <tr>
+
+                                                                <td class="weekend ">
+                                                                    <h3 class="date">15</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="">
+                                                                    <h3 class="date">16</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="has-orders">
+                                                                    <h3 class="date">17</h3>
+
+                                                                    <a title="Show" class="colorbox cboxElement" href="http://doctors.prescription.technology/ws/ajax_get_orders_by_day.asp?date=2014-09-17">view&nbsp;<span>5</span>&nbsp;<i class="fa fa-caret-down"></i></a>
+                                                                </td>
+
+                                                                <td class="">
+                                                                    <h3 class="date">18</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="">
+                                                                    <h3 class="date">19</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="">
+                                                                    <h3 class="date">20</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="weekend ">
+                                                                    <h3 class="date">21</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                            </tr>
+
+                                                            <tr>
+
+                                                                <td class="weekend ">
+                                                                    <h3 class="date">22</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="">
+                                                                    <h3 class="date">23</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="">
+                                                                    <h3 class="date">24</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="">
+                                                                    <h3 class="date">25</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="">
+                                                                    <h3 class="date">26</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="">
+                                                                    <h3 class="date">27</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="weekend ">
+                                                                    <h3 class="date">28</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                            </tr>
+
+                                                            <tr>
+
+                                                                <td class="weekend ">
+                                                                    <h3 class="date">29</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="">
+                                                                    <h3 class="date">30</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="out-of-month">
+                                                                    <h3 class="date">1</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="out-of-month">
+                                                                    <h3 class="date">2</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="out-of-month">
+                                                                    <h3 class="date">3</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="out-of-month">
+                                                                    <h3 class="date">4</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="weekend out-of-month">
+                                                                    <h3 class="date">5</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                            </tr>
+
+                                                            <tr>
+
+                                                                <td class="weekend out-of-month">
+                                                                    <h3 class="date">6</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="out-of-month">
+                                                                    <h3 class="date">7</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="out-of-month">
+                                                                    <h3 class="date">8</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="out-of-month">
+                                                                    <h3 class="date">9</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="out-of-month">
+                                                                    <h3 class="date">10</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="out-of-month">
+                                                                    <h3 class="date">11</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+
+                                                                <td class="weekend out-of-month">
+                                                                    <h3 class="date">12</h3>
+                                                                    <p title="Number of orders for this day">&nbsp;</p>
+                                                                </td>
+                                                            </tr>
+</tbody>
+    -->
+</table>
+<table id="day-orders" class="clonable" style="margin:10px 10px 10px 10px;width:90%">
+    <thead>
+    <tr>
+        <th>Actions</th>
+        <th>Customer info</th>
+        <th>Order details</th>
+        <th>Assign date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="clonable">
+        <td>
+            <a class="OrderURL">Edit</a>
+        </td>
+        <td class="customer-info">
+            <h3>
+                <span class="autoupdate" data-term="firstname"></span>&nbsp;<span class="autoupdate"
+                                                                                  data-term="middleinitial"></span>&nbsp;<span
+                    class="autoupdate" data-term="lastname"></span>
+            </h3>
+        </td>
+        <td class="order">
+            #<span class="autoupdate" data-term="order_number"></span>
+            /
+            <span class="autoupdate" data-term="order_date"></span>
+        </td>
+        <td class="assign_date">
+            <p class="autoupdate" data-term="assign_date"></p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+<footer class="container wrap">
+    <div class="row gutters">
+        <div class="col span_12">
+            This software and all connected databases are the exclusive property of
+            <strong>HR Healthcare Ltd</strong><br>
+            All rights are reserved by <strong>
+            HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
+            2HH. 01204 559 999
+        </strong> <br>
+            All Intellectual Property Rights belong to <strong>
+            HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting,
+            Bolton, BL2 2HH. 01204 559 999
+        </strong>
+        </div>
+        <div class="col span_12">
+            Any use, editing, changing, multiplication or commercial
+            use (including but not limited to selling, licensing of this software
+            and/or parts of it and/or its connected database information), independent
+            of any changes being done first, is prohibited.
+        </div>
+    </div>
+</footer>
+<script type="text/javascript">
+        function PowerUp() {
+            var oLocalStorage = new classLocalStorage();
+            var $localPreloader = $('#page-preloader');
+            var $calendar = $('#calendar');
+            var $dayOrders = $('#day-orders');
+            //alert($dayOrders[0].outerHTML);
+            $localPreloader.fadeIn('fast');
+            var date;
+            var _date = window.location.href.split('?')[1];
+            if (typeof _date !== "undefined") {
+                date = new Date(_date.replace('date=', ''));
+            } else
+                date = new Date();//data curenta
+            //construiesc paginarea
+            //luna anterioara
+            var m = date.getMonth() - 1;
+            var y = date.getFullYear();
+            if (date.getMonth() == 0) {
+                m = 11;
+                y = y - 1;
+            }
+            var l_ant = new Date(y, m, 1);
+            m = date.getMonth() + 1;
+            y = date.getFullYear();
+            if (date.getMonth() == 11) {
+                m = 0;
+                y = y + 1;
+            }
+            console.log('month:' + m);
+            var l_post = new Date(y, m, 1);
+            var $l_ant = $('.paginare').find('a.l_ant');
+            var $l_c = $('.paginare').find('.current').children();
+            var $l_post = $('.paginare').find('a.l_post');
+            $l_ant.html('<i class="fa fa-caret-left"></i> ' + l_ant.getMonthName());
+            console.log('ant:' + l_ant.getFullYear() + '-' + l_ant.getMonth() + '-' + l_ant.getDate());
+            $l_ant.attr('href', "/android_asset/www/invoices.html?date=" + l_ant.getFullYear() + '-' + (l_ant.getMonth() + 1) + '-' + l_ant.getDate());
+            console.log('curent:' + date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate());
+            $l_c.attr('title', date.getMonthName());
+            $l_c.text(date.getMonthName() + ' ' + date.getFullYear());
+            $l_post.html(l_post.getMonthName() + ' <i class="fa fa-caret-right">');
+            console.log('post:' + l_post.getFullYear() + '-' + l_post.getMonth() + '-' + l_post.getDate());
+            $l_post.attr('href', "/android_asset/www/invoices.html?date=" + l_post.getFullYear() + '-' + (l_post.getMonth() + 1) + '-' + l_post.getDate());
+            //$l_post.attr('href', "/android_asset/www/index.html");
+            //construiesc calendarul
+            var calendartbody = date.getCalendar();
+            $('.prezentare').append(calendartbody);
+            $calendar.removeClass('hide');
+            if (!isFromCache()) { //prevent content loading on resume
                 $.ajax({
-                    url: 'http://doctors.prescription.technology/ws/invoices.asp',
+                    url: 'http://doctors.prescription.technology/ws/ajax.orders.getInvoices.asp',
                     type: 'GET',
                     beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', doctors.getToken()); }
                 }).fail(function (xhr, textStatus, error) { alert(textStatus); })
                 .done(function (data, textStatus, xhr) {
-                    alert(data);
+                    //console.log(data);
                     var invoices = JSON.parse(data);
-                    var invoicesList = $('#invoices');
-                    if (invoices.Invoices.length() > 0) {
-                        for (var i = 0; i < invoices.Invoices; i++) {
-                            var current_invoices = invoices.Invoices[i];
-                            var clone = invoicesList.find('#clone').clone();
-                            clone.find('#edit-link').attr('href', current_invoices.OrderNumber.oid_url);
-                            clone.children('#customer-placeholder > #customer-info').children('#firstname').text(current_invoices.customer.firstname);
-                            clone.children('#customer-placeholder > #customer-info').children('#middleinitial').text(current_invoices.customer.middleinitial);
-                            clone.children('#customer-placeholder > #customer-info').children('#lastname').text(current_invoices.customer.lastname);
-                            clone.children('#Treatment&Order > #OrderNumber').text(current_invoices.Treatment_Order.OrderNumber);
-                            clone.children('#Treatment&Order > #OrderDate').text(current_invoices.Treatment_Order.OrderDate);
-                            clone.children('#Treatment&Order > #OrderStatus').text(current_invoices.Treatment_Order.OrderStatus);
-                            for (var j = 0; j < current_invoices.Treatment_Order.Meds.length() ; j++) {
-                                var li = clone.children('#Treatment&Order > #Meds').find('li.cloneable').clone();
-                                li.children('#MedName').text(current_invoices.Treatment_Order.Meds[j].MedName);
-                                li.appendTo(clone.children('#Treatment&Order > #Meds'));
+                    if (invoices.length > 0) {
+                        for (var i = 0; i < invoices.length; i++) {
+                            var $newrow = $('<tr></tr>');
+                            $newrow.css('display', 'none');
+                            for (var j = 0 ; j < invoices[i].length ; j++) {
+                                var current_day = invoices[i][j];
+                                var day = current_day.day;
+                                var $day = calendartbody.find('#' + day);
+                                var $newtd = $('<td></td>');
+                                $newtd.attr('colspan', '7');
+                                $newtd.css('display', 'none');
+                                $newtd.attr('data-refday', '#' + day);
+                                if (typeof current_day.nr_of_orders !== "undefined" && typeof $day !== "undefined") {
+                                    $day.find('.show-orders').removeClass('hide');
+                                    $day.addClass("has-orders");
+                                    oLocalStorage.UpdatePageElements(current_day, $day);
+                                    var $row = $day.parents('tr');
+                                    var $clone = $dayOrders.clone(true);
+                                    $clone.attr('id', day + "-" + $clone.attr('id'));
+                                    for (var k = 0; k < current_day.orders.length; k++) {
+                                        var order = current_day.orders[k];
+                                        var $tr_clone = $clone.find('.clonable').clone(true);
+                                        var $customerinfo = $tr_clone.find('.customer-info');
+                                        oLocalStorage.UpdatePageElements(order.customer, $customerinfo);
+                                        $tr_clone.find('a.OrderURL').attr('href', order.treatment_order.order_URL);
+                                        var $orderinfo = $tr_clone.find('.order');
+                                        oLocalStorage.UpdatePageElements(order.treatment_order, $orderinfo);
+                                        var $assigndayinfo = $tr_clone.find('.assign_date');
+                                        oLocalStorage.UpdatePageElements(order, $assigndayinfo);
+                                        $tr_clone.removeClass('clonable');
+                                        $clone.find('tbody').append($tr_clone);
+                                        //console.log($clone.html());
+                                    }
+                                    $clone.removeClass('clonable');
+                                    $newtd.append($clone);
+                                    $newrow.append($newtd);
+                                    $row.after($newrow);
+                                }
                             }
-                            clone.children('#Assign_date > #assign_date').text(current_invoices.Assign_date);
-                            clone.appendTo($('#invoices'));
                         }
-                    } else {
-
                     }
+                    $localPreloader.fadeOut('fast');
                 });
-                */
-            };
-			$(function() {
-	            document.addEventListener("deviceready", PowerUp, false);
-				
-				/* Only for in-browser (not in Android) testing */
-				//PowerUp();
-			});
-	    </script>
-	</body>
+            }
+            $('#nav-toggle').on('touchstart click', function (e) {
+                e.preventDefault();
+                var extra = new Array();
+                extra.push({ key: "open", value: "1" });
+                doctors.sendMessage("DRAWER", JSON.stringify(extra));
+            });
+            $(document).on('click', 'a.show-orders', function (e) {
+                e.preventDefault();
+                var $dayTd = $(this).parents('td');
+                var day = $dayTd.attr('id');
+                var $dayOrders = $('#' + day + '-day-orders');//tabel
+                var $dayOrdersTd = $dayOrders.parents('td');//clone td
+                var $dayOrdersTr = $dayOrders.parents('tr');//clone tr
+                if ($dayTd.hasClass('selected')) { //trebuie sa ascund next tr
+                    $dayOrdersTd.css('display', 'none');
+                    $dayOrdersTr.css('display', 'none');
+                    $dayTd.removeClass('selected');
+                } else {
+                    $dayOrders.parents('tr').children('td').each(function () {
+                        $(this).css('display', 'none');
+                        $($(this).data('refday')).removeClass('selected');
+                    });
+                    $dayOrdersTd.css('display', 'table-cell');
+                    $dayOrdersTr.css('display', 'table-row');
+                    $dayTd.addClass('selected');
+                }
+            });
+        };
+        $(function () {
+            document.addEventListener("deviceready", PowerUp, false);
+
+            /* Only for in-browser (not in Android) testing */
+            //PowerUp();
+        });
+
+</script>
+</body>
 </html>

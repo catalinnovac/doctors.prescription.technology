@@ -23,9 +23,11 @@
 <div class="container wrap">
     <div class="row gutters">
         <div class="col span_24">
-            <a href="/" id="logo" title="Prescription Technology - Doctors Interface"/><img src="img/logo_PT.png"
-                                                                                            alt=""/></a>
-            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface Menu"/>Menu</a>
+            <a href="/" id="logo" title="Prescription Technology - Doctors Interface">
+                <img src="img/logo_PT.png"
+                     alt=""/>
+            </a>
+            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface Menu">Menu</a>
         </div>
     </div>
     <div class="row gutters">
@@ -34,18 +36,21 @@
 
             <div id="discussion-view" class="superholder">
                 <div class="row gutters col span_24">
-                    <form class="form-edit clonable" method="post">
+                    <form class="form-edit clonable" method="post"
+                          action="http://doctors.prescription.technology/ws/ajax.messages.send_message.asp">
                         <h4 class="autoupdate" data-term="OrderNumber"></h4>
-                        <input type="hidden" class="autoupdate" data-term="doctorKey"/>
-                        <input type="hidden" class="autoupdate" data-term="doctorName"/>
-                        <input type="hidden" class="autoupdate" data-term="orderNumber"/>
+                        <input type="hidden" class="autoupdate" name="doctorkey" data-term="doctorKey"/>
+                        <input type="hidden" class="autoupdate" name="doctor" id="doctor" data-term="doctorName"/>
+                        <input type="hidden" class="autoupdate" name="ordernumber" data-term="OrderNumber"/>
                         <input type="hidden" name="max-chars" id="max-chars" value="2000"/>
 
                         <div class="messages">
                             <div class="messages-inset">
                                 <div id="message-id" class="message-left message-block clonable">
-                                    <label class="message-author"><span class="autoupdate" data-term="author"></span>&nbsp;(<span
-                                            class="autoupdate" data-term="stamp"></span>)</label>
+                                    <label class="message-author">
+                                        <span class="autoupdate" data-term="author"></span>&nbsp;(<span
+                                            class="autoupdate" data-term="stamp"></span>)
+                                    </label>
 
                                     <div class="message-body force-wrap autoupdate" data-term="body"></div>
                                 </div>
@@ -53,20 +58,25 @@
                         </div>
                         <h5>Post your message</h5>
                         <textarea class="post-your-message autoclear" cols="" rows=""
-                                  data-autoclear="Write your message" name="new_message_body">Write your
-                            message</textarea>
+                                  data-autoclear="Write your message" name="new_message_body">
+                            Write your
+                            message
+                        </textarea>
 
                         <div class="butoane">
-                            <button type="button" class="btn cancel"><i class="fa fa-times"></i> Cancel</button>
-                            <button class="btn save" type="submit"><i class="fa fa-comment"></i>&nbsp;Send message
+                            <button type="button" class="btn btn-error"><i class="fa fa-times"></i> Cancel</button>
+                            <button class="btn save" type="submit">
+                                <i class="fa fa-comment"></i>&nbsp;Send message
                             </button>
-                            <label style="float:right; width:auto;"><strong class="status success"
-                                                                            id="chars-left">2000</strong> chars
-                                left</label>
+                            <label style="float:right; width:auto;">
+                                <strong class="status success"
+                                        id="chars-left">2000</strong> chars
+                                left
+                            </label>
                         </div>
                     </form>
                 </div>
-                <div class="response-holder"
+                <div class="response-holder row gutters col span_24"
                      data-url="http://doctors.prescription.technology/ws/ajax.orders.getDiscussion.asp"></div>
                 <div class="ajax-loader">
                     <img class="preloader" src="img/loading.gif" alt=""/>
@@ -105,9 +115,14 @@
             var oLocalStorage = new classLocalStorage();
             var $superholder = $('div.superholder');
             var $form = $superholder.find('form.form-edit');
-            var $messagesHolder = $superholder.find('.messages-inset');            
+            var $messagesHolder = $superholder.find('.messages-inset');
             var $localResponseHolder = $superholder.children('div.response-holder');
             var $localPreloader = $superholder.children('div.ajax-loader');
+            var $btnSubmit = $form.find('button[type=submit]');
+            var $mesaj = $form.find('textarea.post-your-message');
+            var doctor = $('#doctor').val();
+            var $charsLeft = $('#chars-left');
+            var maxChars = $('#max-chars').val();
             $localPreloader.fadeIn('fast');
             //get order number from url
             var orderNumber = window.location.hash.replace('#ordernumber=', '');
@@ -118,7 +133,7 @@
                 extra.push({ key: "open", value: "1" });
                 doctors.sendMessage("DRAWER", JSON.stringify(extra));
             });
-            if (orderNumber != null && orderNumber != "") {
+            if (!isFromCache() && orderNumber != null && orderNumber != "") {
                 var URL = $localResponseHolder.data('url') + '?ordernumber=' + orderNumber;
                 $.ajax({
                     url: URL,
@@ -141,6 +156,7 @@
                         if (typeof current_data.Doctor != 'undefined' && typeof current_data.OrderNumber != 'undefined') {
                             oLocalStorage.UpdatePageElements(current_data, $form); //fill order number hidden input
                             oLocalStorage.UpdatePageElements(current_data.Doctor, $form); //fill doctor details hidden inputs
+                            $form.find('input[data-term=OrderNumber][type=hidden]').val(current_data.OrderNumber);
                             /*Messages*/
                             var $message = $messagesHolder.children('.clonable');
                             var $messageClone = false;
@@ -157,7 +173,53 @@
                                     oLocalStorage.UpdatePageElements(mesaj, $messageClone);
                                     $messageClone.removeClass('clonable').appendTo($messagesHolder);
                                 }
-                            }                            
+                            }
+                            $btnSubmit.on('click', function (e) {
+                                e.preventDefault();
+                                //console.log($form.serialize());
+
+                                $.ajax({
+                                    url: $form.prop('action'),
+                                    type: $form.prop('method'),
+                                    data: $form.serialize(),
+                                    beforeSend: function (xhr) { if (typeof doctors != 'undefined') { xhr.setRequestHeader('Authorization', doctors.getToken()); } }
+                                }).fail(function (response) {
+                                    var messages = ''
+                                    + '<p class="alert error">status: ' + response.status + '</p>'
+                                    + '<p class="alert error">message: ' + response.responseText + '</p>'
+                                    ;
+                                    $localResponseHolder.append(messages).show();
+                                }).done(function (response) {
+                                    console.log(response);
+                                    var lastMessageID = $messagesHolder.last('div.message-block').prop('id');
+                                    if (typeof lastMessageID == 'undefined') {
+                                        lastMessageID = 1;
+                                    };
+
+                                    var $clonaMesaj = $('#message-id').clone();
+                                    $clonaMesaj.find('label.message-author').html(doctor + ' @ ' + $.now());
+                                    $clonaMesaj.find('div.message-body').html($mesaj.val());
+                                    $clonaMesaj.prop('id', $clonaMesaj.prop('id') + '-' + lastMessageID);
+                                    $clonaMesaj.appendTo($messagesHolder).fadeIn('fast', function () {
+                                        $clonaMesaj.removeClass('clonable');
+                                        $messagesHolder.animate({ scrollTop: $messagesHolder[0].scrollHeight }, 1000);
+                                    });
+                                    $mesaj.val($mesaj.data('autoclear'));
+                                    /*
+                                    // Reset message to empty - do not reset it to predef text if it's from textarea on enter key
+                                    if ($element.prop('type') == 'textarea') {
+                                        // Fired from ENTER key in textarea
+                                        $mesaj.val('');
+                                    } else {
+                                        // Fired from Send button
+                                        $mesaj.val($mesaj.data('autoclear'));
+                                    };
+                                    */
+                                    // Reset chars counter
+                                    $charsLeft.prop('class', 'status success').text(maxChars);
+                                });
+
+                            });
                             $form.removeClass('clonable');
                         }
 
@@ -186,6 +248,7 @@
             /* Only for in-browser (not in Android) testing */
             //PowerUp();
         });
+
 
 
 </script>

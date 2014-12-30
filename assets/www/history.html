@@ -152,75 +152,76 @@
                 extra.push({ key: "open", value: "1" });
                 doctors.sendMessage("DRAWER", JSON.stringify(extra));
             });
-
-            $.ajax({
-                url: $localResponseHolder.data('url'),
-                type: 'GET',
-                beforeSend: function (xhr) { if (typeof doctors != 'undefined') { xhr.setRequestHeader('Authorization', doctors.getToken()); } }
-            }).fail(function (response) {
-                // Failure
-                //var json = $.parseJSON(response);
-                var messages = ''
-                                + '<p class="alert error">status: ' + response.status + '</p>'
-                                + '<p class="alert error">message: ' + response.responseText + '</p>'
-                ;
-                $localResponseHolder.append(messages).show();
-            }).done(function (response) {
-                console.log(response);
-                var data = JSON.parse(response);
-                if (data.orders.length > 0) {
-                    var $editLink = false;
-                    var current_data = false;
-                    var $customerHolder = false;
-                    var $cinfo = false;
-                    var $clone = false;
-                    var $order = false;
-                    var $meds = false;
-                    for (var i = 0; i < data.orders.length; i++) {
-                        current_data = data.orders[i];
-                        if (typeof current_data.Order != 'undefined' && typeof current_data.Order.OrderNumber != 'undefined') {
-                            $clone = $clonable.clone(true);
-                            $clone.prop("id", "_" + current_data.Order.OrderNumber).addClass('clone');
-                            $customerHolder = $clone.find('div.customer-holder');
-                            $cinfo = $clone.find('div.customer-info');
-                            $order = $clone.find('div.order');
-                            $meds = $clone.find('div.meds');
-
-                            $editLink = $clone.find("a.OrderURL");
-                            $editLink.prop('href', current_data.Order.OrderURL);
-                            //console.log(JSON.stringify(current_data.customer));
-                            oLocalStorage.UpdatePageElements(current_data.customer, $customerHolder);
-                            oLocalStorage.UpdatePageElements(current_data.customer, $cinfo);
-                            oLocalStorage.UpdatePageElements(current_data.Order, $order);
-                            //oLocalStorage.UpdatePageElements(current_data.Meds, $meds);
-                            /* Meds */
-                            var $medsList = $clone.find('ul.meds-list');
-                            var $li = $medsList.find("li.clonable").clone(true);
-                            if (typeof current_data.Meds != 'undefined') {
-                                for (var j = 0; j < current_data.Meds.length ; j++) {
-                                    oLocalStorage.UpdatePageElements(current_data.Meds[j], $li);
-                                    $li.removeClass('clonable').appendTo($medsList);
-                                };
-                            };
-
-                            /* Assign Date */
-                            oLocalStorage.UpdatePageElements(current_data, $clone.find(".assign_date"));
-
-                            /* Set the clone alive */
-                            $clone.prop('display', 'none').removeClass('clonable').appendTo($localResponseHolder).fadeIn();
-                        }
-                    }
-                } else {
-                    messages = '<p>No history yet</p>';
+            if (!isFromCache()) { //prevent content loading on resume
+                $.ajax({
+                    url: $localResponseHolder.data('url'),
+                    type: 'GET',
+                    beforeSend: function (xhr) { if (typeof doctors != 'undefined') { xhr.setRequestHeader('Authorization', doctors.getToken()); } }
+                }).fail(function (response) {
+                    // Failure
+                    //var json = $.parseJSON(response);
+                    var messages = ''
+                                    + '<p class="alert error">status: ' + response.status + '</p>'
+                                    + '<p class="alert error">message: ' + response.responseText + '</p>'
+                    ;
                     $localResponseHolder.append(messages).show();
-                }
-                var extra = new Array();
-                extra.push({ key: "open", value: "0" });
-                doctors.sendMessage("DRAWER", JSON.stringify(extra));
-            }).always(function (response) {
-                console.log('response: ' + response);
-                $localPreloader.fadeOut('fast');
-            });
+                }).done(function (response) {
+                    console.log(response);
+                    var data = JSON.parse(response);
+                    if (data.orders.length > 0) {
+                        var $editLink = false;
+                        var current_data = false;
+                        var $customerHolder = false;
+                        var $cinfo = false;
+                        var $clone = false;
+                        var $order = false;
+                        var $meds = false;
+                        for (var i = 0; i < data.orders.length; i++) {
+                            current_data = data.orders[i];
+                            if (typeof current_data.Order != 'undefined' && typeof current_data.Order.OrderNumber != 'undefined') {
+                                $clone = $clonable.clone(true);
+                                $clone.prop("id", "_" + current_data.Order.OrderNumber).addClass('clone');
+                                $customerHolder = $clone.find('div.customer-holder');
+                                $cinfo = $clone.find('div.customer-info');
+                                $order = $clone.find('div.order');
+                                $meds = $clone.find('div.meds');
+
+                                $editLink = $clone.find("a.OrderURL");
+                                $editLink.prop('href', current_data.Order.OrderURL);
+                                //console.log(JSON.stringify(current_data.customer));
+                                oLocalStorage.UpdatePageElements(current_data.customer, $customerHolder);
+                                oLocalStorage.UpdatePageElements(current_data.customer, $cinfo);
+                                oLocalStorage.UpdatePageElements(current_data.Order, $order);
+                                //oLocalStorage.UpdatePageElements(current_data.Meds, $meds);
+                                /* Meds */
+                                var $medsList = $clone.find('ul.meds-list');
+                                var $li = $medsList.find("li.clonable").clone(true);
+                                if (typeof current_data.Meds != 'undefined') {
+                                    for (var j = 0; j < current_data.Meds.length ; j++) {
+                                        oLocalStorage.UpdatePageElements(current_data.Meds[j], $li);
+                                        $li.removeClass('clonable').appendTo($medsList);
+                                    };
+                                };
+
+                                /* Assign Date */
+                                oLocalStorage.UpdatePageElements(current_data, $clone.find(".assign_date"));
+
+                                /* Set the clone alive */
+                                $clone.prop('display', 'none').removeClass('clonable').appendTo($localResponseHolder).fadeIn();
+                            }
+                        }
+                    } else {
+                        messages = '<p>No history yet</p>';
+                        $localResponseHolder.append(messages).show();
+                    }
+                    var extra = new Array();
+                    extra.push({ key: "open", value: "0" });
+                    doctors.sendMessage("DRAWER", JSON.stringify(extra));
+                }).always(function (response) {
+                    console.log('response: ' + response);
+                    $localPreloader.fadeOut('fast');
+                });
+            }
         };
         $(function () {
             document.addEventListener("deviceready", PowerUp, false);
@@ -228,6 +229,7 @@
             /* Only for in-browser (not in Android) testing */
             //PowerUp();
         });
+
 
 
 

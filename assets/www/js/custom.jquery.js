@@ -2,6 +2,51 @@ function classLocalStorage() {
     this.logged = 0;
     this.oid = 0;
 };
+//i=day,j=nr of orders/day,d =date,t = template
+function day(i, d) {
+    var instance = this;
+    this.dateString = d;
+    this.disabled = false;
+    this.disabledClass = 'disabled';
+    this.value = i;
+    this.get__template = function () {
+        /*
+        //custom template
+        if (typeof t !== "undefined")
+            return t.html();
+        else
+        */
+        return __getDefaultTemplate();
+    };
+    function __getDefaultTemplate() {
+        //var $__templateWrap = $('<tr></tr>');
+        var $__td = $('<td></td>');
+        $__td.prop('id', instance.dateString);
+        var $__h3 = $('<h3></h3>');
+        var $__p = $('<p class="autoupdate" data-term="nr_of_orders"></p>');
+        var $__a = $('<a></a>');
+        $__h3.text(instance.value);
+        $__p.attr('title', 'Number of orders for this day');
+        $__p.text("No orders");
+        $__a.addClass('show-orders');
+        $__a.addClass('hide');
+        $__a.prop('href', '#');
+        $__a.html('Show &nbsp <i class="fa fa-caret-down"></i>');
+        if (instance.disabled) {
+            $__h3.addClass(instance.disabledClass);
+            $__h3.addClass('date');
+            $__a.attr('disabled', 'disabled');
+            $__td.addClass(instance.disabledClass);
+        } else {
+            $__h3.addClass('date');
+        }
+        $__td.append($__h3);
+        $__td.append($__p);
+        $__td.append($__a);
+        //$__templateWrap.append($__td);
+        return $__td;
+    };
+}
 
 function onDeviceReady() {
     var $responseHolder2 = $('#response-holder2');
@@ -327,7 +372,162 @@ function onDeviceReady() {
     /* End Local Storage */
 
     //var oLocalStorage = new classLocalStorage();
+    //document.addEventListener("backbutton", onBackKeyDown, false);    
+
+    /* Date extension. Sursa: http://stackoverflow.com/questions/1643320/get-month-name-from-date*/
+    Date.prototype.getMonthName = function (lang) {
+        lang = lang && (lang in Date.locale) ? lang : 'en';
+        return Date.locale[lang].month_names[this.getMonth()];
+    };
+
+    Date.prototype.getMonthNameShort = function (lang) {
+        lang = lang && (lang in Date.locale) ? lang : 'en';
+        return Date.locale[lang].month_names_short[this.getMonth()];
+    };
+
+    Date.locale = {
+        en: {
+            month_names: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            month_names_short: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+        }
+    };
+    // Source: http://weeknumber.net/how-to/javascript 
+    // Returns the ISO week of the date.
+    Date.prototype.getWeek = function () {
+        var date = new Date(this.getTime());
+        date.setHours(0, 0, 0, 0);
+        // Thursday in current week decides the year.
+        date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+        // January 4 is always in week 1.
+        var week1 = new Date(date.getFullYear(), 0, 4);
+        // Adjust to Thursday in week 1 and count number of weeks from date to week1.
+        return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000
+                              - 3 + (week1.getDay() + 6) % 7) / 7);
+    }
+
+    //t means day template
+    Date.prototype.getCalendar = function (t) {
+
+        var i = this.getDay();//indexul zilei din saptamana
+        //console.log(this.getMonth());
+        var j = new Date(this.getYear(), this.getMonth() + 1, 0).getDate(); //numar de zile in luna curenta
+        var k = this.getDate(); //numarul zilei din luna curenta    
+        console.log(j);
+        var emptyday = new day(0);
+        var m = [[emptyday, emptyday, emptyday, emptyday, emptyday, emptyday, emptyday],
+                 [emptyday, emptyday, emptyday, emptyday, emptyday, emptyday, emptyday],
+                 [emptyday, emptyday, emptyday, emptyday, emptyday, emptyday, emptyday],
+                 [emptyday, emptyday, emptyday, emptyday, emptyday, emptyday, emptyday],
+                 [emptyday, emptyday, emptyday, emptyday, emptyday, emptyday, emptyday],
+                 [emptyday, emptyday, emptyday, emptyday, emptyday, emptyday, emptyday]
+        ]; //matricea calendar
+        var l = 0;//ordinul liniei 
+        var mM = this.getMonth() - 1;
+        var yY = this.getFullYear();
+        if (this.getMonth() == 0) {
+            mM = 11;
+            yY = yY - 1;
+        }
+        var l_ant = new Date(yY, mM, 0);
+        var j_ant = l_ant.getDate(); //nr de zile luna anterioara(ultima zi din luna)                
+        var mm = this.getMonth() + 1;
+        var y = this.getFullYear();
+        if (this.getMonth() == 11) {
+            mm = 0;
+            y = y + 1;
+        }
+        var l_post = new Date(y, mm, this.getDate());
+        //determin ordinul primei zi din luna
+        //i = new Date(this.getFullYear(), this.getMonth(), 0).getDay();
+        while (true) {
+            if (k >= 1) {
+                if (k == 1)
+                    break;
+                if (i == 0)
+                    i = 7;
+                k--;
+                i--;
+            }
+        }
+
+        //console.log(i); //ordinul coloanei pe care se afla prima zi a lunii curente                       
+        var i_ant = i;//salvez ordinul coloanei
+        while (k <= j) {
+            for (; i_ant > 0 ;) {
+                i_ant--; //scad ordinul coloanei
+                m[l][i_ant] = new day(j_ant, l_ant.getFullYear() + "-" + l_ant.getMonth() + "-" + j_ant);
+                m[l][i_ant].disabled = true;
+                //console.log(m[l][i_ant].disabled);
+                j_ant--;
+            }
+            m[l][i] = new day(k, this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + k);
+            k++;
+            i++;//trec la urmatoarea coloana
+            if (i == 7) //trebuie sa trec pe urmatoarea linie
+            {
+                i = 0;//mut catre prima coloana
+                l++;//trec la linia urmat
+            }
+
+            if (k > j) {
+                //completez matricea cu zilele din urmatoarea luna
+                var k1 = 1;
+                while (l < m.length) {
+                    m[l][i] = new day(k1, l_post.getFullYear() + "-" + l_post.getMonth() + "-" + k1);
+                    m[l][i].disabled = true;
+                    i++;
+                    k1++;
+                    if (i == 7) {
+                        i = 0;
+                        l++;
+                    }
+                }
+            }
+
+        }
+        //construiesc tbody
+        var tbodyContent = $('<tbody></tbody>');
+        for (var i1 = 0; i1 < m.length; i1++) {
+            var tr = $('<tr></tr>');
+            for (var i2 = 0; i2 < m[i1].length; i2++) {
+                /*var style = '';
+                if (typeof m[i1][i2].disabled !== "undefined" && m[i1][i2].disabled)
+                    style = 'style = "color:#ccc"';
+                var td = '<td><h3 ' + style + ' class="date">' + m[i1][i2].value + '</h3><p title="Number of orders for this day">&nbsp;</p></td>';
+                tr += td;
+                */
+                //console.log(m[i1][i2].get__template());
+                tr.append(m[i1][i2].get__template());
+            }
+            //tr += '</tr>';
+            tbodyContent.append(tr);
+        }
+        return tbodyContent;
+    }
 };
+
+function isFromCache() {
+    var isfc = window.location.hash.replace('#fromcache=', '');
+    if (typeof isfc !== "undefined" && isfc == "true")
+        return true;
+    else
+        return false;
+}
+
+function onBackKeyDown(e) {
+    e.preventDefault();
+    navigator.notification.confirm("Are you sure you want to exit ?", onConfirm, "Confirmation", "Yes,No");
+    // Prompt the user with the choice
+}
+
+function onConfirm(button) {
+    if (button == 2) {//If User selected No, then we just do nothing
+        return;
+    } else {
+        navigator.app.exitApp();// Otherwise we quit the app.
+    }
+}
 
 $(function () {
     document.addEventListener("deviceready", onDeviceReady, true);

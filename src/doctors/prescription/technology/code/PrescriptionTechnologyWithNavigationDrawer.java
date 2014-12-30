@@ -2,10 +2,8 @@ package doctors.prescription.technology.code;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
+import android.app.AlertDialog;
+import android.content.*;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,8 +12,10 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import doctors.prescription.technology.R;
@@ -62,6 +62,7 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
     private ActionBarDrawerToggle mDrawerToggle;
     private ConcurrentHashMap<String, BroadcastReceiver> broadcastReceiverHashMap;
     private Request request;
+    private Context context;
     //</editor-fold>
 
     //<editor-fold desc="Override">
@@ -101,30 +102,57 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
                     case 0: //pending
+                        appView.CurrentPage = "file:///android_asset/www/pending.html";
                         appView.loadUrl("file:///android_asset/www/pending.html");
                         break;
                     case 1://history
+                        appView.CurrentPage = "file:///android_asset/www/history.html";
                         appView.loadUrl("file:///android_asset/www/history.html");
                         break;
                     case 2://declined
+                        appView.CurrentPage = "file:///android_asset/www/declined.html";
                         appView.loadUrl("file:///android_asset/www/declined.html");
                         break;
                     case 3://query
+                        appView.CurrentPage = "file:///android_asset/www/query.html";
                         appView.loadUrl("file:///android_asset/www/query.html");
                         break;
                     case 4: //invoices
+                        appView.CurrentPage = "file:///android_asset/www/invoices.html";
                         appView.loadUrl("file:///android_asset/www/invoices.html");
                         break;
                     case 5: //messages
+                        appView.CurrentPage = "file:///android_asset/www/messages.html";
                         appView.loadUrl("file:///android_asset/www/messages.html");
                         break;
                 }
                 mDrawerLayout.closeDrawer(Gravity.LEFT);
             }
         });
-        PopulateLeftMenu();//populeaza listview din navigation drawer
         //deschide meniu lateral(stanga)
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        appView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    WebView webView = (WebView) view;
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                        new AlertDialog.Builder(webView.getContext())
+                                .setMessage("Are you sure you want to exit?")
+                                .setCancelable(false)
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        finish();
+                                    }
+                                })
+                                .setNegativeButton("No", null)
+                                .show();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -227,16 +255,18 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
         }
         super.onDestroy();
     }
-    //</editor-fold>
+
+//</editor-fold>
 
     //<editor-fold desc="Abstract">
     protected abstract ConcurrentHashMap<String, BroadcastReceiver> GetBroadcastsMap();
 
-    //</editor-fold>
+//</editor-fold>
 
     //<editor-fold desc="Private">
-    private void PopulateLeftMenu() {
+    protected void PopulateLeftMenu() {
         items = new ArrayList<Item>();
+        context = this;
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         request = new Request(this);
         request.setRequestMethod(HttpMethod.GET);
@@ -283,6 +313,8 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
                         item.isHeader = false;
                         items.add(item);
                     }
+                    mDrawerList.setAdapter(new Adapter(context,
+                            R.layout.left_drawer_item, items));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -290,7 +322,7 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
         };
         request.execute(Constants.MENU_DATABINDING_URL);
         try {
-            request.get(30, TimeUnit.SECONDS);
+            request.get(30, TimeUnit.SECONDS);//wait for menu items to be populated
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -298,8 +330,10 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
         } catch (TimeoutException e) {
             e.printStackTrace();
         }
+        /*
         mDrawerList.setAdapter(new Adapter(this,
                 R.layout.left_drawer_item, items));
+        */
         /*
         Item pendingItem = new Item();
         pendingItem.counter = 1;
@@ -341,7 +375,7 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
         items.add(messagesItem);
         */
     }
-    //</editor-fold>
+//</editor-fold>
 
     //<editor-fold desc="Public">
     public void AddNavigationDrawerView(String key, View v) {

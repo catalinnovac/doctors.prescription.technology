@@ -70,11 +70,15 @@
         <div class="col span_12">
             This software and all connected databases are the exclusive property of
             <strong>HR Healthcare Ltd</strong><br>
-            All rights are reserved by <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
-            2HH. 01204 559 999</strong> <br>
-            All Intellectual Property Rights belong to <strong>HR Healthcare Ltd, The Office, Britannia Way, Waters
+            All rights are reserved by <strong>
+            HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
+            2HH. 01204 559 999
+        </strong> <br>
+            All Intellectual Property Rights belong to <strong>
+            HR Healthcare Ltd, The Office, Britannia Way, Waters
             Meeting,
-            Bolton, BL2 2HH. 01204 559 999</strong>
+            Bolton, BL2 2HH. 01204 559 999
+        </strong>
         </div>
         <div class="col span_12">
             Any use, editing, changing, multiplication or commercial
@@ -86,89 +90,91 @@
 </footer>
 
 <script type="text/javascript">
-			function PowerUp() {
-				var oLocalStorage = new classLocalStorage();
-				var $superholder = $('div.superholder');
-				var $clonable = $superholder.children('div.clonable');
-				var $localResponseHolder = $superholder.children('div.response-holder');
-				var $localPreloader = $superholder.children('div.ajax-loader');
-				$localPreloader.fadeIn('fast');
+        function PowerUp() {
+            var oLocalStorage = new classLocalStorage();
+            var $superholder = $('div.superholder');
+            var $clonable = $superholder.children('div.clonable');
+            var $localResponseHolder = $superholder.children('div.response-holder');
+            var $localPreloader = $superholder.children('div.ajax-loader');
+            $localPreloader.fadeIn('fast');
 
-				$('#nav-toggle').on('touchstart click', function(e){
-					e.preventDefault();
-                    var extra = new Array();
-                    extra.push({ key:"open",value:"1"});
-                    doctors.sendMessage("DRAWER",JSON.stringify(extra));
-				});
-
+            $('#nav-toggle').on('touchstart click', function (e) {
+                e.preventDefault();
+                var extra = new Array();
+                extra.push({ key: "open", value: "1" });
+                doctors.sendMessage("DRAWER", JSON.stringify(extra));
+            });
+            if (!isFromCache()) { //prevent content loading on resume
                 $.ajax({
                     url: $localResponseHolder.data('url'),
                     type: 'GET',
                     beforeSend: function (xhr) { if (typeof doctors != 'undefined') { xhr.setRequestHeader('Authorization', doctors.getToken()); } }
                 }).fail(function (response) {
-					// Failure
-					//var json = $.parseJSON(response);
-					var messages = ''
-									+ '<p class="alert error">status: ' + response.status + '</p>'
-									+ '<p class="alert error">message: ' + response.statusText + '</p>'
-									;
-					$localResponseHolder.append(messages).show();
-				}).done(function (response) {
-					var data = JSON.parse(response);
+                    // Failure
+                    //var json = $.parseJSON(response);
+                    var messages = ''
+                                    + '<p class="alert error">status: ' + response.status + '</p>'
+                                    + '<p class="alert error">message: ' + response.statusText + '</p>'
+                    ;
+                    $localResponseHolder.append(messages).show();
+                }).done(function (response) {
+                    var data = JSON.parse(response);
                     if (typeof data !== "undefined" && typeof data.Messages !== "undefined" && data.Messages.length > 0) {
                         var current_data = false;
                         var $clone = false;
-						var $customer = false;
-						var $order = false;
-						var $message = false;
+                        var $customer = false;
+                        var $order = false;
+                        var $message = false;
                         for (var i = 0; i < data.Messages.length; i++) {
-							current_data = data.Messages[i];
-							if (typeof current_data.Order != 'undefined' && typeof current_data.Order.orderNumber != 'undefined') {
-								$clone = $clonable.clone(true);
-								$clone.prop("id", "_" + current_data.Order.orderNumber).addClass('clone');
+                            current_data = data.Messages[i];
+                            if (typeof current_data.Order != 'undefined' && typeof current_data.Order.orderNumber != 'undefined') {
+                                $clone = $clonable.clone(true);
+                                $clone.prop("id", "_" + current_data.Order.orderNumber).addClass('clone');
 
-								$customer = $clone.find('h3.customer');
-								$order = $clone.find('div.order');
-								$editLink = $clone.find("a.OrderURL");
-								$editLink.prop('href', current_data.Order.orderURL);
+                                $customer = $clone.find('h3.customer');
+                                $order = $clone.find('div.order');
+                                $editLink = $clone.find("a.OrderURL");
+                                $editLink.prop('href', current_data.Order.orderURL);
                                 var $messgeStatusHolder = $clone.find('div.customer-info');
-								oLocalStorage.UpdatePageElements(current_data.Customer, $customer);
-								oLocalStorage.UpdatePageElements(current_data.Order, $order);
-								oLocalStorage.UpdatePageElements(current_data.Message, $messgeStatusHolder);
-								 /* Message */
-								$message = $clone.find('div.message-info');
-								var $mesajLink = $message.find('a.mesajURL');
-								$mesajLink.prop('href',current_data.Message.mesajURL);
+                                oLocalStorage.UpdatePageElements(current_data.Customer, $customer);
+                                oLocalStorage.UpdatePageElements(current_data.Order, $order);
+                                oLocalStorage.UpdatePageElements(current_data.Message, $messgeStatusHolder);
+                                /* Message */
+                                $message = $clone.find('div.message-info');
+                                var $mesajLink = $message.find('a.mesajURL');
+                                $mesajLink.prop('href', current_data.Message.mesajURL);
                                 oLocalStorage.UpdatePageElements(current_data.Message, $message);
 
-								/* Last Message Date */
-								oLocalStorage.UpdatePageElements(current_data, $clone.find(".last_message_date"));
+                                /* Last Message Date */
+                                oLocalStorage.UpdatePageElements(current_data, $clone.find(".last_message_date"));
 
-								/* Set the clone alive */
-								$clone.prop('display', 'none').removeClass('clonable').appendTo($localResponseHolder).fadeIn();
-							}
+                                /* Set the clone alive */
+                                $clone.prop('display', 'none').removeClass('clonable').appendTo($localResponseHolder).fadeIn();
+                            }
                         }
                     } else {
                         var data = JSON.parse(response);
-                        if(typeof data !== "undefined" && typeof data.message !== "undefined"){
-						    messages = '<p>'+data.message+'</p>';
-						    $localResponseHolder.append(messages).show();
-						}
+                        if (typeof data !== "undefined" && typeof data.message !== "undefined") {
+                            messages = '<p>' + data.message + '</p>';
+                            $localResponseHolder.append(messages).show();
+                        }
                     }
                     var extra = new Array();
                     extra.push({ key: "open", value: "0" });
                     doctors.sendMessage("DRAWER", JSON.stringify(extra));
-				}).always(function(response) {
-					console.log('response: ' + response);
-					$localPreloader.fadeOut('fast');
-				});
-            };
-			$(function() {
-	            document.addEventListener("deviceready", PowerUp, false);
+                }).always(function (response) {
+                    console.log('response: ' + response);
+                    $localPreloader.fadeOut('fast');
+                });
+            }
+        };
+        $(function () {
+            document.addEventListener("deviceready", PowerUp, false);
 
-				/* Only for in-browser (not in Android) testing */
-				//PowerUp();
-			});
+            /* Only for in-browser (not in Android) testing */
+            //PowerUp();
+        });
+
 
 
 

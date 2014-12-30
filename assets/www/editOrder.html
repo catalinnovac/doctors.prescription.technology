@@ -23,9 +23,11 @@
 <div class="container wrap">
     <div class="row gutters">
         <div class="col span_24">
-            <a href="/" id="logo" title="Prescription Technology - Doctors Interface"/><img src="img/logo_PT.png"
-                                                                                            alt=""/></a>
-            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface Menu"/>Menu</a>
+            <a href="/" id="logo" title="Prescription Technology - Doctors Interface">
+                <img src="img/logo_PT.png"
+                     alt=""/>
+            </a>
+            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface Menu">Menu</a>
         </div>
     </div>
     <div class="row gutters">
@@ -109,7 +111,7 @@
 
                                     <p>Province: <strong class="autoupdate" data-term="province"></strong></p>
 
-                                    <p>Zip: <strong code class="autoupdate" data-term="zip"></strong></p>
+                                    <p>Zip: <strong class="autoupdate" data-term="zip"></strong></p>
 
                                     <p>Country: <strong class="autoupdate" data-term="country"></strong></p>
                                 </div>
@@ -124,54 +126,62 @@
 
                                     <p>Province: <strong class="autoupdate" data-term="province"></strong></p>
 
-                                    <p>Zip: <strong code class="autoupdate" data-term="zip"></strong></p>
+                                    <p>Zip: <strong class="autoupdate" data-term="zip"></strong></p>
 
                                     <p>Country: <strong class="autoupdate" data-term="country"></strong></p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="medical-questions row gutters">
-                        <label>Medical Questions</label>
+                    <form id="frmPatient" class="row gutters" method="post">
+                        <input type="hidden" id="ordernumber" name="ordernumber" data-term="ordernumber"/>
+                        <input type="hidden" id="custkey" name="custkey" data-term="custkey"/>
+                        <input type="hidden" id="disposition" name="disposition" class="confirm-target" value="0"/>
 
-                        <div class="medical-question clonable">
-                            <p>
-                                Question:
+                        <div class="medical-questions row gutters">
+                            <label>Medical Questions</label>
 
-                                <span class="autoupdate" data-term="question"></span>
-                            </p>
+                            <div class="medical-question clonable">
+                                <p>
+                                    Question:
 
-                            <p>
-                                Short Answer:
+                                    <span class="autoupdate" data-term="question"></span>
+                                </p>
 
-                                <span class="autoupdate" data-term="shortAnswer"></span>
-                            </p>
+                                <p>
+                                    Short Answer:
 
-                            <p>
-                                Answer:
-                                <span class="autoupdate" data-term="answer"></span>
-                            </p>
+                                    <span class="autoupdate" data-term="shortAnswer"></span>
+                                </p>
+
+                                <p>
+                                    Answer:
+                                    <span class="autoupdate" data-term="answer"></span>
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="medication-details row gutters">
-                        <label>Medication Details</label>
+                        <div class="medication-details row gutters">
+                            <label>Medication Details</label>
 
-                        <div class="medication-details-item clonable">
-                            <span class="autoupdate" data-term="medsbackofficeid"></span>
-                            <span class="autoupdate" data-term="med_full_name"></span>
-                            <input type="text" class="autoupdate" data-term="sig"/>
+                            <div class="medication-details-item clonable">
+                                <span class="autoupdate" data-term="medsbackofficeid"></span>
+                                <span class="autoupdate" data-term="med_full_name"></span>
+                                <textarea class="autoupdate three-cols" rows="3" cols="20" data-term="sig"
+                                          name="sig"></textarea>
+                            </div>
                         </div>
-                    </div>
-                    <div class="decline-reasons-holder row gutters">
-                        <label>Decline reason</label>
-                        <option class="clonable item"></option>
-                        <select class="reasons"></select>
-                    </div>
+                        <div class="decline-reasons-holder row gutters">
+                            <label for="noteslist">Decline reason</label>
+                            <option class="clonable item"></option>
+                            <select name="noteslist" id="noteslist" class="reasons"></select>
+                        </div>
+                    </form>
                     <div class="doctor-disposition">
                         <label>Doctor Disposition</label> <br/>
-                        <a href="#">Query</a>
-                        <a href="#">Approve</a>
-                        <a href="#">Decline</a>
+                        <a class="btn confirmed" id="confirm-buton-query" name="confirm-buton-query">Query</a>
+                        <a class="btn confirmed save" id="confirm-buton-approve"
+                           name="confirm-buton-approve">Approve</a>
+                        <a class="btn confirmed btn-error" id="confirm-buton-decline" name="confirm-buton-decline">Decline</a>
                     </div>
                     <div class="patient-history row gutters">
                         <label>Patient History</label>
@@ -205,7 +215,7 @@
                         <a class="view-discussion-link">View discussion</a>
                     </div>
                 </div>
-                <div class="response-holder"
+                <div class="response-holder row gutters col span_24"
                      data-url="http://doctors.prescription.technology/ws/ajax.orders.getOrderEdit.asp"></div>
                 <div class="ajax-loader">
                     <img class="preloader" src="img/loading.gif" alt=""/>
@@ -246,6 +256,7 @@
             var $clonable = $superholder.children('.clonable');
             var $localResponseHolder = $superholder.children('div.response-holder');
             var $localPreloader = $superholder.children('div.ajax-loader');
+            var $frmPatient = $superholder.find('#frmPatient');
             $localPreloader.fadeIn('fast');
             //get order number from url
             var orderNumber = window.location.hash.replace('#ordernumber=', '');
@@ -255,9 +266,9 @@
                 var extra = new Array();
                 extra.push({ key: "open", value: "1" });
                 doctors.sendMessage("DRAWER", JSON.stringify(extra));
-            });            
-            if (orderNumber != null && orderNumber != "") {
-                var URL = $localResponseHolder.data('url') + '?ordernumber=' + orderNumber;                
+            });
+            if (!isFromCache() && orderNumber != null && orderNumber != "") {
+                var URL = $localResponseHolder.data('url') + '?ordernumber=' + orderNumber;
                 $.ajax({
                     url: URL,
                     type: 'GET',
@@ -272,7 +283,7 @@
                     $localResponseHolder.append(messages).show();
                 }).done(function (response) {
                     console.log(response);
-                    var data = JSON.parse(response);                    
+                    var data = JSON.parse(response);
                     if (typeof data !== "undefined" && typeof data.OrderEdit !== "undefined") {
                         var current_data = data.OrderEdit;
                         console.log(data);
@@ -319,6 +330,43 @@
                                     $cbaClone.removeClass('clonable').appendTo($cbaCloneHolder);
                                 }
                             }
+                            var $doctorDisposition = $superholder.find('div.doctor-disposition');
+                            $doctorDisposition.find('a.confirmed').each(function () {
+                                $(this).attr("href", current_data.SetOrderStatusURL);
+                            });
+                            $frmPatient.find('#custkey').val(current_data.Customer.custkey);
+                            $frmPatient.find('#ordernumber').val(current_data.Order.orderNumber);
+                            var $disposition = $frmPatient.children('#disposition');
+                            $('.doctor-disposition').on('click', 'a.confirmed', function (e) {
+                                e.preventDefault();
+                                if (this.id == 'confirm-buton-decline') {
+                                    // Confirmed Decline
+                                    $disposition.val('0');
+                                } else if (this.id == 'confirm-buton-approve') {
+                                    // Confirmed Approval
+                                    $disposition.val('1');
+                                } else if (this.id == 'confirm-buton-query') {
+                                    // Confirmed Query
+                                    $disposition.val('2');
+                                }
+                                console.log($frmPatient.serialize());
+                                $.ajax({
+                                    url: this.href,
+                                    type: "POST",
+                                    data: $frmPatient.serialize(),
+                                    beforeSend: function (xhr) { if (typeof doctors != 'undefined') { xhr.setRequestHeader('Authorization', doctors.getToken()); } }
+                                }).fail(function (response) {
+                                    var messages = ''
+                                    + '<p class="alert error">status: ' + response.status + '</p>'
+                                    + '<p class="alert error">message: ' + response.responseText + '</p>'
+                                    ;
+                                    $localResponseHolder.append(messages).show();
+                                }).done(function (response) {
+                                    var jresponse = JSON.parse(response);
+                                    var message = '<p class="alert success">' + jresponse.message + '</p>';
+                                    $localResponseHolder.append(message).show();
+                                });
+                            });
                             /*Medical Questions*/
                             var $medicalQuestionsHolder = $superholder.find('div.medical-questions');
                             var $medicalQuestion = $medicalQuestionsHolder.find('div.medical-question.clonable');
@@ -332,7 +380,7 @@
                             }
                             /*Decline reasons*/
                             var $declineReasonsHolder = $superholder.find('div.decline-reasons-holder');
-                            var $reasons = $declineReasonsHolder.find('select.reasons');
+                            var $reasons = $declineReasonsHolder.find('select#noteslist');
                             var $reason = $declineReasonsHolder.find('option.clonable');
                             var $reasonClone = false;
                             if (typeof current_data.DeclineReasons != "undefined") {
@@ -354,6 +402,7 @@
                                     $medicationDetailsItemClone.removeClass('clonable').appendTo($medicationDetailsHolder);
                                 }
                             }
+                            $medicationDetailsItem.remove(); //remove clone to prevent sending empty sig field every time
                             /*Patient History*/
                             var $patientHistoryHolder = $superholder.find('div.patient-history');
                             var $patientHistory = $superholder.find('div.history-item.clonable');
@@ -398,6 +447,7 @@
             /* Only for in-browser (not in Android) testing */
             //PowerUp();
         });
+
 
 
 

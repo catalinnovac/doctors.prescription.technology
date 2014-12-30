@@ -74,9 +74,10 @@ public class Index extends PrescriptionTechnologyWithNavigationDrawer {
                 Log.v(TAG, String.valueOf(map.size()));
                 Log.v(TAG, String.valueOf(intent.hasExtra("TOKEN")));
                 if (intent.hasExtra("TOKEN")) {
-                    appView.loadUrl("file:///android_asset/www/index.html");
-                    appView.clearHistory();
                     mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                    PopulateLeftMenu();
+                    appView.loadCurrentPage();
+                    appView.clearHistory();
                 } else {
                     appView.sendJavascript("OnloginErrorEventHandler();");
                 }
