@@ -17,6 +17,7 @@ public class CustomCordovaWebView extends CordovaWebView {
     Context context;
 
     GestureDetector.SimpleOnGestureListener sogl = new GestureDetector.SimpleOnGestureListener() {
+        /*
         public boolean onDown(MotionEvent event) {
             show_toast("swipe down");
             int temp_ScrollY = getScrollY();
@@ -32,6 +33,51 @@ public class CustomCordovaWebView extends CordovaWebView {
                 show_toast("swipe right");
             }
             return true;
+        }
+        */
+        private static final int SWIPE_THRESHOLD = 100;
+        private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            int temp_ScrollY = getScrollY();
+            scrollTo(getScrollX(), getScrollY() + 1);
+            scrollTo(getScrollX(), temp_ScrollY);
+            return false;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            boolean result = false;
+            try {
+
+                float diffY = e2.getY() - e1.getY();
+                float diffX = e2.getX() - e1.getX();
+                if (Math.abs(diffX) > Math.abs(diffY)) {
+                    if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                        if (diffX > 0) {
+                            onSwipeRight();
+                        } else {
+                            onSwipeLeft();
+                        }
+                    }
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+            return result;
+        }
+
+        public void onSwipeRight() {
+            show_toast("swipe right");
+        }
+
+        public void onSwipeLeft() {
+            show_toast("swipe left");
+        }
+
+        public GestureDetector getGestureDetector() {
+            return gd;
         }
     };
 
@@ -61,12 +107,14 @@ public class CustomCordovaWebView extends CordovaWebView {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         //return gd.onTouchEvent(event);
+
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             int temp_ScrollY = getScrollY();
             scrollTo(getScrollX(), getScrollY() + 1);
             scrollTo(getScrollX(), temp_ScrollY);
         }
         return super.onTouchEvent(event);
+
     }
 
     @Override

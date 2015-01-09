@@ -129,7 +129,6 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
                 mDrawerLayout.closeDrawer(Gravity.LEFT);
             }
         });
-        //deschide meniu lateral(stanga)
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         appView.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -263,7 +262,7 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
 
 //</editor-fold>
 
-    //<editor-fold desc="Private">
+    //<editor-fold desc="Protected">
     protected void PopulateLeftMenu() {
         items = new ArrayList<Item>();
         context = this;
@@ -376,11 +375,5 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
         */
     }
 //</editor-fold>
-
-    //<editor-fold desc="Public">
-    public void AddNavigationDrawerView(String key, View v) {
-        NavigationDrawerViews.put(key, v);
-    }
-    //</editor-fold>
 
 }
