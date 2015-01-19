@@ -4,6 +4,7 @@ public class Constants {
 
     public static final String LOGIN_URI = "http://doctors.prescription.technology/wslogin.asp";
     public static final String PENDDING_LOAD_URL = "http://doctors.prescription.technology/ws/pending.asp";
+    public static final String MENU_DATABINDING_URL = "http://doctors.prescription.technology/ws/menuDetails.asp";
     public static final String DECLINED_LOAD_URL = "";
     public static final String HISTORY_LOAD_URL = "";
     public static final String INVOICE_LOAD_URL = "";

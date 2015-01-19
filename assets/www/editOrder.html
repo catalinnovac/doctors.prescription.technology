@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prescription Technology</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen"/>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/respond.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/custom.jquery.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic"
+          rel="stylesheet" type="text/css"/>
+</head>
+<body id="index">
+<!-- Preloader -->
+<div id="page-preloader">
+    <img class="preloader" src="img/loading.gif" alt=""/>
+</div>
+
+<div class="container wrap">
+    <div class="row gutters">
+        <div class="col span_24">
+            <a href="/" id="logo" title="Prescription Technology - Doctors Interface">
+                <img src="img/logo_PT.png"
+                     alt=""/>
+            </a>
+            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface Menu">Menu</a>
+        </div>
+    </div>
+    <div class="row gutters">
+        <div class="col span_24">
+            <h1 class="order-edit-title"></h1>
+
+            <div id="order-edit" class="superholder">
+                <div class="row gutters col span_24 clonable">
+                    <div class='customer-info'>
+                        <h3 class="customer">
+                            <span class="autoupdate" data-term="firstname"></span>&nbsp;<span class="autoupdate"
+                                                                                              data-term="middleinitial"></span>&nbsp;<span
+                                class="autoupdate" data-term="lastname"></span>
+                        </h3>
+
+                        <div class="order row gutters">
+                            <p>Order number:#<span class="autoupdate" data-term="orderNumber"></span></p>
+
+                            <p>Order status:<span class="autoupdate" data-term="orderStatus"></span></p>
+                            <ul class="medication">
+                                <li class="clonable">
+                                    ordered: <span class="autoupdate" data-term="med_full_name"></span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="personal-info row gutters">
+                            <label>Presonal Info</label>
+
+                            <p>
+                                Date of birth:
+                                <span class="autoupdate" data-term="dateOfbirth"></span>
+                            </p>
+
+                            <p>
+                                Age:
+                                <span class="autoupdate" data-term="age"></span>
+                            </p>
+
+                            <p>
+                                Phone:
+                                <span class="autoupdate" data-term="phone"></span>
+                            </p>
+
+                            <p>
+                                Pharmacy:
+                                <span class="autoupdate" data-term="pharmacy"></span>
+                            </p>
+
+                            <p>
+                                Height:
+
+                                <span class="autoupdate" data-term="height"></span>
+                            </p>
+
+                            <p>
+                                Weight:
+
+                                <span class="autoupdate" data-term="weight"></span>
+                            </p>
+
+                            <p>
+                                BMI:
+
+                                <span class="autoupdate" data-term="bmi"></span>
+                            </p>
+
+                            <p>
+                                Sex:
+
+                                <span class="autoupdate" data-term="sex"></span>
+                            </p>
+                        </div>
+                        <div class="customer-addresses row gutters">
+                            <div class="customer-shipping-addresses col span_12">
+                                <div class="customer-shipping-address clonable row gutters">
+                                    <label>Shipping address</label>
+
+                                    <p>Street: <strong class="autoupdate" data-term="street"></strong></p>
+
+                                    <p>City: <strong class="autoupdate" data-term="city"></strong></p>
+
+                                    <p>Province: <strong class="autoupdate" data-term="province"></strong></p>
+
+                                    <p>Zip: <strong class="autoupdate" data-term="zip"></strong></p>
+
+                                    <p>Country: <strong class="autoupdate" data-term="country"></strong></p>
+                                </div>
+                            </div>
+                            <div class="customer-billing-addresses col span_12">
+                                <div class="customer-billing-address clonable row gutters">
+                                    <label>Billing address</label>
+
+                                    <p>Street: <strong class="autoupdate" data-term="street"></strong></p>
+
+                                    <p>City: <strong class="autoupdate" data-term="city"></strong></p>
+
+                                    <p>Province: <strong class="autoupdate" data-term="province"></strong></p>
+
+                                    <p>Zip: <strong class="autoupdate" data-term="zip"></strong></p>
+
+                                    <p>Country: <strong class="autoupdate" data-term="country"></strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form id="frmPatient" class="row gutters" method="post">
+                        <input type="hidden" id="ordernumber" name="ordernumber" data-term="ordernumber"/>
+                        <input type="hidden" id="custkey" name="custkey" data-term="custkey"/>
+                        <input type="hidden" id="disposition" name="disposition" class="confirm-target" value="0"/>
+
+                        <div class="medical-questions row gutters">
+                            <label>Medical Questions</label>
+
+                            <div class="medical-question clonable">
+                                <p>
+                                    Question:
+
+                                    <span class="autoupdate" data-term="question"></span>
+                                </p>
+
+                                <p>
+                                    Short Answer:
+
+                                    <span class="autoupdate" data-term="shortAnswer"></span>
+                                </p>
+
+                                <p>
+                                    Answer:
+                                    <span class="autoupdate" data-term="answer"></span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="medication-details row gutters">
+                            <label>Medication Details</label>
+
+                            <div class="medication-details-item clonable">
+                                <span class="autoupdate" data-term="medsbackofficeid"></span>
+                                <span class="autoupdate" data-term="med_full_name"></span>
+                                <textarea class="autoupdate three-cols" rows="3" cols="20" data-term="sig"
+                                          name="sig"></textarea>
+                            </div>
+                        </div>
+                        <div class="decline-reasons-holder row gutters">
+                            <label for="noteslist">Decline reason</label>
+                            <option class="clonable item"></option>
+                            <select name="noteslist" id="noteslist" class="reasons"></select>
+                        </div>
+                    </form>
+                    <div class="doctor-disposition">
+                        <label>Doctor Disposition</label> <br/>
+                        <a class="btn confirmed" id="confirm-buton-query" name="confirm-buton-query">Query</a>
+                        <a class="btn confirmed save" id="confirm-buton-approve"
+                           name="confirm-buton-approve">Approve</a>
+                        <a class="btn confirmed btn-error" id="confirm-buton-decline" name="confirm-buton-decline">Decline</a>
+                    </div>
+                    <div class="patient-history row gutters">
+                        <label>Patient History</label>
+
+                        <div class="history-item clonable">
+                            <p>
+                                Order number:
+                                <span class="autoupdate" data-term="orderNumber"></span>
+                            </p>
+
+                            <p>
+                                Medication:
+                                <span class="autoupdate" data-term="medication"></span>
+                            </p>
+
+                            <p>
+                                Doctor date:
+                                <span class="autoupdate" data-term="doctorDate"></span>
+                            </p>
+
+                            <p>
+                                Dose:
+                                <span class="autoupdate" data-term="dose"></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="unread-discussion row gutters">
+                        <label>Messages</label>
+
+                        <p class="autoupdate" data-term="message"></p>
+                        <a class="view-discussion-link">View discussion</a>
+                    </div>
+                </div>
+                <div class="response-holder row gutters col span_24"
+                     data-url="http://doctors.prescription.technology/ws/ajax.orders.getOrderEdit.asp"></div>
+                <div class="ajax-loader">
+                    <img class="preloader" src="img/loading.gif" alt=""/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="container wrap">
+    <div class="row gutters">
+        <div class="col span_12">
+            This software and all connected databases are the exclusive property of
+            <strong>HR Healthcare Ltd</strong><br>
+            All rights are reserved by <strong>
+            HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
+            2HH. 01204 559 999
+        </strong> <br>
+            All Intellectual Property Rights belong to <strong>
+            HR Healthcare Ltd, The Office, Britannia Way, Waters
+            Meeting,
+            Bolton, BL2 2HH. 01204 559 999
+        </strong>
+        </div>
+        <div class="col span_12">
+            Any use, editing, changing, multiplication or commercial
+            use (including but not limited to selling, licensing of this software
+            and/or parts of it and/or its connected database information), independent
+            of any changes being done first, is prohibited.
+        </div>
+    </div>
+</footer>
+
+<script type="text/javascript">
+        function PowerUp() {
+            var oLocalStorage = new classLocalStorage();
+            var $superholder = $('div.superholder');
+            var $clonable = $superholder.children('.clonable');
+            var $localResponseHolder = $superholder.children('div.response-holder');
+            var $localPreloader = $superholder.children('div.ajax-loader');
+            var $frmPatient = $superholder.find('#frmPatient');
+            $localPreloader.fadeIn('fast');
+            //get order number from url
+            var orderNumber = window.location.hash.replace('#ordernumber=', '');
+
+            $('#nav-toggle').on('touchstart click', function (e) {
+                e.preventDefault();
+                var extra = new Array();
+                extra.push({ key: "open", value: "1" });
+                doctors.sendMessage("DRAWER", JSON.stringify(extra));
+            });
+            if (!isFromCache() && orderNumber != null && orderNumber != "") {
+                var URL = $localResponseHolder.data('url') + '?ordernumber=' + orderNumber;
+                $.ajax({
+                    url: URL,
+                    type: 'GET',
+                    beforeSend: function (xhr) { if (typeof doctors != 'undefined') { xhr.setRequestHeader('Authorization', doctors.getToken()); } }
+                }).fail(function (response) {
+                    // Failure
+                    //var json = $.parseJSON(response);
+                    var messages = ''
+                                    + '<p class="alert error">status: ' + response.status + '</p>'
+                                    + '<p class="alert error">message: ' + response.responseText + '</p>'
+                    ;
+                    $localResponseHolder.append(messages).show();
+                }).done(function (response) {
+                    console.log(response);
+                    var data = JSON.parse(response);
+                    if (typeof data !== "undefined" && typeof data.OrderEdit !== "undefined") {
+                        var current_data = data.OrderEdit;
+                        console.log(data);
+                        if (typeof current_data.Order != 'undefined' && typeof current_data.Order.orderNumber != 'undefined') {
+                            /*Order*/
+                            var $order = $superholder.find('div.order');
+                            oLocalStorage.UpdatePageElements(current_data.Order, $order);
+                            /*Medication*/
+                            var $medication = $superholder.find('ul.medication');
+                            var $medicationItem = $medication.find('li.clonable');
+                            var $medicationItemClone = false;
+                            if (typeof current_data.Order.medication !== "undefined") {
+                                for (var i = 0; i < current_data.Order.medication.length; i++) {
+                                    $medicationItemClone = $medicationItem.clone(true);
+                                    oLocalStorage.UpdatePageElements(current_data.Order.medication[i], $medicationItemClone);
+                                    $medicationItemClone.removeClass('clonable').appendTo($medication);
+                                }
+                            }
+                            /*Customer*/
+                            var $customer = $superholder.find('h3.customer');
+                            oLocalStorage.UpdatePageElements(current_data.Customer, $customer);
+                            /*Personal Info*/
+                            var $personalInfo = $superholder.find('div.personal-info');
+                            oLocalStorage.UpdatePageElements(current_data.PersonalInfo, $personalInfo);
+                            /* Shipping addresses */
+                            var $csaCloneHolder = $superholder.find('div.customer-shipping-addresses');
+                            var $csaClonable = $superholder.find('div.customer-shipping-address.clonable');
+                            var $csaClone = false;
+                            if (typeof current_data.ShippingAddresses != 'undefined') {
+                                for (var k = 0; k < current_data.ShippingAddresses.length ; k++) {
+                                    $csaClone = $csaClonable.clone(true);
+                                    oLocalStorage.UpdatePageElements(current_data.ShippingAddresses[k], $csaClone);
+                                    $csaClone.removeClass('clonable').appendTo($csaCloneHolder);
+                                }
+                            }
+                            /* Billing addresses */
+                            var $cbaCloneHolder = $superholder.find('div.customer-billing-addresses');
+                            var $cbaClonable = $superholder.find('div.customer-billing-address.clonable');
+                            var $cbaClone = false;
+                            if (typeof current_data.BillingAddresses != 'undefined') {
+                                for (var k = 0; k < current_data.BillingAddresses.length ; k++) {
+                                    $cbaClone = $cbaClonable.clone(true);
+                                    oLocalStorage.UpdatePageElements(current_data.BillingAddresses[k], $cbaClone);
+                                    $cbaClone.removeClass('clonable').appendTo($cbaCloneHolder);
+                                }
+                            }
+                            var $doctorDisposition = $superholder.find('div.doctor-disposition');
+                            $doctorDisposition.find('a.confirmed').each(function () {
+                                $(this).attr("href", current_data.SetOrderStatusURL);
+                            });
+                            $frmPatient.find('#custkey').val(current_data.Customer.custkey);
+                            $frmPatient.find('#ordernumber').val(current_data.Order.orderNumber);
+                            var $disposition = $frmPatient.children('#disposition');
+                            $('.doctor-disposition').on('click', 'a.confirmed', function (e) {
+                                e.preventDefault();
+                                if (this.id == 'confirm-buton-decline') {
+                                    // Confirmed Decline
+                                    $disposition.val('0');
+                                } else if (this.id == 'confirm-buton-approve') {
+                                    // Confirmed Approval
+                                    $disposition.val('1');
+                                } else if (this.id == 'confirm-buton-query') {
+                                    // Confirmed Query
+                                    $disposition.val('2');
+                                }
+                                console.log($frmPatient.serialize());
+                                $.ajax({
+                                    url: this.href,
+                                    type: "POST",
+                                    data: $frmPatient.serialize(),
+                                    beforeSend: function (xhr) { if (typeof doctors != 'undefined') { xhr.setRequestHeader('Authorization', doctors.getToken()); } }
+                                }).fail(function (response) {
+                                    var messages = ''
+                                    + '<p class="alert error">status: ' + response.status + '</p>'
+                                    + '<p class="alert error">message: ' + response.responseText + '</p>'
+                                    ;
+                                    $localResponseHolder.append(messages).show();
+                                }).done(function (response) {
+                                    var jresponse = JSON.parse(response);
+                                    var message = '<p class="alert success">' + jresponse.message + '</p>';
+                                    $localResponseHolder.append(message).show();
+                                });
+                            });
+                            /*Medical Questions*/
+                            var $medicalQuestionsHolder = $superholder.find('div.medical-questions');
+                            var $medicalQuestion = $medicalQuestionsHolder.find('div.medical-question.clonable');
+                            var $medicalQuestionClone = false;
+                            if (typeof current_data.MedicalQuestions !== "undefined") {
+                                for (var i = 0; i < current_data.MedicalQuestions.length; i++) {
+                                    $medicalQuestionClone = $medicalQuestion.clone(true);
+                                    oLocalStorage.UpdatePageElements(current_data.MedicalQuestions[i], $medicalQuestionClone);
+                                    $medicalQuestionClone.removeClass('clonable').appendTo($medicalQuestionsHolder);
+                                }
+                            }
+                            /*Decline reasons*/
+                            var $declineReasonsHolder = $superholder.find('div.decline-reasons-holder');
+                            var $reasons = $declineReasonsHolder.find('select#noteslist');
+                            var $reason = $declineReasonsHolder.find('option.clonable');
+                            var $reasonClone = false;
+                            if (typeof current_data.DeclineReasons != "undefined") {
+                                for (var i = 0; i < current_data.DeclineReasons.length; i++) {
+                                    $reasonClone = $reason.clone(true);
+                                    $reasonClone.attr('value', current_data.DeclineReasons[i].typeID);
+                                    $reasonClone.text(current_data.DeclineReasons[i].reason);
+                                    $reasonClone.removeClass('clonable').appendTo($reasons);
+                                }
+                            }
+                            /*Medication details */
+                            var $medicationDetailsHolder = $superholder.find('div.medication-details');
+                            var $medicationDetailsItem = $superholder.find('div.medication-details-item.clonable');
+                            var $medicationDetailsItemClone = false;
+                            if (typeof current_data.Order.medication !== "undefined") {
+                                for (var i = 0; i < current_data.Order.medication.length; i++) {
+                                    $medicationDetailsItemClone = $medicationDetailsItem.clone(true);
+                                    oLocalStorage.UpdatePageElements(current_data.Order.medication[i], $medicationDetailsItemClone);
+                                    $medicationDetailsItemClone.removeClass('clonable').appendTo($medicationDetailsHolder);
+                                }
+                            }
+                            $medicationDetailsItem.remove(); //remove clone to prevent sending empty sig field every time
+                            /*Patient History*/
+                            var $patientHistoryHolder = $superholder.find('div.patient-history');
+                            var $patientHistory = $superholder.find('div.history-item.clonable');
+                            var $patientHistoryClone = false;
+                            if (typeof current_data.PatientHistory !== "undefined") {
+                                for (var i = 0; i < current_data.PatientHistory.length; i++) {
+                                    $patientHistoryClone = $patientHistory.clone(true);
+                                    oLocalStorage.UpdatePageElements(current_data.PatientHistory[i], $patientHistoryClone);
+                                    $patientHistoryClone.removeClass('clonable').appendTo($patientHistoryHolder);
+                                }
+                            }
+                            /*Unread discussions*/
+                            var $unreadDisc = $superholder.find('div.unread-discussion');
+                            var $viewDisclink = $unreadDisc.find('a.view-discussion-link');
+                            $viewDisclink.attr('href', current_data.UnreadDiscussions.viewDiscusssionURL);
+                            oLocalStorage.UpdatePageElements(current_data.UnreadDiscussions, $unreadDisc);
+                            $clonable.removeClass('clonable');
+                        }
+
+                    } else {
+                        var data = JSON.parse(response);
+                        if (typeof data !== "undefined" && typeof data.message !== "undefined") {
+                            messages = '<p>' + data.message + '</p>';
+                            $localResponseHolder.append(messages).show();
+                        }
+                    }
+                    var extra = new Array();
+                    extra.push({ key: "open", value: "0" });
+                    doctors.sendMessage("DRAWER", JSON.stringify(extra));
+                }).always(function (response) {
+                    console.log('response: ' + response);
+                    $localPreloader.fadeOut('fast');
+                });
+            } else {
+                $localPreloader.fadeOut('fast');
+                var messages = '<p class="alert error">Invalid order number supplied </p>';
+                $localResponseHolder.append(messages).show();
+            }
+        };
+        $(function () {
+            document.addEventListener("deviceready", PowerUp, false);
+            /* Only for in-browser (not in Android) testing */
+            //PowerUp();
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

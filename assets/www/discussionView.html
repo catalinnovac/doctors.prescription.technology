@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prescription Technology</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen"/>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/respond.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/custom.jquery.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic"
+          rel="stylesheet" type="text/css"/>
+</head>
+<body id="index">
+<!-- Preloader -->
+<div id="page-preloader">
+    <img class="preloader" src="img/loading.gif" alt=""/>
+</div>
+
+<div class="container wrap">
+    <div class="row gutters">
+        <div class="col span_24">
+            <a href="/" id="logo" title="Prescription Technology - Doctors Interface">
+                <img src="img/logo_PT.png"
+                     alt=""/>
+            </a>
+            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface Menu">Menu</a>
+        </div>
+    </div>
+    <div class="row gutters">
+        <div class="col span_24">
+            <h1 class="discusion-title">Discussion</h1>
+
+            <div id="discussion-view" class="superholder">
+                <div class="row gutters col span_24">
+                    <form class="form-edit clonable" method="post"
+                          action="http://doctors.prescription.technology/ws/ajax.messages.send_message.asp">
+                        <h4 class="autoupdate" data-term="OrderNumber"></h4>
+                        <input type="hidden" class="autoupdate" name="doctorkey" data-term="doctorKey"/>
+                        <input type="hidden" class="autoupdate" name="doctor" id="doctor" data-term="doctorName"/>
+                        <input type="hidden" class="autoupdate" name="ordernumber" data-term="OrderNumber"/>
+                        <input type="hidden" name="max-chars" id="max-chars" value="2000"/>
+
+                        <div class="messages">
+                            <div class="messages-inset">
+                                <div id="message-id" class="message-left message-block clonable">
+                                    <label class="message-author">
+                                        <span class="autoupdate" data-term="author"></span>&nbsp;(<span
+                                            class="autoupdate" data-term="stamp"></span>)
+                                    </label>
+
+                                    <div class="message-body force-wrap autoupdate" data-term="body"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <h5>Post your message</h5>
+                        <textarea class="post-your-message autoclear" cols="" rows=""
+                                  data-autoclear="Write your message" name="new_message_body">
+                            Write your
+                            message
+                        </textarea>
+
+                        <div class="butoane">
+                            <button type="button" class="btn btn-error"><i class="fa fa-times"></i> Cancel</button>
+                            <button class="btn save" type="submit">
+                                <i class="fa fa-comment"></i>&nbsp;Send message
+                            </button>
+                            <label style="float:right; width:auto;">
+                                <strong class="status success"
+                                        id="chars-left">2000</strong> chars
+                                left
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="response-holder row gutters col span_24"
+                     data-url="http://doctors.prescription.technology/ws/ajax.orders.getDiscussion.asp"></div>
+                <div class="ajax-loader">
+                    <img class="preloader" src="img/loading.gif" alt=""/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="container wrap">
+    <div class="row gutters">
+        <div class="col span_12">
+            This software and all connected databases are the exclusive property of
+            <strong>HR Healthcare Ltd</strong><br>
+            All rights are reserved by <strong>
+            HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
+            2HH. 01204 559 999
+        </strong> <br>
+            All Intellectual Property Rights belong to <strong>
+            HR Healthcare Ltd, The Office, Britannia Way, Waters
+            Meeting,
+            Bolton, BL2 2HH. 01204 559 999
+        </strong>
+        </div>
+        <div class="col span_12">
+            Any use, editing, changing, multiplication or commercial
+            use (including but not limited to selling, licensing of this software
+            and/or parts of it and/or its connected database information), independent
+            of any changes being done first, is prohibited.
+        </div>
+    </div>
+</footer>
+
+<script type="text/javascript">
+        function PowerUp() {
+            var oLocalStorage = new classLocalStorage();
+            var $superholder = $('div.superholder');
+            var $form = $superholder.find('form.form-edit');
+            var $messagesHolder = $superholder.find('.messages-inset');
+            var $localResponseHolder = $superholder.children('div.response-holder');
+            var $localPreloader = $superholder.children('div.ajax-loader');
+            var $btnSubmit = $form.find('button[type=submit]');
+            var $mesaj = $form.find('textarea.post-your-message');
+            var doctor = $('#doctor').val();
+            var $charsLeft = $('#chars-left');
+            var maxChars = $('#max-chars').val();
+            $localPreloader.fadeIn('fast');
+            //get order number from url
+            var orderNumber = window.location.hash.replace('#ordernumber=', '');
+
+            $('#nav-toggle').on('touchstart click', function (e) {
+                e.preventDefault();
+                var extra = new Array();
+                extra.push({ key: "open", value: "1" });
+                doctors.sendMessage("DRAWER", JSON.stringify(extra));
+            });
+            if (!isFromCache() && orderNumber != null && orderNumber != "") {
+                var URL = $localResponseHolder.data('url') + '?ordernumber=' + orderNumber;
+                $.ajax({
+                    url: URL,
+                    type: 'GET',
+                    beforeSend: function (xhr) { if (typeof doctors != 'undefined') { xhr.setRequestHeader('Authorization', doctors.getToken()); } }
+                }).fail(function (response) {
+                    // Failure
+                    //var json = $.parseJSON(response);
+                    var messages = ''
+                                    + '<p class="alert error">status: ' + response.status + '</p>'
+                                    + '<p class="alert error">message: ' + response.responseText + '</p>'
+                    ;
+                    $localResponseHolder.append(messages).show();
+                }).done(function (response) {
+                    console.log(response);
+                    var data = JSON.parse(response);
+                    if (typeof data !== "undefined" && typeof data.Discussion !== "undefined") {
+                        var current_data = data.Discussion;
+                        console.log(data);
+                        if (typeof current_data.Doctor != 'undefined' && typeof current_data.OrderNumber != 'undefined') {
+                            oLocalStorage.UpdatePageElements(current_data, $form); //fill order number hidden input
+                            oLocalStorage.UpdatePageElements(current_data.Doctor, $form); //fill doctor details hidden inputs
+                            $form.find('input[data-term=OrderNumber][type=hidden]').val(current_data.OrderNumber);
+                            /*Messages*/
+                            var $message = $messagesHolder.children('.clonable');
+                            var $messageClone = false;
+                            if (typeof current_data.Messages !== "undefined" && current_data.Messages.length > 0) {
+                                for (var i = 0; i < current_data.Messages.length; i++) {
+                                    var mesaj = current_data.Messages[i];
+                                    $messageClone = $message.clone(true);
+                                    $messageClone.attr('id', $messageClone.attr('id') + "-" + mesaj.mesajID);
+                                    if (mesaj.senderID == "2") {
+                                        $messageClone.removeClass('message-left').addClass('message-right');
+                                        if (mesaj.read == "0")
+                                            $('<span class="icon-unread-message-doctor"></span>').insertBefore($messageClone.find('.message-body'));
+                                    }
+                                    oLocalStorage.UpdatePageElements(mesaj, $messageClone);
+                                    $messageClone.removeClass('clonable').appendTo($messagesHolder);
+                                }
+                            }
+                            $btnSubmit.on('click', function (e) {
+                                e.preventDefault();
+                                //console.log($form.serialize());
+
+                                $.ajax({
+                                    url: $form.prop('action'),
+                                    type: $form.prop('method'),
+                                    data: $form.serialize(),
+                                    beforeSend: function (xhr) { if (typeof doctors != 'undefined') { xhr.setRequestHeader('Authorization', doctors.getToken()); } }
+                                }).fail(function (response) {
+                                    var messages = ''
+                                    + '<p class="alert error">status: ' + response.status + '</p>'
+                                    + '<p class="alert error">message: ' + response.responseText + '</p>'
+                                    ;
+                                    $localResponseHolder.append(messages).show();
+                                }).done(function (response) {
+                                    console.log(response);
+                                    var lastMessageID = $messagesHolder.last('div.message-block').prop('id');
+                                    if (typeof lastMessageID == 'undefined') {
+                                        lastMessageID = 1;
+                                    };
+
+                                    var $clonaMesaj = $('#message-id').clone();
+                                    $clonaMesaj.find('label.message-author').html(doctor + ' @ ' + $.now());
+                                    $clonaMesaj.find('div.message-body').html($mesaj.val());
+                                    $clonaMesaj.prop('id', $clonaMesaj.prop('id') + '-' + lastMessageID);
+                                    $clonaMesaj.appendTo($messagesHolder).fadeIn('fast', function () {
+                                        $clonaMesaj.removeClass('clonable');
+                                        $messagesHolder.animate({ scrollTop: $messagesHolder[0].scrollHeight }, 1000);
+                                    });
+                                    $mesaj.val($mesaj.data('autoclear'));
+                                    /*
+                                    // Reset message to empty - do not reset it to predef text if it's from textarea on enter key
+                                    if ($element.prop('type') == 'textarea') {
+                                        // Fired from ENTER key in textarea
+                                        $mesaj.val('');
+                                    } else {
+                                        // Fired from Send button
+                                        $mesaj.val($mesaj.data('autoclear'));
+                                    };
+                                    */
+                                    // Reset chars counter
+                                    $charsLeft.prop('class', 'status success').text(maxChars);
+                                });
+
+                            });
+                            $form.removeClass('clonable');
+                        }
+
+                    } else {
+                        var data = JSON.parse(response);
+                        if (typeof data !== "undefined" && typeof data.message !== "undefined") {
+                            messages = '<p>' + data.message + '</p>';
+                            $localResponseHolder.append(messages).show();
+                        }
+                    }
+                    var extra = new Array();
+                    extra.push({ key: "open", value: "0" });
+                    doctors.sendMessage("DRAWER", JSON.stringify(extra));
+                }).always(function (response) {
+                    console.log('response: ' + response);
+                    $localPreloader.fadeOut('fast');
+                });
+            } else {
+                $localPreloader.fadeOut('fast');
+                var messages = '<p class="alert error">Invalid order number supplied </p>';
+                $localResponseHolder.append(messages).show();
+            }
+        };
+        $(function () {
+            document.addEventListener("deviceready", PowerUp, false);
+            /* Only for in-browser (not in Android) testing */
+            //PowerUp();
+        });
+
+
+
+</script>
+</body>
+</html>

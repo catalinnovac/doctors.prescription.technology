@@ -8,7 +8,7 @@
             android:id="@+id/content_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <org.apache.cordova.CordovaWebView
+        <doctors.prescription.technology.code.webview.CustomCordovaWebView
                 android:id="@+id/cordova_main_webview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>

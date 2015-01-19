@@ -12,7 +12,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.util.EntityUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Hashtable;
 import java.util.List;
@@ -98,8 +100,15 @@ public class Request extends AsyncTask<String, List<NameValuePair>, String> {
                     String result = EntityUtils.toString(resEntity);
                     return result;
                 } else {
-                    Log.e(TAG, uri[0] + ">>STATUS>>"
+                    Log.v(TAG, uri[0] + ">>STATUS>>"
                             + String.valueOf(statusLine.getStatusCode()));
+                    BufferedReader r = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+                    StringBuilder total = new StringBuilder();
+                    String line;
+                    while ((line = r.readLine()) != null) {
+                        total.append(line);
+                    }
+                    Log.v(TAG, uri[0] + ">>RESPONSE TEXT>>" + total);
                     return null;
                 }
             }
