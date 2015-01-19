@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<<<<<<< HEAD
+<<<<<<< HEAD
 	<head>
 		<title>History - Prescription Technology</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
@@ -39,43 +41,46 @@
 				                <h3 class="customer">
 				                    <span class="autoupdate" data-term="firstname"></span>&nbsp;<span class="autoupdate" data-term="middleinitial"></span>&nbsp;<span class="autoupdate" data-term="lastname"></span>
 								</h3>
-								<div class="customer-addresses">
-									<div class="customer-shipping-addresses row-gutters">
-										<div class="customer-shipping-address clonable col span_12">
+								<div class="customer-addresses row">
+									<div class="customer-shipping-addresses col span_12">
+										<div class="customer-shipping-address clonable">
 											<label>Shipping address</label>
-											<p>Street <strong class="autoupdate" data-term="Street"></strong></p>
-											<p>City <strong class="autoupdate" data-term="City"></strong></p>
-											<p>Province <strong class="autoupdate" data-term="Province"></strong></p>
-											<p>Postal <strong code class="autoupdate" data-term="Postal_Code"></strong></p>
-											<p>Country <strong class="autoupdate" data-term="Country"></strong></p>
+											<p>Street: <strong class="autoupdate" data-term="Street"></strong></p>
+											<p>City: <strong class="autoupdate" data-term="City"></strong></p>
+											<p>Province: <strong class="autoupdate" data-term="Province"></strong></p>
+											<p>Postal: <strong code class="autoupdate" data-term="Postal_Code"></strong></p>
+											<p>Country: <strong class="autoupdate" data-term="Country"></strong></p>
 										</div>
 									</div>
-									<div class="customer-billing-addresses row-gutters">
-										<div class="customer-billing-address clonable col span_12">
+									<div class="customer-billing-addresses col span_12">
+										<div class="customer-billing-address clonable">
 											<label>Billing address</label>
-											<p>Street <strong class="autoupdate" data-term="Street"></strong></p>
-											<p>City <strong class="autoupdate" data-term="City"></strong></p>
-											<p>Province <strong class="autoupdate" data-term="Province"></strong></p>
-											<p>Postal <strong code class="autoupdate" data-term="Postal_Code"></strong></p>
-											<p>Country <strong class="autoupdate" data-term="Country"></strong></p>
+											<p>Street: <strong class="autoupdate" data-term="Street"></strong></p>
+											<p>City: <strong class="autoupdate" data-term="City"></strong></p>
+											<p>Province: <strong class="autoupdate" data-term="Province"></strong></p>
+											<p>Postal: <strong code class="autoupdate" data-term="Postal_Code"></strong></p>
+											<p>Country: <strong class="autoupdate" data-term="Country"></strong></p>
 										</div>
 									</div>
 				                </div>
 				            </div>
-				            <div class="order">
-								<label>Order</label>
-				                <p class="autoupdate" data-term="OrderNumber"></p>
-				                <p class="autoupdate" data-term="OrderDate"></p>
-				                <p class="autoupdate" data-term="status"></p>
-				            </div>
-				            <div class="meds">
-								<label>Meds</label>
-				                <ul class="meds-list">
-				                    <li class="clonable"><p class="autoupdate" data-term="MedName"></p></li>
-				                </ul>
-				            </div>
-				            <div class="assign_date">
-				                <p class="autoupdate" data-term="Assign_date"></p>
+							<div class="row">
+								<div class="col span_12">
+									<div class="order">
+										<p>Order <strong class="autoupdate" data-term="OrderNumber"></strong></p>
+										<p class="autoupdate" data-term="OrderDate"></p>
+										<p class="autoupdate" data-term="status">Status: </p>
+									</div>
+									<div class="assign_date">
+										<p class="autoupdate" data-term="Assign_date">Assign_date: </p>
+									</div>
+								</div>
+								<div class="meds col span_12">
+									<label>Meds</label>
+									<ul class="meds-list">
+										<li class="clonable"><p class="autoupdate" data-term="MedName"></p></li>
+									</ul>
+								</div>
 							</div>
 				        </div>
 						<div class="response-holder" data-url="https://doctors.prescription.technology/ws/ajax.orders.getHistory.asp"></div>
@@ -107,11 +112,85 @@
 		</footer>
 
 		<script type="text/javascript">
+			var isMobile = false;
+			try { document.createEvent("TouchEvent"); isMobile = true; } catch(e){ }
+			
+			var oLocalStorage = false;
+			var $clonable = false;
+			var $localResponseHolder = false;
+			
+			function ShowData(data) {
+				var $editLink = false;
+				var current_data = false;
+				var $clone = false;
+				//var $customer = false;
+				//var $order = false;
+				//var $meds = false;
+				for (var i = 0; i < data.orders.length; i++) {
+					current_data = data.orders[i];
+					if (typeof current_data.Order != 'undefined' && typeof current_data.Order.OrderNumber != 'undefined') {
+						$clone = $clonable.clone(true);
+						$clone.prop("id", "_" + current_data.Order.OrderNumber).addClass('clone');
+
+						//$customer = $clone.find('h3.customer');
+						//$order = $clone.find('div.order');
+						//$meds = $clone.find('div.meds');
+
+						$editLink = $clone.find("a.OrderURL"); 
+						$editLink.prop('href', current_data.Order.OrderURL);
+						
+						oLocalStorage.UpdatePageElements(current_data.customer, $clone.find('h3.customer'));							
+						oLocalStorage.UpdatePageElements(current_data.Order, $clone.find('div.order'));
+						oLocalStorage.UpdatePageElements(current_data.Assign_date, $clone.find(".assign_date"));
+						
+						/* Shipping addresses */
+						var $csaCloneHolder = $clone.find('div.customer-shipping-addresses');
+						var $csaClonable = $clone.find('div.customer-shipping-address.clonable');
+						var $csaClone = false;
+						if (typeof current_data.customer.Shipping_address != 'undefined') {
+							for (var k = 0; k < current_data.customer.Shipping_address.length ; k++) {
+								$csaClone = $csaClonable.clone(true);
+								oLocalStorage.UpdatePageElements(current_data.customer.Shipping_address[k], $csaClone);
+								$csaClone.removeClass('clonable').prependTo($csaCloneHolder);
+								//console.log('end UpdatePageElements(current_data.customer.Shipping_address['+k+'])');
+							}
+						}
+						/* Billing addresses */
+						var $cbaCloneHolder = $clone.find('div.customer-billing-addresses');
+						var $cbaClonable = $clone.find('div.customer-billing-address.clonable');
+						var $cbaClone = false;
+						if (typeof current_data.customer.Billing_address != 'undefined') {
+							for (var k = 0; k < current_data.customer.Billing_address.length ; k++) {
+								$cbaClone = $cbaClonable.clone(true);
+								oLocalStorage.UpdatePageElements(current_data.customer.Billing_address[k], $cbaClone);
+								$cbaClone.removeClass('clonable').prependTo($cbaCloneHolder);
+							}
+						}
+						
+						/* Meds */
+						var $medsList = $clone.find('ul.meds-list');
+						var $li = $medsList.find("li.clonable").clone(true);
+						if (typeof current_data.Meds != 'undefined') {
+							for (var j = 0; j < current_data.Meds.length ; j++) {
+								oLocalStorage.UpdatePageElements(current_data.Meds[j], $li);
+								$li.removeClass('clonable').prependTo($medsList);
+							};
+						};
+						
+						/* Assign Date */
+						
+						
+						/* Set the clone alive */
+						$clone.prop('display', 'none').removeClass('clonable').appendTo($localResponseHolder).fadeIn();
+					}
+				}
+			}
+			
 			function PowerUp() {
-				var oLocalStorage = new classLocalStorage();
+				oLocalStorage = new classLocalStorage();
 				var $superholder = $('div.superholder');
-				var $clonable = $superholder.children('div.clonable');
-				var $localResponseHolder = $superholder.children('div.response-holder');
+				$clonable = $superholder.children('div.clonable');
+				$localResponseHolder = $superholder.children('div.response-holder');
 				var $localPreloader = $superholder.children('div.ajax-loader');
 				$localPreloader.fadeIn('fast');
 				
@@ -122,103 +201,409 @@
                     doctors.sendMessage("DRAWER",JSON.stringify(extra));
 				});
 
+				if (isMobile) {
+					$.ajax({
+						url: $localResponseHolder.data('url'),
+						type: 'GET',
+						beforeSend: function (xhr) { if (typeof doctors != 'undefined') { xhr.setRequestHeader('Authorization', doctors.getToken()); } }
+					}).fail(function (response) { 
+						// Failure
+						//var json = $.parseJSON(response);
+						var messages = ''
+										+ '<p class="alert error">status: ' + response.status + '</p>'
+										+ '<p class="alert error">message: ' + response.statusText + '</p>'
+										;
+						$localResponseHolder.append(messages).show();
+					}).done(function (response) {
+						var data = JSON.parse(response);
+						if (data.orders.length > 0) {
+							ShowData(data);
+						} else {
+							messages = '<p>No history yet</p>';
+							$localResponseHolder.append(messages).show();
+						}
+						var extra = new Array();
+						extra.push({ key: "open", value: "0" });
+						doctors.sendMessage("DRAWER", JSON.stringify(extra));
+					}).always(function(response) {
+						console.log(response);
+						$localPreloader.fadeOut('fast');
+					});
+				}
+            };
+			$(function() {
+				if (isMobile) {
+					document.addEventListener("deviceready", PowerUp, false);
+				} else {
+					alert('No mobile device found, force-starting...');
+					/* Only for in-browser (not in Android) testing */
+					$('div.response-holder').data('url', 'https://doctors.prescription.technology/ws/ajax.orders.getHistory_blind.asp');
+					PowerUp();
+					
+					/* TEMP - Dry testing... */
+					var data = JSON.parse('{"orders":[{"customer":{"firstname":"riaz","middleinitial":"","lastname":"vali","Shipping_address":[{"Street":"6 Newton Walk","City":"Bolton","Province":"Greater Manchester","Postal_Code":"BL1 3UD","Country":"Great Britain"}],"Billing_address":[{"Street":"6 Newton Walk","City":"Bolton","Province":"Greater Manchester","Postal Code":"BL1 3UD","Country":"Great Britain"}]},"Order":{"OrderNumber":"790280","OrderDate":"27/08/2014","OrderURL":"/merch.asp?p=orderedit&ordernumber=790280"},"Meds":[{"MedName":"2544765 - Aldara 5% Cream x 12 Sachets"}]},{"Assign_date":"28/08/2014"},{"customer":{"firstname":"riaz","middleinitial":"","lastname":"vali","Shipping_address":[{"Street":"6 Newton Walk","City":"Bolton","Province":"Greater Manchester","Postal_Code":"BL1 3UD","Country":"Great Britain"}],"Billing_address":[{"Street":"6 Newton Walk","City":"Bolton","Province":"Greater Manchester","Postal Code":"BL1 3UD","Country":"Great Britain"}]},"Order":{"OrderNumber":"790279","OrderDate":"27/08/2014","OrderURL":"/merch.asp?p=orderedit&ordernumber=790279"},"Meds":[{"MedName":"2544765 - Aldara 5% Cream x 12 Sachets"}]},{"Assign_date":"28/08/2014"},{"customer":{"firstname":"marius","middleinitial":"","lastname":"mic","Shipping_address":[{"Street":"Imperial Wharf Station","City":"London","Province":"UK","Postal_Code":"SW6 2ZH","Country":"Canary Islands"}],"Billing_address":[{"Street":"Imperial Wharf Station","City":"London","Province":"UK","Postal Code":"SW6 2ZH","Country":"Canary Islands"}]},"Order":{"OrderNumber":"788914","OrderDate":"19/08/2014","OrderURL":"/merch.asp?p=orderedit&ordernumber=788914"},"Meds":[{"MedName":"2917243 - Cialis (Tadalafil) 10mg x 12 Tablets"},{"MedName":"383307 - Beconase Aqu Nasal Spray"},{"MedName":"2921070 - Avodart (Dutasteride) 0.5mg x 30 Capsules"}]},{"Assign_date":"28/08/2014"},{"customer":{"firstname":"marius","middleinitial":"","lastname":"mic","Shipping_address":[{"Street":"Imperial Wharf Station","City":"London","Province":"UK","Postal_Code":"SW6 2ZH","Country":"Canary Islands"}],"Billing_address":[{"Street":"Imperial Wharf Station","City":"London","Province":"UK","Postal Code":"SW6 2ZH","Country":"Canary Islands"}]},"Order":{"OrderNumber":"788698","OrderDate":"13/08/2014","OrderURL":"/merch.asp?p=orderedit&ordernumber=788698"},"Meds":[{"MedName":"2917243 - Cialis (Tadalafil) 10mg x 12 Tablets"}]},{"Assign_date":"13/08/2014"},{"customer":{"firstname":"marius","middleinitial":"","lastname":"mic","Shipping_address":[{"Street":"Imperial Wharf Station","City":"London","Province":"UK","Postal_Code":"SW6 2ZH","Country":"Canary Islands"}],"Billing_address":[{"Street":"Imperial Wharf Station","City":"London","Province":"UK","Postal Code":"SW6 2ZH","Country":"Canary Islands"}]},"Order":{"OrderNumber":"786984","OrderDate":"29/07/2014","OrderURL":"/merch.asp?p=orderedit&ordernumber=786984"},"Meds":[{"MedName":"0 - Test x 2000 pills(CD)"}]},{"Assign_date":"29/07/2014"},{"customer":{"firstname":"riaz","middleinitial":"","lastname":"vali","Shipping_address":[{"Street":"6 Newton Walk","City":"Bolton","Province":"Greater Manchester","Postal_Code":"BL1 3UD","Country":"Great Britain"}],"Billing_address":[{"Street":"6 Newton Walk","City":"Bolton","Province":"Greater Manchester","Postal Code":"BL1 3UD","Country":"Great Britain"}]},"Order":{"OrderNumber":"786420","OrderDate":"17/07/2014","OrderURL":"/merch.asp?p=orderedit&ordernumber=786420"},"Meds":[{"MedName":"1182369 - Sildenafil 100mg - 12 tablets"}]},{"Assign_date":"28/08/2014"},{"customer":{"firstname":"marius","middleinitial":"","lastname":"mic","Shipping_address":[{"Street":"Imperial Wharf Station","City":"London","Province":"UK","Postal_Code":"SW6 2ZH","Country":"Canary Islands"}],"Billing_address":[{"Street":"Imperial Wharf Station","City":"London","Province":"UK","Postal Code":"SW6 2ZH","Country":"Canary Islands"}]},"Order":{"OrderNumber":"786372","OrderDate":"16/07/2014","OrderURL":"/merch.asp?p=orderedit&ordernumber=786372"},"Meds":[{"MedName":"2917243 - Cialis (Tadalafil) 10mg x 12 Tablets"}]},{"Assign_date":"29/07/2014"},{"customer":{"firstname":"Adam","middleinitial":"","lastname":"Pearson","Shipping_address":[{"Street":"13 Bradden Close","City":"Salford","Province":"Greater Manchester","Postal_Code":"M5 4HP","Country":"Great Britain"}],"Billing_address":[{"Street":"13 Bradden Close","City":"Salford","Province":"Greater Manchester","Postal Code":"M5 4HP","Country":"Great Britain"}]},"Order":{"OrderNumber":"786245","OrderDate":"14/07/2014","OrderURL":"/merch.asp?p=orderedit&ordernumber=786245"},"Meds":[{"MedName":"2734697 - Zapain Capsules 30/500mg x 100 Capsules"}]},{"Assign_date":"17/09/2014"},{"customer":{"firstname":"riaz","middleinitial":"","lastname":"vali","Shipping_address":[{"Street":"6 Newton Walk","City":"Bolton","Province":"Greater Manchester","Postal_Code":"BL1 3UD","Country":"Great Britain"}],"Billing_address":[{"Street":"6 Newton Walk","City":"Bolton","Province":"Greater Manchester","Postal Code":"BL1 3UD","Country":"Great Britain"}]},"Order":{"OrderNumber":"786202","OrderDate":"14/07/2014","OrderURL":"/merch.asp?p=orderedit&ordernumber=786202"},"Meds":[{"MedName":"8882821 - Sildenafil 25mg - 4 tablets"}]},{"Assign_date":"14/07/2014"},{"customer":{"firstname":"marius","middleinitial":"","lastname":"mic","Shipping_address":[{"Street":"Imperial Wharf Station","City":"London","Province":"UK","Postal_Code":"SW6 2ZH","Country":"Canary Islands"}],"Billing_address":[{"Street":"Imperial Wharf Station","City":"London","Province":"UK","Postal Code":"SW6 2ZH","Country":"Canary Islands"}]},"Order":{"OrderNumber":"782300","OrderDate":"02/06/2014","OrderURL":"/merch.asp?p=orderedit&ordernumber=782300"},"Meds":[]},{"Assign_date":"14/07/2014"}]}');
+					ShowData(data);
+				}
+			});
+	    </script>
+	</body>
+=======
+<head>
+    <title>History - Prescription Technology</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen"/>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/respond.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/custom.jquery.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic"
+          rel="stylesheet" type="text/css"/>
+</head>
+<body id="index">
+<!-- Preloader -->
+<div id="page-preloader" class="ajax-loader">
+    <img src="img/loading.gif" alt=""/>
+</div>
+
+<div class="container wrap">
+    <div class="row gutters">
+        <div class="col span_24">
+            <a href="/" id="logo" title="Prescription Technology - Doctors Interface"/><img src="img/logo_PT.png"
+                                                                                            alt=""/></a>
+            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface Menu"/>Menu</a>
+        </div>
+    </div>
+    <div class="row gutters">
+        <div class="col span_24">
+            <h1>History</h1>
+
+            <div id="history" class="superholder">
+                <div class="clonable">
+                    <div class="edit-buttons">
+                        <a class="OrderURL">Edit</a>
+                    </div>
+                    <div class="row gutters">
+                        <div class="customer-holder col span_12">
+                            <h3 class="customer">
+                                <span class="autoupdate" data-term="firstname"></span>&nbsp;<span class="autoupdate"
+                                                                                                  data-term="middleinitial"></span>&nbsp;<span
+                                    class="autoupdate" data-term="lastname"></span>
+                            </h3>
+
+                            <p>
+                                <span>Email:</span>&nbsp;<span class="autoupdate" data-term="email"></span>
+                            </p>
+
+                            <p>
+                                <span>Phone:</span>&nbsp;<span class="autoupdate" data-term="phone"></span>
+                            </p>
+
+                            <p>
+                                <span>Country:</span>&nbsp;<span class="autoupdate" data-term="country"></span>
+                            </p>
+                        </div>
+                        <div class="customer-info col span_12">
+                            <label>Customer Info</label>
+
+                            <p>
+                                <span>BMI:</span>&nbsp;<span class="autoupdate" data-term="BMI"></span>
+                            </p>
+
+                            <p>
+                                <span>Height</span>&nbsp;<span class="autoupdate" data-term="Height"></span>
+                            </p>
+
+                            <p>
+                                <span>Weight:</span>&nbsp;<span class="autoupdate" data-term="Weight"></span>
+                            </p>
+
+                            <p>
+                                <span>Language:</span>&nbsp;<span class="autoupdate" data-term="Language"></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="order">
+                        <label>Order</label>
+
+                        <p>
+                            <span>Order#:</span>&nbsp;<span class="autoupdate" data-term="OrderNumber"></span>
+                        </p>
+
+                        <p>
+                            <span>OrderDate:</span>&nbsp;<span class="autoupdate" data-term="OrderDate"></span>
+                        </p>
+
+                        <p class="autoupdate" data-term="status"></p>
+                    </div>
+                    <div class="meds">
+                        <label>Meds</label>
+                        <ul class="meds-list">
+                            <li class="clonable"><p class="autoupdate" data-term="MedName"></p></li>
+                        </ul>
+                    </div>
+                    <div class="assign_date">
+                        <label>Assign date</label>
+
+                        <p class="autoupdate" data-term="Assign_date"></p>
+                    </div>
+                </div>
+                <div class="response-holder"
+                     data-url="https://doctors.prescription.technology/ws/ajax.orders.getHistory.asp"></div>
+                <div class="ajax-loader">
+                    <img class="preloader" src="img/loading.gif" alt=""/>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+=======
+<head>
+    <title>History - Prescription Technology</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/responsive.gs.24col.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen"/>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/respond.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/custom.jquery.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,800,700italic"
+          rel="stylesheet" type="text/css"/>
+</head>
+<body id="index">
+<!-- Preloader -->
+<div id="page-preloader" class="ajax-loader">
+    <img src="img/loading.gif" alt=""/>
+</div>
+
+<div class="container wrap">
+    <div class="row gutters">
+        <div class="col span_24">
+            <a href="/" id="logo" title="Prescription Technology - Doctors Interface"/><img src="img/logo_PT.png"
+                                                                                            alt=""/></a>
+            <a href="/" id="nav-toggle" title="Prescription Technology - Doctors Interface Menu"/>Menu</a>
+        </div>
+    </div>
+    <div class="row gutters">
+        <div class="col span_24">
+            <h1>History</h1>
+
+            <div id="history" class="superholder">
+                <div class="clonable">
+                    <div class="edit-buttons">
+                        <a class="OrderURL">Edit</a>
+                    </div>
+                    <div class="row gutters">
+                        <div class="customer-holder col span_12">
+                            <h3 class="customer">
+                                <span class="autoupdate" data-term="firstname"></span>&nbsp;<span class="autoupdate"
+                                                                                                  data-term="middleinitial"></span>&nbsp;<span
+                                    class="autoupdate" data-term="lastname"></span>
+                            </h3>
+
+                            <p>
+                                <span>Email:</span>&nbsp;<span class="autoupdate" data-term="email"></span>
+                            </p>
+
+                            <p>
+                                <span>Phone:</span>&nbsp;<span class="autoupdate" data-term="phone"></span>
+                            </p>
+
+                            <p>
+                                <span>Country:</span>&nbsp;<span class="autoupdate" data-term="country"></span>
+                            </p>
+                        </div>
+                        <div class="customer-info col span_12">
+                            <label>Customer Info</label>
+
+                            <p>
+                                <span>BMI:</span>&nbsp;<span class="autoupdate" data-term="BMI"></span>
+                            </p>
+
+                            <p>
+                                <span>Height</span>&nbsp;<span class="autoupdate" data-term="Height"></span>
+                            </p>
+
+                            <p>
+                                <span>Weight:</span>&nbsp;<span class="autoupdate" data-term="Weight"></span>
+                            </p>
+
+                            <p>
+                                <span>Language:</span>&nbsp;<span class="autoupdate" data-term="Language"></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="order">
+                        <label>Order</label>
+
+                        <p>
+                            <span>Order#:</span>&nbsp;<span class="autoupdate" data-term="OrderNumber"></span>
+                        </p>
+
+                        <p>
+                            <span>OrderDate:</span>&nbsp;<span class="autoupdate" data-term="OrderDate"></span>
+                        </p>
+
+                        <p class="autoupdate" data-term="status"></p>
+                    </div>
+                    <div class="meds">
+                        <label>Meds</label>
+                        <ul class="meds-list">
+                            <li class="clonable"><p class="autoupdate" data-term="MedName"></p></li>
+                        </ul>
+                    </div>
+                    <div class="assign_date">
+                        <label>Assign date</label>
+
+                        <p class="autoupdate" data-term="Assign_date"></p>
+                    </div>
+                </div>
+                <div class="response-holder"
+                     data-url="https://doctors.prescription.technology/ws/ajax.orders.getHistory.asp"></div>
+                <div class="ajax-loader">
+                    <img class="preloader" src="img/loading.gif" alt=""/>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+>>>>>>> origin/master
+<footer class="container wrap">
+    <div class="row gutters">
+        <div class="col span_12">
+            This software and all connected databases are the exclusive property of
+            <strong>HR Healthcare Ltd</strong><br>
+            All rights are reserved by <strong>
+            HR Healthcare Ltd, The Office, Britannia Way, Waters Meeting, Bolton, BL2
+            2HH. 01204 559 999
+        </strong> <br>
+            All Intellectual Property Rights belong to <strong>
+            HR Healthcare Ltd, The Office, Britannia Way, Waters
+            Meeting,
+            Bolton, BL2 2HH. 01204 559 999
+        </strong>
+        </div>
+        <div class="col span_12">
+            Any use, editing, changing, multiplication or commercial
+            use (including but not limited to selling, licensing of this software
+            and/or parts of it and/or its connected database information), independent
+            of any changes being done first, is prohibited.
+        </div>
+    </div>
+</footer>
+
+<script type="text/javascript">
+        function PowerUp() {
+            var oLocalStorage = new classLocalStorage();
+            var $superholder = $('div.superholder');
+            var $clonable = $superholder.children('div.clonable');
+            var $localResponseHolder = $superholder.children('div.response-holder');
+            var $localPreloader = $superholder.children('div.ajax-loader');
+            $localPreloader.fadeIn('fast');
+
+            $('#nav-toggle').on('touchstart click', function (e) {
+                e.preventDefault();
+                var extra = new Array();
+                extra.push({ key: "open", value: "1" });
+                doctors.sendMessage("DRAWER", JSON.stringify(extra));
+            });
+            if (!isFromCache()) { //prevent content loading on resume
                 $.ajax({
                     url: $localResponseHolder.data('url'),
                     type: 'GET',
                     beforeSend: function (xhr) { if (typeof doctors != 'undefined') { xhr.setRequestHeader('Authorization', doctors.getToken()); } }
-                }).fail(function (response) { 
-					// Failure
-					//var json = $.parseJSON(response);
-					var messages = ''
-									+ '<p class="alert error">status: ' + response.status + '</p>'
-									+ '<p class="alert error">message: ' + response.statusText + '</p>'
-									;
-					$localResponseHolder.append(messages).show();
-				}).done(function (response) {
-					var data = JSON.parse(response);
+                }).fail(function (response) {
+                    // Failure
+                    //var json = $.parseJSON(response);
+                    var messages = ''
+                                    + '<p class="alert error">status: ' + response.status + '</p>'
+                                    + '<p class="alert error">message: ' + response.responseText + '</p>'
+                    ;
+                    $localResponseHolder.append(messages).show();
+                }).done(function (response) {
+                    console.log(response);
+                    var data = JSON.parse(response);
                     if (data.orders.length > 0) {
-						var $editLink = false;
+                        var $editLink = false;
                         var current_data = false;
+                        var $customerHolder = false;
+                        var $cinfo = false;
                         var $clone = false;
-						var $customer = false;
-						var $order = false;
-						var $meds = false;
+                        var $order = false;
+                        var $meds = false;
                         for (var i = 0; i < data.orders.length; i++) {
-							current_data = data.orders[i];
-							if (typeof current_data.Order != 'undefined' && typeof current_data.Order.OrderNumber != 'undefined') {
-								$clone = $clonable.clone(true);
-								$clone.prop("id", "_" + current_data.Order.OrderNumber).addClass('clone');
+                            current_data = data.orders[i];
+                            if (typeof current_data.Order != 'undefined' && typeof current_data.Order.OrderNumber != 'undefined') {
+                                $clone = $clonable.clone(true);
+                                $clone.prop("id", "_" + current_data.Order.OrderNumber).addClass('clone');
+                                $customerHolder = $clone.find('div.customer-holder');
+                                $cinfo = $clone.find('div.customer-info');
+                                $order = $clone.find('div.order');
+                                $meds = $clone.find('div.meds');
 
-								$customer = $clone.find('h3.customer');
-								$order = $clone.find('div.order');
-								$meds = $clone.find('div.meds');
+                                $editLink = $clone.find("a.OrderURL");
+                                $editLink.prop('href', current_data.Order.OrderURL);
+                                //console.log(JSON.stringify(current_data.customer));
+                                oLocalStorage.UpdatePageElements(current_data.customer, $customerHolder);
+                                oLocalStorage.UpdatePageElements(current_data.customer, $cinfo);
+                                oLocalStorage.UpdatePageElements(current_data.Order, $order);
+                                //oLocalStorage.UpdatePageElements(current_data.Meds, $meds);
+                                /* Meds */
+                                var $medsList = $clone.find('ul.meds-list');
+                                var $li = $medsList.find("li.clonable").clone(true);
+                                if (typeof current_data.Meds != 'undefined') {
+                                    for (var j = 0; j < current_data.Meds.length ; j++) {
+                                        oLocalStorage.UpdatePageElements(current_data.Meds[j], $li);
+                                        $li.removeClass('clonable').appendTo($medsList);
+                                    };
+                                };
 
-								$editLink = $clone.find("a.OrderURL"); 
-								$editLink.prop('href', current_data.Order.OrderURL);
-								
-								oLocalStorage.UpdatePageElements(current_data.customer, $customer);							
-								oLocalStorage.UpdatePageElements(current_data.Order, $order);
-								//oLocalStorage.UpdatePageElements(current_data.Meds, $meds);
-								
-								/* Shipping addresses */
-								var $csaCloneHolder = $clone.find('div.customer-shipping-addresses');
-								var $csaClonable = $clone.find('div.customer-shipping-address.clonable');
-								var $csaClone = false;
-								if (typeof current_data.customer.Shipping_address != 'undefined') {
-									for (var k = 0; k < current_data.customer.Shipping_address.length ; k++) {
-										$csaClone = $csaClonable.clone(true);
-										oLocalStorage.UpdatePageElements(current_data.customer.Shipping_address[k], $csaClone);
-										$csaClone.removeClass('clonable').appendTo($csaCloneHolder);
-										//console.log('end UpdatePageElements(current_data.customer.Shipping_address['+k+'])');
-									}
-								}
-								/* Billing addresses */
-								var $cbaCloneHolder = $clone.find('div.customer-billing-addresses');
-								var $cbaClonable = $clone.find('div.customer-billing-address.clonable');
-								var $cbaClone = false;
-								if (typeof current_data.customer.Billing_address != 'undefined') {
-									for (var k = 0; k < current_data.customer.Billing_address.length ; k++) {
-										$cbaClone = $cbaClonable.clone(true);
-										oLocalStorage.UpdatePageElements(current_data.customer.Billing_address[k], $cbaClone);
-										$cbaClone.removeClass('clonable').appendTo($cbaCloneHolder);
-									}
-								}
-								
-								/* Meds */
-								var $medsList = $clone.find('ul.meds-list');
-								var $li = $medsList.find("li.clonable").clone(true);
-								if (typeof current_data.Meds != 'undefined') {
-									for (var j = 0; j < current_data.Meds.length ; j++) {
-										oLocalStorage.UpdatePageElements(current_data.Meds[j], $li);
-										$li.removeClass('clonable').appendTo($medsList);
-									};
-								};
-								
-								/* Assign Date */
-								oLocalStorage.UpdatePageElements(current_data.Assign_date, $clone.find(".assign_date"));
-								
-								/* Set the clone alive */
-								$clone.prop('display', 'none').removeClass('clonable').appendTo($localResponseHolder).fadeIn();
-							}
+                                /* Assign Date */
+                                oLocalStorage.UpdatePageElements(current_data, $clone.find(".assign_date"));
+
+                                /* Set the clone alive */
+                                $clone.prop('display', 'none').removeClass('clonable').appendTo($localResponseHolder).fadeIn();
+                            }
                         }
                     } else {
-						messages = '<p>No history yet</p>';
-						$localResponseHolder.append(messages).show();
+                        messages = '<p>No history yet</p>';
+                        $localResponseHolder.append(messages).show();
                     }
                     var extra = new Array();
                     extra.push({ key: "open", value: "0" });
                     doctors.sendMessage("DRAWER", JSON.stringify(extra));
-				}).always(function(response) {
-					console.log('response: ' + response);
-					$localPreloader.fadeOut('fast');
-				});
-            };
-			$(function() {
-	            document.addEventListener("deviceready", PowerUp, false);
-				
-				/* Only for in-browser (not in Android) testing */
-				//PowerUp();
-			});
-	    </script>
-	</body>
+                }).always(function (response) {
+                    console.log('response: ' + response);
+                    $localPreloader.fadeOut('fast');
+                });
+            }
+        };
+        $(function () {
+            document.addEventListener("deviceready", PowerUp, false);
+
+            /* Only for in-browser (not in Android) testing */
+            //PowerUp();
+        });
+
+
+
+
+
+
+
+
+</script>
+</body>
+<<<<<<< HEAD
+>>>>>>> origin/master
+=======
+>>>>>>> origin/master
 </html>
