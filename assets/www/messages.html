@@ -118,6 +118,7 @@
                     ;
                     $localResponseHolder.append(messages).show();
                 }).done(function (response) {
+                    console.log(response);
                     var data = JSON.parse(response);
                     if (typeof data !== "undefined" && typeof data.Messages !== "undefined" && data.Messages.length > 0) {
                         var current_data = false;

@@ -75,7 +75,7 @@ public class Index extends PrescriptionTechnologyWithNavigationDrawer {
                 Log.v(TAG, String.valueOf(intent.hasExtra("TOKEN")));
                 if (intent.hasExtra("TOKEN")) {
                     mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-                    PopulateLeftMenu();
+                    BindLeftMenu();
                     appView.loadCurrentPage();
                     appView.clearHistory();
                 } else {

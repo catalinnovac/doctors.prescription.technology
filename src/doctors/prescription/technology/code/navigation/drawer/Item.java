@@ -6,6 +6,8 @@ package doctors.prescription.technology.code.navigation.drawer;
 public class Item {
     public String title;
     public int iconRes;
+    public int colorRes;
     public int counter; //counter
     public boolean isHeader;
+    public boolean selected;
 }

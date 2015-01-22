@@ -213,4 +213,11 @@
     <color name="transparent_white_percent_85">#D9ffffff</color>
     <color name="transparent_white_percent_90">#E6ffffff</color>
     <color name="transparent_white_percent_95">#F2ffffff</color>
+    <color name="pending_menu">#0075a0</color>
+    <color name="history_menu">#0082b2</color>
+    <color name="declined_menu">#0189bf</color>
+    <color name="query_menu">#0292cc</color>
+    <color name="invoices_menu">#009ee0</color>
+    <color name="messages_menu">#02a8ea</color>
+    <color name="selected_menu">#015982</color>
 </resources>

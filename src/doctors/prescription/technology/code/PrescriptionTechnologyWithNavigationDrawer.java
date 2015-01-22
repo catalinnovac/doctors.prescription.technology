@@ -126,6 +126,9 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
                         appView.loadUrl("file:///android_asset/www/messages.html");
                         break;
                 }
+                Adapter adapter = ((Adapter) adapterView.getAdapter());
+                adapter.SetSelected(i);
+                adapter.notifyDataSetChanged();
                 mDrawerLayout.closeDrawer(Gravity.LEFT);
             }
         });
@@ -263,7 +266,8 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
 //</editor-fold>
 
     //<editor-fold desc="Protected">
-    protected void PopulateLeftMenu() {
+    protected void BindLeftMenu() {
+        //if (!BindLeftMenu(true)) {
         items = new ArrayList<Item>();
         context = this;
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -290,20 +294,25 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
                         int iconResource = 0;
                         Log.v(TAG, "MENU NAME:" + menuName);
                         Item item = new Item();
-
-                        if (menuName.equals("Pending"))
+                        if (menuName.equals("Pending")) {
                             item.iconRes = R.drawable.adjust4;
-                        else if (menuName.equals("History"))
+                            item.colorRes = R.color.pending_menu;
+                        } else if (menuName.equals("History")) {
                             item.iconRes = R.drawable.big37;
-                        else if (menuName.equals("Declined"))
+                            item.colorRes = R.color.history_menu;
+                        } else if (menuName.equals("Declined")) {
                             item.iconRes = R.drawable.thumbs27;
-                        else if (menuName.equals("Query"))
+                            item.colorRes = R.color.declined_menu;
+                        } else if (menuName.equals("Query")) {
                             item.iconRes = R.drawable.white24;
-                        else if (menuName.equals("Invoices"))
+                            item.colorRes = R.color.query_menu;
+                        } else if (menuName.equals("Invoices")) {
                             item.iconRes = R.drawable.list30;
-                        else if (menuName.equals("Messages"))
+                            item.colorRes = R.color.invoices_menu;
+                        } else if (menuName.equals("Messages")) {
                             item.iconRes = R.drawable.speech59;
-
+                            item.colorRes = R.color.messages_menu;
+                        }
                         if (counter != null && counter.length() > 0)
                             item.counter = Integer.decode(counter);
                         else
@@ -312,6 +321,10 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
                         item.isHeader = false;
                         items.add(item);
                     }
+                    //add menu to cache
+                    SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+                    editor.putString("menu", menus.toString());
+                    editor.apply();
                     mDrawerList.setAdapter(new Adapter(context,
                             R.layout.left_drawer_item, items));
                 } catch (JSONException e) {
@@ -329,50 +342,53 @@ public abstract class PrescriptionTechnologyWithNavigationDrawer extends Activit
         } catch (TimeoutException e) {
             e.printStackTrace();
         }
-        /*
-        mDrawerList.setAdapter(new Adapter(this,
-                R.layout.left_drawer_item, items));
-        */
-        /*
-        Item pendingItem = new Item();
-        pendingItem.counter = 1;
-        pendingItem.iconRes = R.drawable.ic_drawer;
-        pendingItem.title = R.string.pending_menu_title;
-        pendingItem.isHeader = false;
-        items.add(pendingItem);
+        //}
+    }
 
-        Item historyItem = new Item();
-        historyItem.counter = 6;
-        historyItem.iconRes = R.drawable.ic_drawer;
-        historyItem.title = R.string.history_menu_title;
-        historyItem.isHeader = false;
-        items.add(historyItem);
-
-        Item declinedItem = new Item();
-        declinedItem.counter = 18;
-        declinedItem.iconRes = R.drawable.ic_drawer;
-        declinedItem.title = R.string.declined_menu_title;
-        declinedItem.isHeader = false;
-        items.add(declinedItem);
-
-        Item queryItem = new Item();
-        queryItem.iconRes = R.drawable.ic_drawer;
-        queryItem.title = R.string.query_menu_title;
-        queryItem.isHeader = false;
-        items.add(queryItem);
-
-        Item invoicesItem = new Item();
-        invoicesItem.iconRes = R.drawable.ic_drawer;
-        invoicesItem.title = R.string.invoices_menu_title;
-        invoicesItem.isHeader = false;
-        items.add(invoicesItem);
-
-        Item messagesItem = new Item();
-        messagesItem.iconRes = R.drawable.ic_drawer;
-        messagesItem.title = R.string.messages_menu_title;
-        messagesItem.isHeader = false;
-        items.add(messagesItem);
-        */
+    protected boolean BindLeftMenu(boolean fromCache) throws JSONException {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        JSONArray menus = new JSONArray(sharedPreferences.getString("menu", "[]"));
+        if (menus.length() > 0) {
+            items = new ArrayList<Item>();//reinit items
+            for (int i = 0; i < menus.length(); i++) {
+                JSONObject menu = menus.getJSONObject(i);
+                String menuName = menu.getString("name");
+                String counter = menu.getString("counter");
+                int iconResource = 0;
+                Log.v(TAG, "MENU NAME:" + menuName);
+                Item item = new Item();
+                if (menuName.equals("Pending")) {
+                    item.iconRes = R.drawable.adjust4;
+                    item.colorRes = R.color.pending_menu;
+                } else if (menuName.equals("History")) {
+                    item.iconRes = R.drawable.big37;
+                    item.colorRes = R.color.history_menu;
+                } else if (menuName.equals("Declined")) {
+                    item.iconRes = R.drawable.thumbs27;
+                    item.colorRes = R.color.declined_menu;
+                } else if (menuName.equals("Query")) {
+                    item.iconRes = R.drawable.white24;
+                    item.colorRes = R.color.query_menu;
+                } else if (menuName.equals("Invoices")) {
+                    item.iconRes = R.drawable.list30;
+                    item.colorRes = R.color.invoices_menu;
+                } else if (menuName.equals("Messages")) {
+                    item.iconRes = R.drawable.speech59;
+                    item.colorRes = R.color.messages_menu;
+                }
+                if (counter != null && counter.length() > 0)
+                    item.counter = Integer.decode(counter);
+                else
+                    item.counter = 0;
+                item.title = menuName;
+                item.isHeader = false;
+                items.add(item);
+            }
+            mDrawerList.setAdapter(new Adapter(context,
+                    R.layout.left_drawer_item, items));
+            return true;
+        } else
+            return false;
     }
 //</editor-fold>
 
